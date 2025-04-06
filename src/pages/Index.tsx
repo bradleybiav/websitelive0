@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
@@ -6,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollGlyphRail from '@/components/ScrollGlyphRail';
 import HeroSection from '@/components/HeroSection';
+import HomeSection from '@/components/HomeSection';
 import PhilosophySection from '@/components/PhilosophySection';
 import ServicesSection from '@/components/ServicesSection';
 import ClientsSection from '@/components/ClientsSection';
@@ -18,7 +18,6 @@ const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
   
-  // Handle hero interaction (clicking, scrolling, key press)
   const handleHeroInteraction = () => {
     setHeroActive(false);
     setTimeout(() => {
@@ -35,7 +34,6 @@ const Index = () => {
       const scrollPosition = Math.abs(containerTop);
       const windowHeight = window.innerHeight;
       
-      // Find which section is currently in view
       for (let i = 0; i < sections.length; i++) {
         const sectionElement = document.getElementById(sections[i]);
         if (!sectionElement) continue;
@@ -43,7 +41,6 @@ const Index = () => {
         const sectionTop = sectionElement.offsetTop - containerTop;
         const sectionBottom = sectionTop + sectionElement.offsetHeight;
         
-        // If the section is in view
         if (
           (scrollPosition >= sectionTop - windowHeight * 0.5) && 
           (scrollPosition < sectionBottom - windowHeight * 0.5)
@@ -109,10 +106,9 @@ const Index = () => {
             navVisible ? "opacity-100" : "opacity-0"
           )}
         >
-          <HeroSection 
+          <HomeSection 
             id="home" 
             isActive={activeSection === 'home'} 
-            onInteraction={() => {}} 
           />
           <PhilosophySection id="philosophy" isActive={activeSection === 'philosophy'} />
           <ServicesSection id="services" isActive={activeSection === 'services'} />
