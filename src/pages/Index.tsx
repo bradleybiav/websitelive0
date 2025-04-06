@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
 import Navbar from '@/components/Navbar';
-import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollGlyphRail from '@/components/ScrollGlyphRail';
 import HeroSection from '@/components/HeroSection';
 import HomeSection from '@/components/HomeSection';
@@ -203,12 +201,7 @@ const Index = () => {
           visible={navVisible}
         />
         
-        <ScrollIndicator 
-          sections={sections} 
-          activeSection={activeSection} 
-          onDotClick={scrollToSection}
-          visible={navVisible}
-        />
+        {/* Removed ScrollIndicator component */}
         
         <ScrollGlyphRail visible={navVisible} />
         
