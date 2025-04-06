@@ -109,7 +109,11 @@ const Index = () => {
             navVisible ? "opacity-100" : "opacity-0"
           )}
         >
-          <HeroSection id="home" isActive={activeSection === 'home'} />
+          <HeroSection 
+            id="home" 
+            isActive={activeSection === 'home'} 
+            onInteraction={() => {}} 
+          />
           <PhilosophySection id="philosophy" isActive={activeSection === 'philosophy'} />
           <ServicesSection id="services" isActive={activeSection === 'services'} />
           <ClientsSection id="clients" isActive={activeSection === 'clients'} />
