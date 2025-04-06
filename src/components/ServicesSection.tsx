@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface ServicesSectionProps {
   id: string;
@@ -33,34 +34,24 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
 
   const services = [
     {
-      title: "Strategic Campaign Development",
-      description: "Comprehensive promotion strategies tailored to your artistic vision and target audience, crafted to maximize impact across all platforms.",
+      title: "Press",
+      description: "Strategic placement in key publications and digital platforms that align with your artistic vision. We craft compelling narratives and visual assets that capture the essence of your music, securing meaningful coverage that resonates with both established fans and new audiences.",
       icon: "◎"
     },
     {
-      title: "Immersive Content Creation",
-      description: "Surreal, attention-grabbing visual and written content that elevates your music and creates a cohesive narrative around your releases.",
+      title: "DSP",
+      description: "Expert navigation of the digital streaming landscape to maximize your presence on platforms like Spotify, Apple Music, and beyond. We develop tailored strategies for playlist placement, algorithmic optimization, and feature opportunities that exponentially expand your digital footprint.",
       icon: "◑"
     },
     {
-      title: "Media Relations & Placement",
-      description: "Strategic outreach to our extensive network of publications, playlists, radio stations, and influencers to secure meaningful coverage.",
+      title: "Radio",
+      description: "Targeted campaigns for both traditional and digital radio channels, leveraging our extensive network of relationships with programmers and tastemakers. We position your music strategically to reach the right listeners at the right moment across the airwaves.",
       icon: "⊙"
     },
     {
-      title: "Digital Presence Optimization",
-      description: "Enhancement of your online presence through website design, social media strategy, and algorithmic optimization techniques.",
+      title: "Tastemaker",
+      description: "Curated outreach to influential voices in music culture who can amplify your artistic message. We identify and engage with the perfect constellation of bloggers, podcasters, and cultural commentators whose audiences align with your creative universe.",
       icon: "◓"
-    },
-    {
-      title: "Release Strategy & Planning",
-      description: "Detailed release timelines, coordinated cross-platform strategies, and audience engagement tactics to maximize each release's potential.",
-      icon: "⦿"
-    },
-    {
-      title: "Performance & Tour Support",
-      description: "Comprehensive promotion for live events, tour support, and creation of immersive experiences that extend beyond the traditional concert format.",
-      icon: "⊛"
     }
   ];
 
@@ -87,22 +78,31 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {services.map((service, index) => (
-            <div 
-              key={index}
-              ref={el => elementsRef.current[index + 1] = el}
-              className="p-6 border border-gray-200 hover:border-black transition-all duration-300 ease-in-out opacity-0 transform translate-y-4"
-            >
-              <div className="text-3xl mb-4">{service.icon}</div>
-              <h3 className="text-xl font-display font-semibold mb-3">{service.title}</h3>
-              <p className="text-muted-foreground">{service.description}</p>
-            </div>
+            <HoverCard key={index} openDelay={75} closeDelay={100}>
+              <HoverCardTrigger asChild>
+                <div 
+                  ref={el => elementsRef.current[index + 1] = el}
+                  className="p-6 border border-gray-200 hover:border-black transition-all duration-300 ease-in-out opacity-0 transform translate-y-4 cursor-pointer shimmer-bg"
+                >
+                  <div className="text-3xl mb-4">{service.icon}</div>
+                  <h3 className="text-xl font-display font-semibold mb-3">{service.title}</h3>
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent 
+                className="w-80 bg-white border border-black p-4 shadow-lg"
+                side="top"
+                align="center"
+              >
+                <p className="text-sm text-muted-foreground">{service.description}</p>
+              </HoverCardContent>
+            </HoverCard>
           ))}
         </div>
         
         <div 
-          ref={el => elementsRef.current[7] = el}
+          ref={el => elementsRef.current[5] = el}
           className="mt-16 text-center transition-all duration-500 ease-out opacity-0 transform translate-y-4"
         >
           <button className="px-8 py-3 border-2 border-black font-medium transition-all duration-300 hover:bg-black hover:text-white">

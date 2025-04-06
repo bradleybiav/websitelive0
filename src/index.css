@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -89,6 +90,23 @@
 
   .jiggle {
     animation: jiggle 0.4s ease-in-out;
+  }
+  
+  /* Card flip utilities */
+  .perspective {
+    perspective: 1000px;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  .rotate-y-0 {
+    transform: rotateY(0deg);
   }
 }
 
