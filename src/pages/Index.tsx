@@ -18,8 +18,8 @@ const Index = () => {
   const [navVisible, setNavVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
-  // Add flag to prevent multiple navigation attempts while scrolling
   const isScrollingRef = useRef(false);
+  const lastScrollTimeRef = useRef(0);
   
   const handleHeroInteraction = () => {
     setHeroActive(false);
@@ -29,30 +29,49 @@ const Index = () => {
     }, 500);
   };
   
+  // More robust scroll handler that properly detects sections
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current || heroActive || isScrollingRef.current) return;
+      if (!containerRef.current || heroActive) return;
       
-      const containerTop = containerRef.current.getBoundingClientRect().top;
-      const scrollPosition = Math.abs(containerTop);
+      // Throttle scroll events
+      const now = Date.now();
+      if (now - lastScrollTimeRef.current < 50) return;
+      lastScrollTimeRef.current = now;
+      
+      const container = containerRef.current;
+      const scrollTop = container.scrollTop;
       const windowHeight = window.innerHeight;
       
-      // Find the section currently in view
-      for (let i = 0; i < sections.length; i++) {
-        const sectionElement = document.getElementById(sections[i]);
-        if (!sectionElement) continue;
+      // Only detect sections if not actively scrolling to a section
+      if (!isScrollingRef.current) {
+        // Determine which section is most visible in the viewport
+        let maxVisibleSection = '';
+        let maxVisibleArea = 0;
         
-        const sectionTop = sectionElement.offsetTop - containerTop;
-        const sectionBottom = sectionTop + sectionElement.offsetHeight;
-        
-        if (
-          (scrollPosition >= sectionTop - windowHeight * 0.5) && 
-          (scrollPosition < sectionBottom - windowHeight * 0.5)
-        ) {
-          if (activeSection !== sections[i]) {
-            setActiveSection(sections[i]);
+        for (const sectionId of sections) {
+          const sectionElement = document.getElementById(sectionId);
+          if (!sectionElement) continue;
+          
+          const sectionTop = sectionElement.offsetTop;
+          const sectionHeight = sectionElement.offsetHeight;
+          const sectionBottom = sectionTop + sectionHeight;
+          
+          // Calculate how much of the section is visible
+          const visibleTop = Math.max(scrollTop, sectionTop);
+          const visibleBottom = Math.min(scrollTop + windowHeight, sectionBottom);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+          
+          // Determine which section has the most visible area
+          if (visibleHeight > maxVisibleArea) {
+            maxVisibleArea = visibleHeight;
+            maxVisibleSection = sectionId;
           }
-          break;
+        }
+        
+        // Update active section if we found one with visible area
+        if (maxVisibleSection && maxVisibleSection !== activeSection) {
+          setActiveSection(maxVisibleSection);
         }
       }
     };
@@ -60,34 +79,38 @@ const Index = () => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
+      
+      // Also check section visibility after any resize
+      window.addEventListener('resize', handleScroll);
     }
     
     return () => {
       if (container) {
         container.removeEventListener('scroll', handleScroll);
       }
+      window.removeEventListener('resize', handleScroll);
     };
   }, [sections, heroActive, activeSection]);
   
   const scrollToSection = (sectionId: string) => {
-    // Prevent multiple navigation attempts
-    if (isScrollingRef.current) {
+    // Skip if already scrolling or hero is active
+    if (isScrollingRef.current || (heroActive && sectionId !== 'home')) {
       return;
     }
     
-    console.log(`Attempting to scroll to section: ${sectionId}`);
+    console.log(`Scrolling to section: ${sectionId}`);
     
     const sectionElement = document.getElementById(sectionId);
     if (sectionElement && containerRef.current) {
       // Set scrolling flag to prevent interference
       isScrollingRef.current = true;
       
-      const offsetTop = sectionElement.offsetTop;
-      console.log(`Section ${sectionId} offsetTop:`, offsetTop);
-      
-      // Set active section immediately to update UI
+      // Immediately update active section for UI feedback
       setActiveSection(sectionId);
       
+      const offsetTop = sectionElement.offsetTop;
+      
+      // Smooth scroll to the section
       containerRef.current.scrollTo({
         top: offsetTop,
         behavior: 'smooth'
@@ -96,7 +119,21 @@ const Index = () => {
       // Reset scrolling flag after animation completes
       setTimeout(() => {
         isScrollingRef.current = false;
-      }, 800); // Slightly longer than the typical scroll animation
+        
+        // Verify we ended up at the correct section
+        if (containerRef.current) {
+          const finalScrollTop = containerRef.current.scrollTop;
+          const tolerance = 50; // pixel tolerance
+          
+          // If we're not close to where we should be, try once more
+          if (Math.abs(finalScrollTop - offsetTop) > tolerance) {
+            containerRef.current.scrollTo({
+              top: offsetTop,
+              behavior: 'auto' // Immediate jump the second time
+            });
+          }
+        }
+      }, 1000); // Wait for scroll animation to complete
     } else {
       console.error(`Could not find section element with id: ${sectionId}`);
     }
