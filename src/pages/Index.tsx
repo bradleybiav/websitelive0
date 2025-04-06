@@ -20,6 +20,8 @@ const Index = () => {
   const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
   const isScrollingRef = useRef(false);
   const lastScrollTimeRef = useRef(0);
+  const scrollTargetRef = useRef<string | null>(null);
+  const scrollTimeoutRef = useRef<number | null>(null);
   
   const handleHeroInteraction = () => {
     setHeroActive(false);
@@ -29,114 +31,165 @@ const Index = () => {
     }, 500);
   };
   
-  // More robust scroll handler that properly detects sections
+  // Reset scroll state if stuck
+  useEffect(() => {
+    const resetScrollState = () => {
+      if (isScrollingRef.current) {
+        console.log('Resetting scroll state after timeout');
+        isScrollingRef.current = false;
+      }
+    };
+    
+    // Reset scroll state after 2 seconds if still locked
+    const interval = setInterval(resetScrollState, 2000);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
+  // Improved scroll handler
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current || heroActive) return;
       
-      // Throttle scroll events
+      // Don't process scroll events during programmatic scrolling
+      if (isScrollingRef.current) {
+        return;
+      }
+      
+      // Throttle scroll events to improve performance
       const now = Date.now();
       if (now - lastScrollTimeRef.current < 50) return;
       lastScrollTimeRef.current = now;
+      
+      // Clear any existing timeout
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // Set a timeout to determine the final scroll position
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        if (containerRef.current && !isScrollingRef.current) {
+          detectVisibleSection();
+        }
+        scrollTimeoutRef.current = null;
+      }, 100);
+    };
+    
+    const detectVisibleSection = () => {
+      if (!containerRef.current) return;
       
       const container = containerRef.current;
       const scrollTop = container.scrollTop;
       const windowHeight = window.innerHeight;
       
-      // Only detect sections if not actively scrolling to a section
-      if (!isScrollingRef.current) {
-        // Determine which section is most visible in the viewport
-        let maxVisibleSection = '';
-        let maxVisibleArea = 0;
+      // Determine which section is most visible
+      let maxVisibleSection = '';
+      let maxVisibleRatio = 0;
+      
+      sections.forEach(sectionId => {
+        const sectionElement = document.getElementById(sectionId);
+        if (!sectionElement) return;
         
-        for (const sectionId of sections) {
-          const sectionElement = document.getElementById(sectionId);
-          if (!sectionElement) continue;
-          
-          const sectionTop = sectionElement.offsetTop;
-          const sectionHeight = sectionElement.offsetHeight;
-          const sectionBottom = sectionTop + sectionHeight;
-          
-          // Calculate how much of the section is visible
-          const visibleTop = Math.max(scrollTop, sectionTop);
-          const visibleBottom = Math.min(scrollTop + windowHeight, sectionBottom);
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-          
-          // Determine which section has the most visible area
-          if (visibleHeight > maxVisibleArea) {
-            maxVisibleArea = visibleHeight;
-            maxVisibleSection = sectionId;
-          }
-        }
+        const sectionRect = sectionElement.getBoundingClientRect();
+        const visibleHeight = Math.min(sectionRect.bottom, windowHeight) - 
+                             Math.max(sectionRect.top, 0);
         
-        // Update active section if we found one with visible area
-        if (maxVisibleSection && maxVisibleSection !== activeSection) {
-          setActiveSection(maxVisibleSection);
+        // Calculate what percentage of the viewport this section occupies
+        const visibleRatio = visibleHeight / windowHeight;
+        
+        if (visibleRatio > maxVisibleRatio) {
+          maxVisibleRatio = visibleRatio;
+          maxVisibleSection = sectionId;
         }
+      });
+      
+      // Only update if we found a section and it's different from current
+      if (maxVisibleSection && maxVisibleSection !== activeSection) {
+        console.log(`Detected section: ${maxVisibleSection} (ratio: ${maxVisibleRatio.toFixed(2)})`);
+        setActiveSection(maxVisibleSection);
       }
     };
     
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
-      
-      // Also check section visibility after any resize
-      window.addEventListener('resize', handleScroll);
+      window.addEventListener('resize', detectVisibleSection);
     }
     
     return () => {
       if (container) {
         container.removeEventListener('scroll', handleScroll);
       }
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('resize', detectVisibleSection);
+      
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
     };
   }, [sections, heroActive, activeSection]);
   
   const scrollToSection = (sectionId: string) => {
-    // Skip if already scrolling or hero is active
-    if (isScrollingRef.current || (heroActive && sectionId !== 'home')) {
+    // Prevent multiple scroll attempts
+    if (isScrollingRef.current) {
+      console.log(`Ignoring scroll request to ${sectionId} - already scrolling`);
+      return;
+    }
+    
+    // Skip if hero is active (except for home)
+    if (heroActive && sectionId !== 'home') {
       return;
     }
     
     console.log(`Scrolling to section: ${sectionId}`);
     
     const sectionElement = document.getElementById(sectionId);
-    if (sectionElement && containerRef.current) {
-      // Set scrolling flag to prevent interference
-      isScrollingRef.current = true;
-      
-      // Immediately update active section for UI feedback
-      setActiveSection(sectionId);
-      
-      const offsetTop = sectionElement.offsetTop;
-      
-      // Smooth scroll to the section
-      containerRef.current.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      });
-      
-      // Reset scrolling flag after animation completes
-      setTimeout(() => {
-        isScrollingRef.current = false;
-        
-        // Verify we ended up at the correct section
-        if (containerRef.current) {
-          const finalScrollTop = containerRef.current.scrollTop;
-          const tolerance = 50; // pixel tolerance
-          
-          // If we're not close to where we should be, try once more
-          if (Math.abs(finalScrollTop - offsetTop) > tolerance) {
-            containerRef.current.scrollTo({
-              top: offsetTop,
-              behavior: 'auto' // Immediate jump the second time
-            });
-          }
-        }
-      }, 1000); // Wait for scroll animation to complete
-    } else {
+    if (!sectionElement || !containerRef.current) {
       console.error(`Could not find section element with id: ${sectionId}`);
+      return;
     }
+    
+    // Immediately update active section for UI feedback
+    setActiveSection(sectionId);
+    
+    // Set scrolling flag and target
+    isScrollingRef.current = true;
+    scrollTargetRef.current = sectionId;
+    
+    // Get correct scroll position
+    const offsetTop = sectionElement.offsetTop;
+    
+    // Perform the scroll
+    containerRef.current.scrollTo({
+      top: offsetTop,
+      behavior: 'smooth'
+    });
+    
+    // Clear any existing timeout
+    if (scrollTimeoutRef.current !== null) {
+      window.clearTimeout(scrollTimeoutRef.current);
+    }
+    
+    // Reset scrolling flag after animation completes
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      isScrollingRef.current = false;
+      scrollTargetRef.current = null;
+      
+      // Verify the scroll position
+      if (containerRef.current) {
+        const currentScrollTop = containerRef.current.scrollTop;
+        const tolerance = 5; // smaller tolerance
+        
+        if (Math.abs(currentScrollTop - offsetTop) > tolerance) {
+          console.log(`Scroll didn't end at expected position. Adjusting to ${offsetTop}`);
+          containerRef.current.scrollTo({
+            top: offsetTop,
+            behavior: 'auto'
+          });
+        }
+      }
+      
+      scrollTimeoutRef.current = null;
+    }, 1000); // Wait for scroll animation to complete
   };
   
   return (
