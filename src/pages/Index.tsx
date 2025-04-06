@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
@@ -64,12 +65,23 @@ const Index = () => {
   }, [sections, heroActive]);
   
   const scrollToSection = (sectionId: string) => {
+    // Add console logs to help debug scrolling issues
+    console.log(`Attempting to scroll to section: ${sectionId}`);
+    
     const sectionElement = document.getElementById(sectionId);
     if (sectionElement && containerRef.current) {
+      const offsetTop = sectionElement.offsetTop;
+      console.log(`Section ${sectionId} offsetTop:`, offsetTop);
+      
       containerRef.current.scrollTo({
-        top: sectionElement.offsetTop,
+        top: offsetTop,
         behavior: 'smooth'
       });
+      
+      // Force update the active section
+      setActiveSection(sectionId);
+    } else {
+      console.error(`Could not find section element with id: ${sectionId}`);
     }
   };
   
