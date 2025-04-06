@@ -1,7 +1,12 @@
 
 import React, { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
-const ScrollGlyphRail: React.FC = () => {
+interface ScrollGlyphRailProps {
+  visible: boolean;
+}
+
+const ScrollGlyphRail: React.FC<ScrollGlyphRailProps> = ({ visible }) => {
   const railRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -30,7 +35,10 @@ const ScrollGlyphRail: React.FC = () => {
   });
   
   return (
-    <div className="fixed left-6 top-0 h-screen pointer-events-none z-10 flex items-center">
+    <div className={cn(
+      "fixed left-6 top-0 h-screen pointer-events-none z-10 flex items-center transition-opacity duration-500",
+      visible ? "opacity-100" : "opacity-0"
+    )}>
       <div 
         ref={railRef} 
         className="flex flex-col items-center space-y-8 transition-transform duration-700 ease-out"

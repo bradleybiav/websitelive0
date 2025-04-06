@@ -6,15 +6,20 @@ interface ScrollIndicatorProps {
   sections: string[];
   activeSection: string;
   onDotClick: (section: string) => void;
+  visible: boolean;
 }
 
 const ScrollIndicator: React.FC<ScrollIndicatorProps> = ({ 
   sections, 
   activeSection, 
-  onDotClick 
+  onDotClick,
+  visible
 }) => {
   return (
-    <div className="scroll-indicator hidden md:block">
+    <div className={cn(
+      "scroll-indicator hidden md:block transition-opacity duration-500",
+      visible ? "opacity-100" : "opacity-0 pointer-events-none"
+    )}>
       {sections.map((section) => (
         <div 
           key={section}

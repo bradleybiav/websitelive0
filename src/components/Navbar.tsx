@@ -5,9 +5,10 @@ import { cn } from '@/lib/utils';
 interface NavbarProps {
   activeSection: string;
   onSectionClick: (section: string) => void;
+  visible: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick }) => {
+const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -36,8 +37,9 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick }) => {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-6 md:px-12 py-4',
-        isScrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm' : 'bg-transparent'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out px-6 md:px-12 py-4',
+        isScrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm' : 'bg-transparent',
+        visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       )}
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto">

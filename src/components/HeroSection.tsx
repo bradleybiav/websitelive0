@@ -1,69 +1,92 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface HeroSectionProps {
   id: string;
   isActive: boolean;
+  onInteraction: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive, onInteraction }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
-  
+  const [showContent, setShowContent] = useState(false);
+
+  // Fade in content on initial load
   useEffect(() => {
-    if (isActive && logoRef.current) {
-      logoRef.current.classList.add('animate-float');
-    } else if (logoRef.current) {
-      logoRef.current.classList.remove('animate-float');
+    const logoTimer = setTimeout(() => {
+      setShowContent(true);
+    }, 1000);
+
+    return () => clearTimeout(logoTimer);
+  }, []);
+
+  // Set up event listeners for interaction
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleInteraction = () => {
+      onInteraction();
+    };
+
+    // Add event listeners for various interactions
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('scroll', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
+
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('scroll', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+    };
+  }, [isActive, onInteraction]);
+
+  // Handle logo hover animation
+  const handleLogoHover = (isHovering: boolean) => {
+    if (logoRef.current) {
+      logoRef.current.style.transform = isHovering ? 'scale(1.03)' : 'scale(1)';
     }
-  }, [isActive]);
+  };
 
   return (
     <section 
       id={id} 
       ref={sectionRef}
-      className="scroll-section flex flex-col justify-center items-center px-6 py-20 md:py-0"
+      className={cn(
+        "scroll-section flex flex-col justify-center items-center min-h-screen w-full fixed inset-0 z-30 transition-opacity duration-1000",
+        isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      )}
     >
-      <div 
-        className={cn(
-          "text-center max-w-5xl mx-auto transition-opacity duration-1000",
-          isActive ? "opacity-100" : "opacity-0"
-        )}
-      >
-        <div className="mb-8 flex justify-center" ref={logoRef}>
+      <div className="text-center">
+        <div 
+          ref={logoRef} 
+          className={cn(
+            "mb-8 flex justify-center transition-all duration-400 ease-in-out transform opacity-0",
+            showContent && "opacity-100"
+          )}
+          onMouseEnter={() => handleLogoHover(true)}
+          onMouseLeave={() => handleLogoHover(false)}
+        >
           <img 
             src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
             alt="Brain in a Vat" 
-            className="w-32 md:w-48 lg:w-64 transition-all duration-500 ease-in-out"
+            className="w-32 md:w-48 lg:w-64"
           />
         </div>
 
-        <h1 className="header-text mb-6">
-          <span className="block">Music Promotion</span>
-          <span className="block">Reimagined</span>
-        </h1>
-        
-        <p className="subheader-text max-w-3xl mx-auto mb-10 text-muted-foreground">
-          A boutique agency crafting surreal music promotion experiences that transcend conventional boundaries.
-        </p>
-        
-        <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
-          <button className="px-8 py-3 border-2 border-black font-medium transition-all duration-300 hover:bg-black hover:text-white">
-            Our Services
+        <div 
+          className={cn(
+            "mt-8 transition-all duration-500 delay-500 transform opacity-0 translate-y-4", 
+            showContent && "opacity-100 translate-y-0"
+          )}
+        >
+          <button 
+            onClick={onInteraction}
+            className="uppercase tracking-widest text-sm font-medium"
+          >
+            Enter
           </button>
-          <button className="px-8 py-3 border-2 border-transparent underline font-medium transition-all duration-300 hover:opacity-70">
-            Discover Our Work
-          </button>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-widest mb-2">Scroll Down</p>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 5V19M12 19L18 13M12 19L6 13" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
         </div>
       </div>
     </section>

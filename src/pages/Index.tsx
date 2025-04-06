@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
 import Navbar from '@/components/Navbar';
 import ScrollIndicator from '@/components/ScrollIndicator';
@@ -11,13 +12,24 @@ import ClientsSection from '@/components/ClientsSection';
 import ContactSection from '@/components/ContactSection';
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('hero');
+  const [heroActive, setHeroActive] = useState(true);
+  const [navVisible, setNavVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
   
+  // Handle hero interaction (clicking, scrolling, key press)
+  const handleHeroInteraction = () => {
+    setHeroActive(false);
+    setTimeout(() => {
+      setNavVisible(true);
+      scrollToSection('home');
+    }, 500);
+  };
+  
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || heroActive) return;
       
       const containerTop = containerRef.current.getBoundingClientRect().top;
       const scrollPosition = Math.abs(containerTop);
@@ -52,7 +64,7 @@ const Index = () => {
         container.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [sections]);
+  }, [sections, heroActive]);
   
   const scrollToSection = (sectionId: string) => {
     const sectionElement = document.getElementById(sectionId);
@@ -69,17 +81,34 @@ const Index = () => {
       <HeatShimmerShader />
       
       <div className="relative min-h-screen">
-        <Navbar activeSection={activeSection} onSectionClick={scrollToSection} />
+        <Navbar 
+          activeSection={activeSection} 
+          onSectionClick={scrollToSection} 
+          visible={navVisible}
+        />
         
         <ScrollIndicator 
           sections={sections} 
           activeSection={activeSection} 
-          onDotClick={scrollToSection} 
+          onDotClick={scrollToSection}
+          visible={navVisible}
         />
         
-        <ScrollGlyphRail />
+        <ScrollGlyphRail visible={navVisible} />
         
-        <div ref={containerRef} className="scroll-container">
+        <HeroSection 
+          id="hero" 
+          isActive={heroActive} 
+          onInteraction={handleHeroInteraction} 
+        />
+        
+        <div 
+          ref={containerRef} 
+          className={cn(
+            "scroll-container transition-opacity duration-1000", 
+            navVisible ? "opacity-100" : "opacity-0"
+          )}
+        >
           <HeroSection id="home" isActive={activeSection === 'home'} />
           <PhilosophySection id="philosophy" isActive={activeSection === 'philosophy'} />
           <ServicesSection id="services" isActive={activeSection === 'services'} />
