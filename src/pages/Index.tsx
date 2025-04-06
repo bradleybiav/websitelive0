@@ -18,6 +18,8 @@ const Index = () => {
   const [navVisible, setNavVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
+  // Add flag to prevent multiple navigation attempts while scrolling
+  const isScrollingRef = useRef(false);
   
   const handleHeroInteraction = () => {
     setHeroActive(false);
@@ -29,12 +31,13 @@ const Index = () => {
   
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current || heroActive) return;
+      if (!containerRef.current || heroActive || isScrollingRef.current) return;
       
       const containerTop = containerRef.current.getBoundingClientRect().top;
       const scrollPosition = Math.abs(containerTop);
       const windowHeight = window.innerHeight;
       
+      // Find the section currently in view
       for (let i = 0; i < sections.length; i++) {
         const sectionElement = document.getElementById(sections[i]);
         if (!sectionElement) continue;
@@ -46,7 +49,9 @@ const Index = () => {
           (scrollPosition >= sectionTop - windowHeight * 0.5) && 
           (scrollPosition < sectionBottom - windowHeight * 0.5)
         ) {
-          setActiveSection(sections[i]);
+          if (activeSection !== sections[i]) {
+            setActiveSection(sections[i]);
+          }
           break;
         }
       }
@@ -62,24 +67,36 @@ const Index = () => {
         container.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [sections, heroActive]);
+  }, [sections, heroActive, activeSection]);
   
   const scrollToSection = (sectionId: string) => {
-    // Add console logs to help debug scrolling issues
+    // Prevent multiple navigation attempts
+    if (isScrollingRef.current) {
+      return;
+    }
+    
     console.log(`Attempting to scroll to section: ${sectionId}`);
     
     const sectionElement = document.getElementById(sectionId);
     if (sectionElement && containerRef.current) {
+      // Set scrolling flag to prevent interference
+      isScrollingRef.current = true;
+      
       const offsetTop = sectionElement.offsetTop;
       console.log(`Section ${sectionId} offsetTop:`, offsetTop);
+      
+      // Set active section immediately to update UI
+      setActiveSection(sectionId);
       
       containerRef.current.scrollTo({
         top: offsetTop,
         behavior: 'smooth'
       });
       
-      // Force update the active section
-      setActiveSection(sectionId);
+      // Reset scrolling flag after animation completes
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 800); // Slightly longer than the typical scroll animation
     } else {
       console.error(`Could not find section element with id: ${sectionId}`);
     }
