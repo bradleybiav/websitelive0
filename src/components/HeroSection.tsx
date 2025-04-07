@@ -5,7 +5,7 @@ import FadeInText from '@/components/ui/FadeInText';
 
 interface HeroSectionProps {
   id: string;
-  isActive: boolean;
+  isActive?: boolean;
   onInteraction?: () => void;
 }
 
@@ -28,7 +28,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
       ref={sectionRef}
       className="min-h-screen w-full flex flex-col justify-center items-center px-6 md:px-12 lg:px-24"
     >
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-8"> {/* Increased space-y from 4 to 8 */}
         <Logo showContent={showContent} />
         <FadeInText 
           text="brain in a vat is a boutique music promotions agency that shapes perception and shifts reality."
@@ -40,3 +40,4 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
 };
 
 export default HeroSection;
+
