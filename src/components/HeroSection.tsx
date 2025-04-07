@@ -5,10 +5,10 @@ import { cn } from '@/lib/utils';
 interface HeroSectionProps {
   id: string;
   isActive: boolean;
-  onInteraction: () => void;
+  onInteraction?: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const [showContent, setShowContent] = useState(false);
@@ -26,7 +26,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen w-full flex flex-col justify-center items-center"
+      className="min-h-screen w-full flex flex-col justify-center items-center px-6 md:px-12 lg:px-24"
     >
       <div className="text-center space-y-4">
         <div 
@@ -44,7 +44,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
         </div>
         <p 
           className={cn(
-            "text-2xl md:text-3xl lg:text-4xl font-normal leading-relaxed px-6 transition-opacity duration-400 opacity-0",
+            "text-2xl md:text-3xl lg:text-4xl font-normal leading-relaxed px-6 md:px-12 lg:px-24 transition-opacity duration-400 opacity-0",
             showContent && "opacity-100"
           )}
         >
