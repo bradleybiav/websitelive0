@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   activeSection: string;
@@ -11,6 +11,12 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate('/');
+    onSectionClick('home');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,11 +53,11 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
           <img 
             src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
             alt="Brain in a Vat" 
-            className="h-10 md:h-12"
+            className="h-10 md:h-12 cursor-pointer"
+            onClick={handleLogoClick}
           />
         </div>
 
-        {/* Desktop navigation */}
         <div className="hidden md:flex space-x-10">
           {navItems.map(item => (
             <button
@@ -69,7 +75,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
           ))}
         </div>
 
-        {/* Mobile menu button */}
         <button 
           className="md:hidden flex flex-col space-y-1.5"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -96,7 +101,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
         </button>
       </div>
 
-      {/* Mobile navigation */}
       <div 
         className={cn(
           "md:hidden absolute top-full left-0 right-0 bg-white shadow-md transition-all duration-300 ease-in-out overflow-hidden",

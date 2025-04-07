@@ -36,7 +36,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
           </a>
           
           <a 
-            href="https://www.linkedin.com/company/braininavat/?viewAsMember=true" 
+            href="https://www.linkedin.com/company/braininavat/" 
             className="hover:opacity-70 transition-opacity"
             target="_blank"
             rel="noopener noreferrer"
