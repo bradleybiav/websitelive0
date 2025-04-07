@@ -15,40 +15,57 @@ const fragmentShader = `
   uniform vec2 mouse;
   varying vec2 vUv;
   
+  float field(in vec3 p) {
+    float strength = 7.0;
+    float accum = 0.0;
+    float prev = 0.0;
+    float tw = 0.0;
+    
+    for (int i = 0; i < 5; ++i) {
+      float mag = dot(p, p);
+      p = abs(p) / mag + vec3(-0.5, -0.4, -1.5);
+      float w = exp(-float(i) / 7.0);
+      accum += w * exp(-strength * pow(abs(mag - prev), 2.2));
+      tw += w;
+      prev = mag;
+    }
+    
+    return max(0.0, 5.0 * accum / tw - 0.7);
+  }
+  
   void main() {
     vec2 uv = vUv;
     vec2 uvs = uv * 2.0 - 1.0;
     uvs.x *= resolution.x / resolution.y;
     
+    // Add subtle mouse influence
     vec2 mousePos = mouse.xy / resolution.xy;
     mousePos = mousePos * 2.0 - 1.0;
     mousePos.x *= resolution.x / resolution.y;
     
-    // Calculate distance from current pixel to mouse position
-    float dist = distance(uvs, mousePos);
+    // Use a very subtle influence from mouse position
+    float mouseInfluence = 0.02; // Very subtle effect
+    vec3 p = vec3(uvs / 3.5, 0) + vec3(mousePos.x * mouseInfluence, mousePos.y * mouseInfluence, 1.0 + sin(time * 0.2) * 0.05);
     
-    // Create a wave effect that follows the mouse
-    // Make the effect more concentrated around the mouse (less zoomed out)
-    float strength = 0.02 / (0.01 + dist * 2.5); // Increased influence by lowering the denominator
+    // Apply field function
+    float t = field(p);
     
-    // Create displacement effect
-    vec2 displacement = normalize(uvs - mousePos) * strength;
+    // We want a very subtle effect - just whitish with a hint of variation
+    vec3 baseColor = vec3(0.99, 0.99, 1.0); // Almost white base
     
-    // Base color (almost white for subtlety)
-    vec3 color = vec3(0.98, 0.98, 0.98);
+    // Create very subtle color variation
+    float colorIntensity = 0.03; // Very low intensity
+    vec3 color = baseColor - vec3(t * colorIntensity, t * colorIntensity, t * colorIntensity * 0.8);
     
-    // Add very subtle color variation based on displacement
-    color += vec3(displacement.y * 0.04, displacement.x * 0.02, displacement.x * displacement.y * 0.01);
-    
-    // Ensure the color doesn't get too dark or bright
+    // Increase brightness to ensure it's subtle and close to white
     color = clamp(color, 0.95, 1.0);
     
-    // Subtle vignette effect to hide edges
-    float vignette = 1.0 - length(uv - 0.5) * 0.2;
+    // Add an extremely subtle vignette to hide edges
+    float vignette = 1.0 - length(uv - 0.5) * 0.3;
     color *= vignette;
     
-    // Set a subtle alpha to ensure the effect is visible but not overwhelming
-    float alpha = smoothstep(0.0, 0.5, strength) * 0.3;
+    // Set a high alpha to ensure the background shows through only subtly
+    float alpha = 0.3 + min(t * 0.15, 0.2); // Low opacity for subtlety
     
     gl_FragColor = vec4(color, alpha);
   }
@@ -68,7 +85,7 @@ const ShaderBackground: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     
     // Import Three.js dynamically to avoid SSR issues
-    import('three').then(({ WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Clock }) => {
+    import('three').then(({ WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Clock, Vector2 }) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
