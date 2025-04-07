@@ -18,7 +18,6 @@ const fragmentShader = `
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
   }
   
-  // Simple noise function
   float noise(vec2 st) {
     vec2 i = floor(st);
     vec2 f = fract(st);
@@ -36,29 +35,34 @@ const fragmentShader = `
   void main() {
     vec2 uv = vUv;
     
-    // Subtle heat shimmer effect
-    float noiseScale = 8.0;
-    float timeScale = 0.2;
+    // Enhanced psychedelic noise parameters
+    float noiseScale = 12.0;  // Increased from 8.0
+    float timeScale = 0.4;    // Increased from 0.2
+    float distortionIntensity = 0.03; // Increased from 0.01
     
-    // Create layers of noise with different scales
+    // Multiple layers of noise with different frequencies and time offsets
     float noiseValue = 0.0;
     noiseValue += noise(vec2(uv.x * noiseScale, uv.y * noiseScale + time * timeScale)) * 0.5;
     noiseValue += noise(vec2(uv.x * noiseScale * 2.0, uv.y * noiseScale * 2.0 + time * timeScale * 1.3)) * 0.25;
     noiseValue += noise(vec2(uv.x * noiseScale * 4.0, uv.y * noiseScale * 4.0 + time * timeScale * 1.7)) * 0.125;
     
-    // Very subtle displacement
-    vec2 distortedUv = uv + vec2(noiseValue * 0.01, noiseValue * 0.01);
+    // More pronounced distortion
+    vec2 distortedUv = uv + vec2(
+      noiseValue * distortionIntensity, 
+      noiseValue * distortionIntensity
+    );
     
-    // Gradient from top to bottom with very subtle variation
-    float gradientValue = 1.0 - uv.y * 0.1; // Very subtle gradient
+    // More dynamic gradient with noise influence
+    float gradientValue = 1.0 - distortedUv.y * 0.2;
+    gradientValue += (noiseValue - 0.5) * 0.05;
     
-    // Add noise to create a subtle texture
-    gradientValue += (noiseValue - 0.5) * 0.02; // Very subtle noise
+    // Soft color variation with psychedelic hints
+    vec3 baseColor = vec3(0.9, 0.9, 1.0);  // Soft blue-white
+    vec3 accentColor = vec3(0.8, 0.7, 1.0); // Soft lavender
     
-    // Final color - very subtle white to off-white
-    vec3 color = vec3(1.0, 1.0, 1.0) * gradientValue;
+    vec3 color = mix(baseColor, accentColor, noiseValue * 0.3) * gradientValue;
     
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, 0.8);  // Slightly more transparent
   }
 `;
 
@@ -67,24 +71,18 @@ const HeatShimmerShader: React.FC = () => {
   const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
-    // Initialize Three.js
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
     // Import Three.js dynamically to avoid SSR issues
     import('three').then(({ WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Clock }) => {
-      // Renderer
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
       const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
 
-      // Scene
       const scene = new Scene();
-
-      // Camera
       const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-      // Shader material
       const uniforms = {
         time: { value: 0 },
         resolution: { value: [window.innerWidth, window.innerHeight] }
@@ -97,15 +95,12 @@ const HeatShimmerShader: React.FC = () => {
         transparent: true
       });
 
-      // Geometry - full screen quad
       const geometry = new PlaneGeometry(2, 2);
       const mesh = new Mesh(geometry, material);
       scene.add(mesh);
 
-      // Clock for animation
       const clock = new Clock();
 
-      // Animation loop
       const animate = () => {
         uniforms.time.value = clock.getElapsedTime();
         renderer.render(scene, camera);
@@ -114,7 +109,6 @@ const HeatShimmerShader: React.FC = () => {
 
       animate();
 
-      // Handle window resize
       const handleResize = () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         uniforms.resolution.value = [window.innerWidth, window.innerHeight];
@@ -122,7 +116,6 @@ const HeatShimmerShader: React.FC = () => {
 
       window.addEventListener('resize', handleResize);
 
-      // Cleanup
       return () => {
         if (animationFrameId.current) {
           cancelAnimationFrame(animationFrameId.current);
@@ -142,7 +135,7 @@ const HeatShimmerShader: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="shader-canvas" />;
+  return <canvas ref={canvasRef} className="shader-canvas fixed top-0 left-0 -z-10 w-full h-full opacity-80" />;
 };
 
 export default HeatShimmerShader;
