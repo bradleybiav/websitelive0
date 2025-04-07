@@ -15,11 +15,27 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      // Update active section based on scroll position
+      const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (!element) continue;
+        
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          if (section !== activeSection) {
+            onSectionClick(section);
+          }
+          break;
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [activeSection, onSectionClick]);
 
   const navItems = [
     { name: 'Home', id: 'home' },

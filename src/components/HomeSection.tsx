@@ -1,39 +1,18 @@
 
-import React, { useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface HomeSectionProps {
   id: string;
   isActive: boolean;
 }
 
-const HomeSection: React.FC<HomeSectionProps> = ({ id, isActive }) => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isActive && contentRef.current) {
-      contentRef.current.style.opacity = '1';
-      contentRef.current.style.transform = 'translateY(0)';
-    } else if (contentRef.current) {
-      contentRef.current.style.opacity = '0';
-      contentRef.current.style.transform = 'translateY(20px)';
-    }
-  }, [isActive]);
-
+const HomeSection: React.FC<HomeSectionProps> = ({ id }) => {
   return (
     <section 
       id={id} 
-      ref={sectionRef}
-      className="scroll-section section-padding flex flex-col justify-center items-center"
+      className="py-20 md:py-28 px-6 md:px-12 lg:px-24 flex flex-col justify-center items-center"
     >
-      <div 
-        ref={contentRef}
-        className={cn(
-          "max-w-[700px] text-center mx-auto transition-all duration-500 ease-out opacity-0 transform translate-y-4",
-          isActive ? "opacity-100 translate-y-0" : ""
-        )}
-      >
+      <div className="max-w-[700px] text-center mx-auto">
         <p className="text-xl md:text-2xl font-normal leading-relaxed">
           Brain in a Vat is a boutique music promotion agency that challenges perception and crafts immersive narratives for artists who defy conventional boundaries in sound and expression.
         </p>

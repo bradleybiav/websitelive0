@@ -1,44 +1,19 @@
 
-import React, { useRef, useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState } from 'react';
 import { 
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 
 interface PhilosophySectionProps {
   id: string;
   isActive: boolean;
 }
 
-const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id, isActive }) => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
   const [openStates, setOpenStates] = useState<boolean[]>([false, false, false, false]);
-
-  useEffect(() => {
-    if (isActive && sectionRef.current) {
-      elementsRef.current.forEach((element, index) => {
-        if (element) {
-          setTimeout(() => {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
-          }, index * 150);
-        }
-      });
-    } else {
-      elementsRef.current.forEach(element => {
-        if (element) {
-          element.style.opacity = '0';
-          element.style.transform = 'translateY(20px)';
-        }
-      });
-      
-      // Reset open states when section is not active
-      setOpenStates([false, false, false, false]);
-    }
-  }, [isActive]);
 
   const philosophyPoints = [
     {
@@ -68,30 +43,17 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id, isActive }) =
   return (
     <section 
       id={id} 
-      ref={sectionRef}
-      className="scroll-section section-padding"
+      className="py-20 md:py-28 px-6 md:px-12 lg:px-24 bg-gray-50"
     >
-      <div 
-        className={cn(
-          "max-w-7xl mx-auto",
-          isActive ? "opacity-100" : "opacity-0"
-        )}
-      >
-        <div 
-          ref={el => elementsRef.current[0] = el}
-          className="transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-        >
+      <div className="max-w-7xl mx-auto">
+        <div>
           <h2 className="header-text mb-6">Our Philosophy</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
         <div className="space-y-6">
           {philosophyPoints.map((point, index) => (
-            <div 
-              key={index}
-              ref={el => elementsRef.current[index + 1] = el}
-              className="transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-            >
+            <div key={index}>
               <Collapsible
                 open={openStates[index]}
                 onOpenChange={() => toggleCollapsible(index)}
@@ -116,10 +78,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id, isActive }) =
           ))}
         </div>
         
-        <div 
-          ref={el => elementsRef.current[5] = el}
-          className="mt-16 py-6 border-t border-b border-gray-200 transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-        >
+        <div className="mt-16 py-6 border-t border-b border-gray-200">
           <blockquote className="italic text-xl md:text-2xl text-center max-w-3xl mx-auto">
             "We don't just promote music; we create experiences that challenge perception and expand consciousness."
           </blockquote>

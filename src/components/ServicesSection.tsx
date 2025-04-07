@@ -1,6 +1,5 @@
 
-import React, { useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import React from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface ServicesSectionProps {
@@ -8,30 +7,7 @@ interface ServicesSectionProps {
   isActive: boolean;
 }
 
-const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    if (isActive && sectionRef.current) {
-      elementsRef.current.forEach((element, index) => {
-        if (element) {
-          setTimeout(() => {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
-          }, index * 150);
-        }
-      });
-    } else {
-      elementsRef.current.forEach(element => {
-        if (element) {
-          element.style.opacity = '0';
-          element.style.transform = 'translateY(20px)';
-        }
-      });
-    }
-  }, [isActive]);
-
+const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
   const services = [
     {
       title: "Press",
@@ -58,19 +34,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
   return (
     <section 
       id={id} 
-      ref={sectionRef}
-      className="scroll-section section-padding"
+      className="py-20 md:py-28 px-6 md:px-12 lg:px-24"
     >
-      <div 
-        className={cn(
-          "max-w-7xl mx-auto",
-          isActive ? "opacity-100" : "opacity-0"
-        )}
-      >
-        <div 
-          ref={el => elementsRef.current[0] = el}
-          className="mb-16 transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-        >
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-16">
           <h2 className="header-text mb-6">Our Services</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
           <p className="subheader-text max-w-3xl">
@@ -82,10 +49,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
           {services.map((service, index) => (
             <HoverCard key={index} openDelay={75} closeDelay={100}>
               <HoverCardTrigger asChild>
-                <div 
-                  ref={el => elementsRef.current[index + 1] = el}
-                  className="p-6 border border-gray-200 hover:border-black transition-all duration-300 ease-in-out opacity-0 transform translate-y-4 cursor-pointer shimmer-bg"
-                >
+                <div className="p-6 border border-gray-200 hover:border-black transition-all duration-300 ease-in-out cursor-pointer shimmer-bg">
                   <div className="text-3xl mb-4">{service.icon}</div>
                   <h3 className="text-xl font-display font-semibold mb-3">{service.title}</h3>
                 </div>
@@ -101,10 +65,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id, isActive }) => {
           ))}
         </div>
         
-        <div 
-          ref={el => elementsRef.current[5] = el}
-          className="mt-16 text-center transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-        >
+        <div className="mt-16 text-center">
           <button className="px-8 py-3 border-2 border-black font-medium transition-all duration-300 hover:bg-black hover:text-white">
             Contact Us For Details
           </button>

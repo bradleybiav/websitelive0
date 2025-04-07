@@ -2,29 +2,23 @@
 import React, { useState } from 'react';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
 import Navbar from '@/components/Navbar';
-import ScrollGlyphRail from '@/components/ScrollGlyphRail';
 import HeroSection from '@/components/HeroSection';
-import ContentContainer from '@/components/ContentContainer';
-import { useScrollManager } from '@/hooks/useScrollManager';
+import HomeSection from '@/components/HomeSection';
+import PhilosophySection from '@/components/PhilosophySection';
+import ServicesSection from '@/components/ServicesSection';
+import ClientsSection from '@/components/ClientsSection';
+import ContactSection from '@/components/ContactSection';
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState('hero');
-  const [heroActive, setHeroActive] = useState(true);
-  const [navVisible, setNavVisible] = useState(false);
-  const sections = ['home', 'philosophy', 'services', 'clients', 'contact'];
+  const [activeSection, setActiveSection] = useState('home');
   
-  const { containerRef, scrollToSection } = useScrollManager({
-    sections,
-    heroActive,
-    onSectionChange: setActiveSection
-  });
-  
-  const handleHeroInteraction = () => {
-    setHeroActive(false);
-    setTimeout(() => {
-      setNavVisible(true);
-      scrollToSection('home');
-    }, 500);
+  const handleSectionClick = (section: string) => {
+    setActiveSection(section);
+    // Smooth scroll to the section
+    const element = document.getElementById(section);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   
   return (
@@ -34,25 +28,42 @@ const Index = () => {
       <div className="relative min-h-screen">
         <Navbar 
           activeSection={activeSection} 
-          onSectionClick={scrollToSection} 
-          visible={navVisible}
+          onSectionClick={handleSectionClick} 
+          visible={true}
         />
         
-        {/* Removed ScrollIndicator component */}
-        
-        <ScrollGlyphRail visible={navVisible} />
-        
-        <HeroSection 
-          id="hero" 
-          isActive={heroActive} 
-          onInteraction={handleHeroInteraction} 
-        />
-        
-        <ContentContainer
-          containerRef={containerRef}
-          activeSection={activeSection}
-          navVisible={navVisible}
-        />
+        <main className="pt-16"> {/* Add padding-top to accommodate fixed navbar */}
+          <HeroSection 
+            id="hero" 
+            isActive={true} 
+            onInteraction={() => {}} 
+          />
+          
+          <HomeSection 
+            id="home" 
+            isActive={true} 
+          />
+          
+          <PhilosophySection 
+            id="philosophy" 
+            isActive={true} 
+          />
+          
+          <ServicesSection 
+            id="services" 
+            isActive={true} 
+          />
+          
+          <ClientsSection 
+            id="clients" 
+            isActive={true} 
+          />
+          
+          <ContactSection 
+            id="contact" 
+            isActive={true} 
+          />
+        </main>
       </div>
     </>
   );

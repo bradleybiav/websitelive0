@@ -8,7 +8,7 @@ interface HeroSectionProps {
   onInteraction: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive, onInteraction }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const [showContent, setShowContent] = useState(false);
@@ -22,26 +22,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive, onInteraction }
     return () => clearTimeout(logoTimer);
   }, []);
 
-  // Set up event listeners for interaction
-  useEffect(() => {
-    if (!isActive) return;
-
-    const handleInteraction = () => {
-      onInteraction();
-    };
-
-    // Add event listeners for various interactions
-    window.addEventListener('click', handleInteraction);
-    window.addEventListener('scroll', handleInteraction);
-    window.addEventListener('keydown', handleInteraction);
-
-    return () => {
-      window.removeEventListener('click', handleInteraction);
-      window.removeEventListener('scroll', handleInteraction);
-      window.removeEventListener('keydown', handleInteraction);
-    };
-  }, [isActive, onInteraction]);
-
   // Handle logo hover animation
   const handleLogoHover = (isHovering: boolean) => {
     if (logoRef.current) {
@@ -53,10 +33,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive, onInteraction }
     <section 
       id={id} 
       ref={sectionRef}
-      className={cn(
-        "scroll-section flex flex-col justify-center items-center min-h-screen w-full fixed inset-0 z-30 transition-opacity duration-1000",
-        isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-      )}
+      className="min-h-[80vh] w-full flex flex-col justify-center items-center"
     >
       <div className="text-center">
         <div 
@@ -81,12 +58,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive, onInteraction }
             showContent && "opacity-100 translate-y-0"
           )}
         >
-          <button 
-            onClick={onInteraction}
-            className="uppercase tracking-widest text-sm font-medium"
-          >
-            Enter
-          </button>
+          <h1 className="header-text">Brain in a Vat</h1>
+          <p className="mt-4 subheader-text">Music Promotion Agency</p>
         </div>
       </div>
     </section>
