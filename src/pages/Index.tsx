@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HeatShimmerShader from '@/components/HeatShimmerShader';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -20,6 +20,28 @@ const Index = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  
+  useEffect(() => {
+    // Set up intersection observer to update active section on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3 } // Trigger when 30% of the element is visible
+    );
+    
+    // Observe all sections
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach((section) => observer.observe(section));
+    
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
   
   return (
     <>

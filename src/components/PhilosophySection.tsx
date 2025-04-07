@@ -43,7 +43,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
   return (
     <section 
       id={id} 
-      className="py-20 md:py-28 px-6 md:px-12 lg:px-24 bg-gray-50"
+      className="py-20 md:py-28 px-6 md:px-12 lg:px-24"
     >
       <div className="max-w-7xl mx-auto">
         <div>
