@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
@@ -52,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center">
           <img 
-            src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
+            src="/lovable-uploads/270d14ee-cd07-46e3-a81b-e1034854d298.png" 
             alt="Brain in a Vat" 
             className="h-10 md:h-12 cursor-pointer"
             onClick={handleLogoClick}
