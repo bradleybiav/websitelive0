@@ -76,14 +76,14 @@ const Index = () => {
           visible={true}
         />
         
-        <main className="pt-16"> {/* Add padding-top to accommodate fixed navbar */}
+        <main className="pt-16">
           <HeroSection 
             id="hero" 
             isActive={true} 
             onInteraction={() => {}} 
           />
           
-          <div className="space-y-8 md:space-y-12"> {/* Reduced spacing between sections */}
+          <div className="space-y-4 md:space-y-6"> {/* Further reduced spacing between sections */}
             <HomeSection 
               id="home" 
               isActive={true} 
@@ -116,3 +116,4 @@ const Index = () => {
 };
 
 export default Index;
+
