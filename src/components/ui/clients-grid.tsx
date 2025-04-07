@@ -8,7 +8,6 @@ import { ZoomIn, ZoomOut, Instagram, ExternalLink } from "lucide-react"
 import { featuredClients } from "@/data/clients/featured-clients"
 import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 interface ClientCardProps {
   client: Client;
@@ -102,25 +101,7 @@ const ClientsGrid = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between mb-4">
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <Button variant="link" className="text-black hover:text-gray-700 p-0">
-              How to import client data
-            </Button>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-80">
-            <div className="text-sm">
-              <p className="font-semibold mb-2">Import options:</p>
-              <ol className="list-decimal pl-4 space-y-1">
-                <li>Export from Airtable as CSV</li>
-                <li>Upload the data as JSON format</li>
-                <li>Connect directly via Airtable API</li>
-              </ol>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
-        
+      <div className="flex justify-end mb-4">
         <div className="flex space-x-2">
           <Button 
             variant="outline" 

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -93,7 +94,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
               {services.map((service, index) => (
                 <div 
                   key={index}
-                  className={`absolute top-0 left-0 w-full transition-opacity duration-300 ease-in-out p-6 md:p-8 border-l-2 border-black ${
+                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ease-in-out border-l-2 border-black pl-6 md:pl-8 ${
                     activeIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                   }`}
                 >
