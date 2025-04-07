@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -93,6 +94,9 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 
 const ClientsGrid = () => {
   const [size, setSize] = useState<"small" | "medium" | "large" | "xl">("medium");
+
+  // Verify we're using all clients from the data file
+  console.log(`Total clients in data: ${clientsData.length}`);
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
