@@ -55,11 +55,14 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
             ))}
           </div>
           
-          <div className="col-span-12 md:col-span-7 relative">
+          <div className="col-span-12 md:col-span-7 relative h-full flex items-center">
+            {hoveredIndex !== null && (
+              <div className="absolute inset-0 border-l-2 border-black"></div>
+            )}
             {philosophyPoints.map((point, index) => (
               <div 
                 key={index}
-                className={`absolute top-0 left-0 w-full transition-opacity duration-300 ease-in-out p-6 md:p-8 border-l-2 border-black ${
+                className={`absolute inset-0 transition-opacity duration-300 ease-in-out p-6 md:p-8 flex items-center ${
                   hoveredIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
               >
@@ -74,4 +77,3 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
 };
 
 export default PhilosophySection;
-
