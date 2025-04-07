@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 const vertexShader = `
@@ -39,8 +40,8 @@ const fragmentShader = `
     // Convert mouse position from screen coordinates to normalized [0,1]
     vec2 mousePos = mouse.xy / resolution.xy;
     
-    // Use mouse for subtle influence (keep it very subtle)
-    float mouseInfluence = 0.03; // Very subtle effect
+    // Increase mouse influence for more pronounced effect
+    float mouseInfluence = 0.12; // Increased from 0.03 to 0.12
     vec2 adjustedUV = uv + (mousePos - center) * mouseInfluence;
     
     vec2 p = -1.0 + 2.0 * adjustedUV;
@@ -48,22 +49,22 @@ const fragmentShader = `
     
     float t = field(vec3(p.x * 1.2, p.y, time * 0.1));
     
-    // Very subtle white base with just a hint of color variation
-    vec3 baseColor = vec3(0.97, 0.97, 0.98); // Almost white base
-    float colorIntensity = 0.04; // Very low intensity
+    // Slightly less white base with more color variation
+    vec3 baseColor = vec3(0.95, 0.95, 0.97); // Slightly off-white base
+    float colorIntensity = 0.1; // Increased from 0.04 to 0.1
     
     vec3 color = mix(
       baseColor,
-      baseColor - vec3(t * colorIntensity, t * colorIntensity, t * colorIntensity * 0.8),
-      t * 0.2
+      baseColor - vec3(t * colorIntensity, t * colorIntensity * 0.9, t * colorIntensity * 0.7),
+      t * 0.35 // Increased from 0.2 to 0.35
     );
     
-    // Add an extremely subtle vignette
-    float vignette = 1.0 - length(uv - 0.5) * 0.3;
+    // Add a slightly stronger vignette
+    float vignette = 1.0 - length(uv - 0.5) * 0.35;
     color *= vignette;
     
-    // Set a low alpha to ensure the background shows through
-    float alpha = 0.2 + min(t * 0.1, 0.15); // Low opacity for subtlety
+    // Increase opacity for more visibility
+    float alpha = 0.25 + min(t * 0.2, 0.25); // Increased from 0.2 + min(t * 0.1, 0.15)
     
     gl_FragColor = vec4(color, alpha);
   }
