@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import ShaderBackground from '@/components/ShaderBackground';
+import DynamicShaderBackground from '@/components/DynamicShaderBackground';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import HomeSection from '@/components/HomeSection';
@@ -70,7 +70,7 @@ const Index = () => {
   
   return (
     <>
-      <ShaderBackground />
+      <DynamicShaderBackground />
       
       <div className="relative min-h-screen">
         <Navbar 
