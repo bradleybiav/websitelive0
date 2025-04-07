@@ -79,7 +79,7 @@ const Index = () => {
           visible={true}
         />
         
-        <main className="pt-16"> {/* Add padding-top to accommodate fixed navbar */}
+        <main className="pt-16">
           <HeroSection 
             id="hero" 
             isActive={true} 
