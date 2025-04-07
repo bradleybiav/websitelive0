@@ -92,12 +92,5 @@ export const electronicArtists: Client[] = [
     image: "/NOCUI_artist_cover (1).jpg",
     instagramUrl: "https://www.instagram.com/nocui_/",
     spotifyUrl: "https://open.spotify.com/artist/5WAAffTsqPSeJqB4zb1SlV"
-  },
-  {
-    name: "Orsay",
-    type: "Electronic Producer",
-    image: "/lovable-uploads/be5a2ed1-81b5-4cbb-b6cb-a9b602759d57.png",
-    instagramUrl: "https://www.instagram.com/orsaymusic/",
-    spotifyUrl: "https://open.spotify.com/artist/0jbyfa9yocQWIf7nXO8LH4"
   }
 ];
