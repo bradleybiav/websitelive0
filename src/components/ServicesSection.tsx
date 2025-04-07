@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ServicesSectionProps {
   id: string;
@@ -7,7 +8,8 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const isMobile = useIsMobile();
   
   const services = [
     {
@@ -28,6 +30,14 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
     }
   ];
 
+  const handleItemClick = (index: number) => {
+    if (activeIndex === index) {
+      setActiveIndex(null);
+    } else {
+      setActiveIndex(index);
+    }
+  };
+
   return (
     <section 
       id={id} 
@@ -39,35 +49,61 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
           <div className="w-20 h-1 bg-black mb-8"></div>
         </div>
         
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 md:col-span-4">
+        {isMobile ? (
+          // Mobile layout - vertical accordion style
+          <div className="space-y-8">
             {services.map((service, index) => (
               <div 
                 key={index}
-                className="mb-8 cursor-pointer group"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                className="cursor-pointer"
               >
-                <h3 className="text-2xl md:text-3xl font-display font-semibold transition-colors duration-300 group-hover:text-gray-600">
-                  {service.title}
-                </h3>
+                <div 
+                  className={`transition-colors duration-300 ${activeIndex === index ? 'text-gray-600' : ''}`}
+                  onClick={() => handleItemClick(index)}
+                >
+                  <h3 className="text-2xl md:text-3xl font-display font-semibold mb-2">{service.title}</h3>
+                </div>
+                {activeIndex === index && (
+                  <div className="mt-3 border-l-2 border-black pl-4 animate-fade-in">
+                    <p className="text-lg">{service.description}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
-          
-          <div className="col-span-12 md:col-span-8 relative">
-            {services.map((service, index) => (
-              <div 
-                key={index}
-                className={`absolute top-0 left-0 w-full transition-opacity duration-300 ease-in-out p-6 md:p-8 border-l-2 border-black ${
-                  hoveredIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                }`}
-              >
-                <p className="text-lg">{service.description}</p>
-              </div>
-            ))}
+        ) : (
+          // Desktop layout - hover with column layout
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 md:col-span-4">
+              {services.map((service, index) => (
+                <div 
+                  key={index}
+                  className="mb-8 cursor-pointer group"
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseLeave={() => setActiveIndex(null)}
+                  onClick={() => handleItemClick(index)}
+                >
+                  <h3 className={`text-2xl md:text-3xl font-display font-semibold transition-colors duration-300 ${activeIndex === index ? 'text-gray-600' : ''}`}>
+                    {service.title}
+                  </h3>
+                </div>
+              ))}
+            </div>
+            
+            <div className="col-span-12 md:col-span-8 relative">
+              {services.map((service, index) => (
+                <div 
+                  key={index}
+                  className={`absolute top-0 left-0 w-full transition-opacity duration-300 ease-in-out p-6 md:p-8 border-l-2 border-black ${
+                    activeIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <p className="text-lg">{service.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
