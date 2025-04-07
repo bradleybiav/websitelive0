@@ -1,4 +1,30 @@
+
 export const clients = [
+  { 
+    name: "Jake Miller", 
+    type: "Pop Artist", 
+    image: "/lovable-uploads/6589eb7a-219a-4224-8985-4b3b1514e548.png" 
+  },
+  { 
+    name: "Luca Marano", 
+    type: "Electronic Producer", 
+    image: "/lovable-uploads/ad396482-facd-4ae4-bc0d-8a78378132ee.png" 
+  },
+  { 
+    name: "Neon Jungle", 
+    type: "Electronic Duo", 
+    image: "/lovable-uploads/cc54a4f7-a5d1-4f5e-9b63-ad4d41dda376.png" 
+  },
+  { 
+    name: "Antonia", 
+    type: "Pop Vocalist", 
+    image: "/lovable-uploads/2e201a6c-ab7e-4b4f-b623-f7094f40eac0.png" 
+  },
+  { 
+    name: "Vision Sounds", 
+    type: "Production Duo", 
+    image: "/lovable-uploads/dfc2416b-091b-4982-8b81-807811e588a3.png" 
+  },
   { 
     name: "Ethereal Echo", 
     type: "Electronic Producer", 
