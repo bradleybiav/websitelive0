@@ -1,13 +1,11 @@
-
 import { Client } from './types';
 
-// Record Labels & Distribution
 export const featuredLabels: Client[] = [
   // Current photo 23: Higher Ground
   { 
     name: "Higher Ground", 
     type: "Record Label", 
-    image: "/lovable-uploads/aeda8d1e-7f05-4ddd-bc99-3434b5c6e554.png", 
+    image: "/lovable-uploads/df4edc9a-7cc5-42a5-9359-9003b489612a.png", 
     instagramUrl: "https://www.instagram.com/thehigherground/",
     beatportUrl: "https://www.beatport.com/label/higher-ground/80998"
   },
