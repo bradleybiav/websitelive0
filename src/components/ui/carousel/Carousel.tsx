@@ -45,10 +45,13 @@ const Carousel = memo(
     const isCardVisible = (index: number) => {
       const currentRotation = rotation.get() % 360
       const cardAngle = (index * (360 / faceCount)) % 360
-      const difference = Math.abs(currentRotation - cardAngle)
+      
+      // Calculate the shortest angle difference
+      let difference = Math.abs(currentRotation - cardAngle)
+      if (difference > 180) difference = 360 - difference
       
       // Cards are visible when they're within 45 degrees of facing forward
-      return difference < 45 || difference > 315
+      return difference < 45
     }
 
     // Handle mouse movement within the carousel container
@@ -64,7 +67,7 @@ const Carousel = memo(
       setMousePosition(relativePosition)
       
       // Enable auto-rotation when mouse is not in the center
-      setAutoRotate(Math.abs(relativePosition) > 0.1)
+      setAutoRotate(Math.abs(relativePosition) > 0.05)
     }
     
     // Handle mouse leaving the container
@@ -72,15 +75,7 @@ const Carousel = memo(
       setAutoRotate(false)
     }
 
-    // Normalize rotation to prevent large values
-    const normalizeRotation = () => {
-      const currentRotation = rotation.get()
-      if (Math.abs(currentRotation) > 3600) { // Reset after 10 full rotations
-        rotation.set(currentRotation % 360)
-      }
-    }
-
-    // Auto-rotate based on mouse position with infinite looping
+    // Auto-rotate based on mouse position
     useEffect(() => {
       if (!isCarouselActive) return
       
@@ -89,9 +84,14 @@ const Carousel = memo(
       const updateRotation = () => {
         if (autoRotate) {
           // Speed depends on how far from center the mouse is
-          const rotationSpeed = mousePosition * 2
-          rotation.set(rotation.get() + rotationSpeed)
-          normalizeRotation()
+          const rotationSpeed = mousePosition * 1.5
+          
+          // Update rotation and ensure continual wrapping
+          let newRotation = rotation.get() + rotationSpeed
+          
+          // No need to normalize the rotation as framer-motion handles
+          // large values well, and we use modulo when checking visibility
+          rotation.set(newRotation)
         }
         animationId = requestAnimationFrame(updateRotation)
       }
@@ -138,7 +138,8 @@ const Carousel = memo(
                   opacity: isCardVisible(i) ? 1 : 0,
                   pointerEvents: isCardVisible(i) ? "auto" : "none",
                   backfaceVisibility: "hidden", // Hide backfaces
-                  transition: "opacity 0.3s ease",
+                  visibility: isCardVisible(i) ? "visible" : "hidden", // Actually hide element
+                  transition: "opacity 0.3s ease, visibility 0.3s ease",
                 }}
                 onClick={() => isCardVisible(i) && handleClick(client.image, {name: client.name, type: client.type}, i)}
               >
