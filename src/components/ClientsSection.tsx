@@ -12,8 +12,10 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Ensure animations are triggered when the section becomes active
   useEffect(() => {
     if (isActive && sectionRef.current) {
+      // Animate elements in sequence when section becomes active
       elementsRef.current.forEach((element, index) => {
         if (element) {
           setTimeout(() => {
@@ -22,7 +24,8 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           }, index * 150);
         }
       });
-    } else {
+    } else if (!isActive) {
+      // Reset element styles when section is not active
       elementsRef.current.forEach(element => {
         if (element) {
           element.style.opacity = '0';
@@ -36,11 +39,11 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen py-10 md:py-12 px-6 md:px-12 lg:px-24"
+      className="min-h-screen flex items-center py-10 md:py-12 px-6 md:px-12 lg:px-24"
     >
       <div 
         className={cn(
-          "max-w-7xl mx-auto",
+          "max-w-7xl mx-auto w-full",
           isActive ? "opacity-100" : "opacity-0"
         )}
       >

@@ -35,29 +35,33 @@ const Index = () => {
         // Only process if we're not in a programmatic scroll
         if (!isScrollingRef.current) {
           entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+            // Lower threshold for better detection
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
               setActiveSection(entry.target.id);
+              console.log("Section visible:", entry.target.id, "with ratio:", entry.intersectionRatio);
             }
           });
         }
       },
       { 
-        threshold: [0.2, 0.3, 0.4, 0.5], // Multiple thresholds for better detection
-        rootMargin: "-5% 0px" // Smaller margin to detect sections earlier
+        threshold: [0.1, 0.2, 0.3, 0.4], // Lower thresholds for earlier detection
+        rootMargin: "-10px 0px" // Minimal margin to detect sections as early as possible
       }
     );
     
-    // Observe all sections with a slight delay to ensure DOM is ready
+    // Observe all sections with a delay to ensure DOM is ready
     setTimeout(() => {
       const sections = document.querySelectorAll('section[id]');
-      sections.forEach((section) => observer.observe(section));
-    }, 100);
+      sections.forEach((section) => {
+        observer.observe(section);
+        console.log("Observing section:", section.id);
+      });
+    }, 500); // Longer delay to ensure all sections are fully rendered
     
-    // Event listener for manual scrolling
+    // Handle manual scrolling
     const handleManualScroll = () => {
       if (!isScrollingRef.current) {
-        // We're in a manual scroll, not a programmatic one
-        // Do nothing special here, let the IntersectionObserver handle it
+        // We're in a manual scroll, the observer will handle section detection
       }
     };
     
@@ -86,7 +90,7 @@ const Index = () => {
             onInteraction={() => {}}
           />
           
-          <div className="space-y-12 md:space-y-24"> {/* Slightly reduced vertical spacing */}
+          <div className="space-y-8 md:space-y-16"> {/* Further reduced vertical spacing */}
             <HomeSection 
               id="home" 
               isActive={activeSection === 'home'} 
