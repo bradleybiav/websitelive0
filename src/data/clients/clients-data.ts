@@ -1,4 +1,3 @@
-
 import { Client } from './types';
 
 export const clientsData: Client[] = [
@@ -41,7 +40,8 @@ export const clientsData: Client[] = [
     name: "Bounce House",
     type: "Label",
     image: "/Bounce House.jpeg",
-    instagramUrl: null,
+    instagramUrl: "https://www.instagram.com/bouncehouseforever/",
+    beatportUrl: null,
     spotifyUrl: null
   },
   {
@@ -248,4 +248,3 @@ export const clientsData: Client[] = [
     beatportUrl: "https://www.beatport.com/label/x-recordings/117694"
   }
 ];
-
