@@ -13,20 +13,20 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
   
   const services = [
     {
-      title: "Press",
-      description: "We craft tailored press campaigns that elevate the visibility of artists and labels within electronic music media and beyond. Our approach builds compelling narratives through strategic placements across a variety of mediums. With a deep understanding of the electronic music landscape, we connect you with the tastemakers and platforms that ensure your story resonates authentically."
-    },
-    {
       title: "DSP Promo",
-      description: "We pitch your release directly to editorial contacts across major platforms like Spotify, Apple Music, Amazon Music, Deezer, and SoundCloud. Beyond standard pitching, our DSP service includes a bespoke third-party playlist placement and algorithmic optimization campaign. We target curators who have featured tracks in your micro niche— driving high-quality listens and refining your release's algorithmic associations."
+      description: "We pitch directly to editorial teams at platforms like Spotify, Apple Music, Amazon Music, Deezer, and SoundCloud. Our approach includes targeted third-party playlisting and algorithmic positioning to drive fan discovery and engagement."
     },
     {
       title: "Radio Promo",
-      description: "We pitch your track for airplay across an international network of radio DJs and music programmers, spanning terrestrial, internet, and satellite stations. In addition, we offer guest mix seeding, pitching stations on exclusive mixes (recorded upon confirmation of interest) or syndicating non-exclusive mixes to shows with recurring guest mix slots."
+      description: "We pitch your release for airplay across a global network of radio DJs and programmers — FM, satellite, and digital — and can seed guest mixes to support a release or tour stop in key markets."
     },
     {
       title: "Club/Tastemaker DJ Promo",
-      description: "Our DJ promo service ensures your release reaches key global tastemaker DJs. Leveraging strong relationships across the electronic music spectrum, we place your track in the hands (or onto the USBs) of influential DJs. Our targeted approach amplifies your music's impact at festivals, clubs, and beyond, generating organic buzz on dance floors worldwide."
+      description: "We ensure your music reaches key global tastemaker DJs. Our targeted outreach gets your release into the right hands, creating momentum in clubs, on dance floors, and at festivals worldwide."
+    },
+    {
+      title: "Press",
+      description: "We run tailored press campaigns that connect artists and labels with the right voices in electronic music media and beyond. Each campaign is grounded in a clear narrative and focused outreach, building credibility and crafting narrative through deliberate, meaningful placements."
     }
   ];
 
