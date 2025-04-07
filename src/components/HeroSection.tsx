@@ -26,7 +26,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pt-48 pb-48"
+      className="min-h-screen w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pt-24 pb-24" // Reduced padding from pt-48 pb-48 to pt-24 pb-24
     >
       <div className="text-center space-y-32 flex-1 flex flex-col justify-center">
         <Logo showContent={showContent} />
@@ -40,3 +40,4 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
 };
 
 export default HeroSection;
+
