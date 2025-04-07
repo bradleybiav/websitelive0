@@ -26,9 +26,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen w-full flex flex-col justify-center items-center pt-16"
+      className="min-h-screen w-full flex flex-col justify-center items-center"
     >
-      <div className="text-center space-y-6">
+      <div className="text-center space-y-4">
         <div 
           ref={logoRef} 
           className={cn(
@@ -42,6 +42,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
             className="w-[249.6px] md:w-[78.0rem] lg:w-[93.6rem]"
           />
         </div>
+        <p 
+          className={cn(
+            "text-xl md:text-2xl font-normal leading-relaxed px-6 transition-opacity duration-400 opacity-0",
+            showContent && "opacity-100"
+          )}
+        >
+          brain in a vat is a boutique music promotions agency that shapes perception and shifts reality.
+        </p>
       </div>
     </section>
   );
