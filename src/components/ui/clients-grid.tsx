@@ -14,7 +14,7 @@ interface ClientCardProps {
     type: string
     image: string
   }
-  size: "small" | "medium" | "large"
+  size: "small" | "medium" | "large" | "xl"
 }
 
 const ClientCard = ({ client, size }: ClientCardProps) => {
@@ -40,15 +40,17 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 };
 
 const ClientsGrid = () => {
-  const [size, setSize] = useState<"small" | "medium" | "large">("medium");
+  const [size, setSize] = useState<"small" | "medium" | "large" | "xl">("medium");
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
     else if (size === "medium") setSize("large");
+    else if (size === "large") setSize("xl");
   };
 
   const handleZoomOut = () => {
-    if (size === "large") setSize("medium");
+    if (size === "xl") setSize("large");
+    else if (size === "large") setSize("medium");
     else if (size === "medium") setSize("small");
   };
 
@@ -56,7 +58,8 @@ const ClientsGrid = () => {
   const gridSizeClasses = {
     small: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6",
     medium: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
-    large: "grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3"
+    large: "grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3",
+    xl: "grid-cols-1" // Single column
   };
 
   return (
@@ -75,7 +78,7 @@ const ClientsGrid = () => {
           variant="outline" 
           size="icon"
           onClick={handleZoomIn}
-          disabled={size === "large"}
+          disabled={size === "xl"}
           className="bg-white hover:bg-gray-100"
         >
           <ZoomIn className="h-4 w-4" />

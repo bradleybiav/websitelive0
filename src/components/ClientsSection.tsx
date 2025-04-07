@@ -61,15 +61,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
         >
           <ClientsGrid />
         </div>
-        
-        <div 
-          ref={el => elementsRef.current[2] = el}
-          className="mt-16 text-center transition-all duration-500 ease-out opacity-0 transform translate-y-4"
-        >
-          <button className="px-8 py-3 border-2 border-transparent underline font-medium transition-all duration-300 hover:opacity-70">
-            View All Case Studies
-          </button>
-        </div>
       </div>
     </section>
   );
