@@ -1,3 +1,4 @@
+
 import { Client } from './types';
 
 export const clientsData: Client[] = [
@@ -38,7 +39,7 @@ export const clientsData: Client[] = [
   },
   {
     name: "Bounce House",
-    type: "Label",
+    type: "Artist", // Changed from "Label" to "Artist"
     image: "/Bounce House.jpeg",
     instagramUrl: "https://www.instagram.com/bouncehouseforever/",
     beatportUrl: null,
@@ -53,8 +54,8 @@ export const clientsData: Client[] = [
   },
   {
     name: "Chloé Caillet",
-    type: "Artist",
-    image: "/Chloé Caillet_artist_cover.jpg",
+    type: "DJ/Producer",
+    image: "/lovable-uploads/b94a5ee9-877f-4e78-926e-f7b0480a6a15.png", // Updated image path
     instagramUrl: "https://www.instagram.com/chloecaillet/",
     spotifyUrl: "https://open.spotify.com/artist/68ywCN6ZpInbcilOfLBa3a"
   },
