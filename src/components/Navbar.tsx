@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import DesktopMenu from './DesktopMenu';
+import MobileMenu from './MobileMenu';
 
 interface NavbarProps {
   activeSection: string;
@@ -14,11 +16,13 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Handle logo click to scroll to top and set active section to home
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onSectionClick('home');
   };
 
+  // Add scroll event listener to detect when navbar should change appearance
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -64,74 +68,19 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
           </div>
         )}
 
-        <div className="flex-1 flex justify-end">
-          <div className={cn(
-            "hidden md:flex space-x-10",
-            shouldShowLogo ? "" : ""
-          )}>
-            {navItems.map(item => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={cn(
-                  'nav-link relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-black after:transition-all after:duration-300 after:ease-in-out',
-                  activeSection === item.id 
-                    ? 'after:w-full' 
-                    : 'after:w-0 hover:after:w-full'
-                )}
-              >
-                {item.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        <DesktopMenu 
+          navItems={navItems} 
+          activeSection={activeSection} 
+          onNavClick={handleNavClick} 
+        />
 
-        <button 
-          className="md:hidden flex flex-col space-y-1.5"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span 
-            className={cn(
-              "block h-0.5 w-6 bg-black transition-transform duration-300", 
-              menuOpen && "rotate-45 translate-y-2"
-            )} 
-          />
-          <span 
-            className={cn(
-              "block h-0.5 w-6 bg-black transition-opacity duration-300", 
-              menuOpen && "opacity-0"
-            )} 
-          />
-          <span 
-            className={cn(
-              "block h-0.5 w-6 bg-black transition-transform duration-300", 
-              menuOpen && "-rotate-45 -translate-y-2"
-            )} 
-          />
-        </button>
-      </div>
-
-      <div 
-        className={cn(
-          "md:hidden absolute top-full left-0 right-0 bg-white shadow-md transition-all duration-300 ease-in-out overflow-hidden",
-          menuOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
-        )}
-      >
-        <div className="px-6 py-4 flex flex-col space-y-4">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
-              className={cn(
-                'nav-link text-left py-2',
-                activeSection === item.id && 'font-bold'
-              )}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
+        <MobileMenu 
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          navItems={navItems}
+          activeSection={activeSection}
+          onNavClick={handleNavClick}
+        />
       </div>
     </nav>
   );
