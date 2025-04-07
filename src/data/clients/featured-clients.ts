@@ -1,4 +1,3 @@
-
 import { Client } from './types';
 
 // These are the clients that have actual uploaded images
@@ -127,5 +126,35 @@ export const featuredClients: Client[] = [
     name: "Electric Pulse", 
     type: "Experimental Music", 
     image: "/lovable-uploads/ac8f5eed-c337-435a-bd28-d22a01701fef.png" 
+  },
+  { 
+    name: "Neon Circuit", 
+    type: "Experimental Electronic", 
+    image: "/lovable-uploads/afb17112-bd85-424f-9df9-ac55ec643d9d.png" 
+  },
+  { 
+    name: "Le Nora", 
+    type: "Alternative Electronic", 
+    image: "/lovable-uploads/909a9400-3125-4625-b155-9f0daff4d567.png" 
+  },
+  { 
+    name: "Hurry Up Slowly", 
+    type: "Indie Electronic", 
+    image: "/lovable-uploads/295bb22b-d6fd-45a8-a168-a382987b8252.png" 
+  },
+  { 
+    name: "Higher Ground", 
+    type: "Electronic Band", 
+    image: "/lovable-uploads/aeda8d1e-7f05-4ddd-bc99-3434b5c6e554.png" 
+  },
+  { 
+    name: "RR Shield", 
+    type: "Electronic Duo", 
+    image: "/lovable-uploads/6447f69c-9e75-403e-a5f3-1b1b178a71a2.png" 
+  },
+  { 
+    name: "20/20 Vision", 
+    type: "Experimental Music", 
+    image: "/lovable-uploads/28da3a2d-3ea6-46a7-9891-1cdf5deef958.png" 
   }
 ];
