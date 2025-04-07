@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ClientsGrid } from "@/components/ui/clients-grid";
@@ -18,12 +19,12 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
       elementsRef.current.forEach((element, index) => {
         if (element) {
           // Set initial visibility to prevent flickering
-          element.style.opacity = '0.5'; // Start slightly visible to prevent complete disappearance
+          element.style.opacity = '0.6'; // Start slightly visible to prevent complete disappearance
           
           setTimeout(() => {
             element.style.opacity = '1';
             element.style.transform = 'translateY(0)';
-          }, index * 50); // Even faster animation sequence
+          }, index * 30); // Even faster animation sequence
         }
       });
     } else if (!isActive && sectionRef.current) {
@@ -31,8 +32,8 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
       // This prevents the complete disappearance during scroll events
       elementsRef.current.forEach(element => {
         if (element) {
-          element.style.opacity = '0.3'; // Keep slightly visible instead of fully hidden
-          element.style.transform = 'translateY(10px)'; // Smaller transform to reduce jumpiness
+          element.style.opacity = '0.4'; // Keep slightly visible instead of fully hidden
+          element.style.transform = 'translateY(5px)'; // Smaller transform to reduce jumpiness
         }
       });
     }
@@ -48,12 +49,12 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
         className={cn(
           "max-w-7xl mx-auto w-full",
           // Maintain base visibility with smoother transitions
-          isActive ? "opacity-100 transition-opacity duration-500" : "opacity-80 transition-opacity duration-300"
+          isActive ? "opacity-100 transition-opacity duration-300" : "opacity-85 transition-opacity duration-200"
         )}
       >
         <div 
           ref={el => elementsRef.current[0] = el}
-          className="mb-6 transition-all duration-500 ease-out opacity-0 transform translate-y-2"
+          className="mb-6 transition-all duration-300 ease-out opacity-0 transform translate-y-2"
         >
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="header-text">Our Clients</h2>
@@ -63,7 +64,7 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
         
         <div 
           ref={el => elementsRef.current[1] = el}
-          className="transition-all duration-500 ease-out opacity-0 transform translate-y-2 will-change-transform"
+          className="transition-all duration-300 ease-out opacity-0 transform translate-y-2 will-change-transform"
         >
           <ClientsGrid />
         </div>

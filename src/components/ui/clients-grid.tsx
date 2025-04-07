@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ZoomIn, ZoomOut, Instagram, ExternalLink } from "lucide-react"
-import { featuredClients } from "@/data/clients/featured-clients"
+import { clientsData } from "@/data/clients/clients-data"
 import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
 
@@ -23,9 +23,9 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
             src={client.image}
             alt={`${client.name} - ${client.type}`}
             className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0 will-change-transform"
-            loading="eager" // Changed from lazy to eager for smoother initial load
+            loading="eager" 
             decoding="async"
-            fetchpriority="high"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
             <div className="text-white text-center p-4 font-sans">
@@ -127,7 +127,7 @@ const ClientsGrid = () => {
       </div>
       
       <div className={cn("grid gap-4 will-change-transform", gridSizeClasses[size])}>
-        {featuredClients.map((client, index) => (
+        {clientsData.map((client, index) => (
           <ClientCard key={`${client.name}-${index}`} client={client} size={size} />
         ))}
       </div>
