@@ -32,14 +32,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
         <div 
           ref={logoRef} 
           className={cn(
-            "flex justify-center transition-all duration-400 ease-in-out transform opacity-0 hover:animate-pulse",
+            "flex justify-center transition-all duration-400 ease-in-out transform opacity-0",
             showContent && "opacity-100"
           )}
         >
           <img 
             src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
             alt="Brain in a Vat" 
-            className="w-[124.8px] md:w-[39.0rem] lg:w-[46.8rem] animate-pulse"
+            className="w-[124.8px] md:w-[39.0rem] lg:w-[46.8rem] animate-breathe"
           />
         </div>
       </div>
@@ -48,4 +48,3 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
 };
 
 export default HeroSection;
-
