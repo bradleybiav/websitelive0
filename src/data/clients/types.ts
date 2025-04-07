@@ -5,4 +5,5 @@ export interface Client {
   image: string;
   instagramUrl?: string;
   beatportUrl?: string;
+  spotifyUrl?: string;
 }

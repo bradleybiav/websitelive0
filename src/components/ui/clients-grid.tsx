@@ -31,7 +31,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
               <h3 className="font-bold text-lg mb-1">{client.name}</h3>
               <p className="text-sm text-gray-300 mb-3">{client.type}</p>
               
-              {(client.instagramUrl || client.beatportUrl) && (
+              {(client.instagramUrl || client.beatportUrl || client.spotifyUrl) && (
                 <div className="flex justify-center space-x-3 mt-2">
                   {client.instagramUrl && (
                     <a 
@@ -52,6 +52,18 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
                       rel="noopener noreferrer"
                       className="text-white hover:text-gray-300 transition-colors"
                       aria-label={`Visit ${client.name}'s Beatport`}
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                  )}
+                  
+                  {client.spotifyUrl && (
+                    <a 
+                      href={client.spotifyUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-gray-300 transition-colors"
+                      aria-label={`Visit ${client.name}'s Spotify`}
                     >
                       <ExternalLink size={18} />
                     </a>
