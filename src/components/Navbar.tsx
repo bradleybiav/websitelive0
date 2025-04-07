@@ -18,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
 
   // Handle logo click to scroll to top and set active section to home
   const handleLogoClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Use the onSectionClick from props to ensure consistent handling
     onSectionClick('home');
   };
 
