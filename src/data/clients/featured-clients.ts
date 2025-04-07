@@ -1,3 +1,4 @@
+
 import { Client } from './types';
 
 // These are the clients that have actual uploaded images
@@ -128,11 +129,6 @@ export const featuredClients: Client[] = [
     image: "/lovable-uploads/ac8f5eed-c337-435a-bd28-d22a01701fef.png" 
   },
   { 
-    name: "Neon Circuit", 
-    type: "Experimental Electronic", 
-    image: "/lovable-uploads/afb17112-bd85-424f-9df9-ac55ec643d9d.png" 
-  },
-  { 
     name: "Le Nora", 
     type: "Alternative Electronic", 
     image: "/lovable-uploads/909a9400-3125-4625-b155-9f0daff4d567.png" 
@@ -156,5 +152,35 @@ export const featuredClients: Client[] = [
     name: "20/20 Vision", 
     type: "Experimental Music", 
     image: "/lovable-uploads/28da3a2d-3ea6-46a7-9891-1cdf5deef958.png" 
+  },
+  { 
+    name: "X Collective", 
+    type: "Electronic Ensemble", 
+    image: "/lovable-uploads/e0ad7887-887f-4f80-a0d8-4ff9cd429c2b.png" 
+  },
+  { 
+    name: "WhyNotUs", 
+    type: "Electronic Production", 
+    image: "/lovable-uploads/c12b99d2-c858-465d-b1a6-b84f9461e7b5.png" 
+  },
+  { 
+    name: "The Orchard", 
+    type: "Music Distribution", 
+    image: "/lovable-uploads/d0c436a7-7e0f-4f2a-87b9-f4b9f6f81808.png" 
+  },
+  { 
+    name: "Spaghetti Moretti", 
+    type: "Record Label", 
+    image: "/lovable-uploads/d9acbc6c-e3e1-4e68-836a-54cb8c0483bf.png" 
+  },
+  { 
+    name: "Smile", 
+    type: "Indie Label", 
+    image: "/lovable-uploads/3212a90f-d141-4c1a-ba53-1d79f0166967.png" 
+  },
+  { 
+    name: "Pop Tomorrow", 
+    type: "Music Collective", 
+    image: "/lovable-uploads/ff4b7b2b-0afb-428d-a29c-58c7d95a2eec.png" 
   }
 ];

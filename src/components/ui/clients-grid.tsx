@@ -1,10 +1,12 @@
+
 "use client"
 
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ZoomIn, ZoomOut } from "lucide-react"
-import { clients, Client } from "@/data/clients"
+import { featuredClients } from "@/data/clients/featured-clients"
+import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
 
 interface ClientCardProps {
@@ -81,7 +83,7 @@ const ClientsGrid = () => {
       </div>
       
       <div className={cn("grid gap-4", gridSizeClasses[size])}>
-        {clients.map((client, index) => (
+        {featuredClients.map((client, index) => (
           <ClientCard key={`${client.name}-${index}`} client={client} size={size} />
         ))}
       </div>
