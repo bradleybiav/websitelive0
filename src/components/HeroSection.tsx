@@ -39,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
           <img 
             src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
             alt="Brain in a Vat" 
-            className="w-[124.8px] md:w-[39.0rem] lg:w-[46.8rem] animate-breathe"
+            className="w-[124.8px] md:w-[39.0rem] lg:w-[46.8rem]"
           />
         </div>
       </div>
