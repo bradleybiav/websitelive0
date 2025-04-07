@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -82,7 +83,7 @@ const Index = () => {
             onInteraction={() => {}} 
           />
           
-          <div className="space-y-0"> {/* Removed vertical spacing */}
+          <div className="space-y-16 md:space-y-24"> {/* Added vertical spacing */}
             <HomeSection 
               id="home" 
               isActive={true} 
