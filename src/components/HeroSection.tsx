@@ -44,7 +44,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
         </div>
         <p 
           className={cn(
-            "text-xl md:text-2xl font-normal leading-relaxed px-6 transition-opacity duration-400 opacity-0",
+            "text-2xl md:text-3xl lg:text-4xl font-normal leading-relaxed px-6 transition-opacity duration-400 opacity-0",
             showContent && "opacity-100"
           )}
         >

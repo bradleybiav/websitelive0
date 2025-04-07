@@ -26,7 +26,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <div className="text-white text-center p-4">
+            <div className="text-white text-center p-4 font-sans">
               <h3 className="font-bold text-lg mb-1">{client.name}</h3>
               <p className="text-sm text-gray-300">{client.type}</p>
             </div>

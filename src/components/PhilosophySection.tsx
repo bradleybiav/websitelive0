@@ -65,7 +65,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
                 </div>
                 {activeIndex === index && (
                   <div className="mt-3 border-l-2 border-black pl-4 animate-fade-in">
-                    <p className="text-lg">{point.description}</p>
+                    <p className="text-xl">{point.description}</p>
                   </div>
                 )}
               </div>
@@ -101,7 +101,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
                     activeIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                   }`}
                 >
-                  <p className="text-lg">{point.description}</p>
+                  <p className="text-xl md:text-2xl font-sans">{point.description}</p>
                 </div>
               ))}
             </div>
