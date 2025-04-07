@@ -68,15 +68,10 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
             ))}
           </div>
         </div>
-        
-        <div className="mt-8 py-4 border-t border-b border-gray-200">
-          <blockquote className="italic text-xl md:text-2xl text-center max-w-3xl mx-auto">
-            "We don't just promote music; we create experiences that challenge perception and expand consciousness."
-          </blockquote>
-        </div>
       </div>
     </section>
   );
 };
 
 export default PhilosophySection;
+

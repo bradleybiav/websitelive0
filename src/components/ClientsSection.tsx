@@ -50,9 +50,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
         >
           <h2 className="header-text mb-6">Our Clients</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
-          <p className="subheader-text max-w-3xl">
-            We've had the privilege of working with visionary artists across various genres.
-          </p>
         </div>
         
         <div 
@@ -67,3 +64,4 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
 };
 
 export default ClientsSection;
+
