@@ -82,8 +82,8 @@ export const clientsData: Client[] = [
   },
   {
     name: "Malóne",
-    type: "Artist",
-    image: "/Malóne_artist_cover (1).jpg",
+    type: "Artist", 
+    image: "/lovable-uploads/c40a2cd9-810e-4f69-8a17-e15a8f8a379c.png", // Updated image path
     instagramUrl: "https://www.instagram.com/malonemusicofc/",
     spotifyUrl: "https://open.spotify.com/artist/7fQMET8UaHL3gpH9LhqINM"
   },
