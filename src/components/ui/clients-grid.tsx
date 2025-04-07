@@ -15,18 +15,32 @@ interface ClientCardProps {
 }
 
 const ClientCard = ({ client, size }: ClientCardProps) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    console.error(`Failed to load image for client: ${client.name}`);
+    setImageError(true);
+  };
+
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md will-change-transform">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
       <CardContent className="p-0">
         <div className="relative overflow-hidden">
-          <img 
-            src={client.image}
-            alt={`${client.name} - ${client.type}`}
-            className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0 will-change-transform"
-            loading="eager" 
-            decoding="async"
-            fetchPriority="high"
-          />
+          {!imageError ? (
+            <img 
+              src={client.image}
+              alt={`${client.name} - ${client.type}`}
+              className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+              loading="eager" 
+              decoding="async"
+              fetchPriority="high"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500">
+              {client.name}
+            </div>
+          )}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
             <div className="text-white text-center p-4 font-sans">
               <h3 className="font-bold text-lg mb-1">{client.name}</h3>
@@ -126,7 +140,7 @@ const ClientsGrid = () => {
         </div>
       </div>
       
-      <div className={cn("grid gap-4 will-change-transform", gridSizeClasses[size])}>
+      <div className={cn("grid gap-4", gridSizeClasses[size])}>
         {clientsData.map((client, index) => (
           <ClientCard key={`${client.name}-${index}`} client={client} size={size} />
         ))}
