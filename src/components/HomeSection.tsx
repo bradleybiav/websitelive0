@@ -10,7 +10,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({ id }) => {
   return (
     <section 
       id={id} 
-      className="py-20 md:py-28 px-6 md:px-12 lg:px-24 flex flex-col justify-center items-center"
+      className="py-10 md:py-16 px-6 md:px-12 lg:px-24 flex flex-col justify-center items-center"
     >
       <div className="max-w-[700px] text-center mx-auto">
         <p className="text-xl md:text-2xl font-normal leading-relaxed">

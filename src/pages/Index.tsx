@@ -83,30 +83,32 @@ const Index = () => {
             onInteraction={() => {}} 
           />
           
-          <HomeSection 
-            id="home" 
-            isActive={true} 
-          />
-          
-          <PhilosophySection 
-            id="philosophy" 
-            isActive={true} 
-          />
-          
-          <ServicesSection 
-            id="services" 
-            isActive={true} 
-          />
-          
-          <ClientsSection 
-            id="clients" 
-            isActive={true} 
-          />
-          
-          <ContactSection 
-            id="contact" 
-            isActive={true} 
-          />
+          <div className="space-y-12 md:space-y-16"> {/* Control vertical spacing between sections */}
+            <HomeSection 
+              id="home" 
+              isActive={true} 
+            />
+            
+            <PhilosophySection 
+              id="philosophy" 
+              isActive={true} 
+            />
+            
+            <ServicesSection 
+              id="services" 
+              isActive={true} 
+            />
+            
+            <ClientsSection 
+              id="clients" 
+              isActive={true} 
+            />
+            
+            <ContactSection 
+              id="contact" 
+              isActive={true} 
+            />
+          </div>
         </main>
       </div>
     </>
