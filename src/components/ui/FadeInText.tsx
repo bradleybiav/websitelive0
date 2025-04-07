@@ -12,7 +12,7 @@ const FadeInText: React.FC<FadeInTextProps> = ({ text, showContent, className })
   return (
     <p 
       className={cn(
-        "text-3xl md:text-[4.8rem] lg:text-[5.76rem] font-normal leading-relaxed px-6 md:px-12 lg:px-24 transition-opacity duration-400 opacity-0",
+        "text-2xl md:text-[3.36rem] lg:text-[4.03rem] font-normal leading-tight max-w-[80ch] mx-auto transition-opacity duration-400 opacity-0",
         showContent && "opacity-100",
         className
       )}
