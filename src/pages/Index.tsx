@@ -21,22 +21,22 @@ const Index = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       
-      // Reset the scroll lock after animation completes (approximately)
+      // Reset the scroll lock after animation completes
       setTimeout(() => {
         isScrollingRef.current = false;
-      }, 1000);
+      }, 800); // Slightly reduced from 1000ms
     }
   };
   
   useEffect(() => {
-    // Set up intersection observer to update active section on scroll
+    // Set up intersection observer with more sensitive thresholds
     const observer = new IntersectionObserver(
       (entries) => {
         // Only process if we're not in a programmatic scroll
         if (!isScrollingRef.current) {
           entries.forEach((entry) => {
-            // Lower threshold for better detection
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+            // Even lower threshold for earlier detection, especially for clients section
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
               setActiveSection(entry.target.id);
               console.log("Section visible:", entry.target.id, "with ratio:", entry.intersectionRatio);
             }
@@ -44,19 +44,19 @@ const Index = () => {
         }
       },
       { 
-        threshold: [0.1, 0.2, 0.3, 0.4], // Lower thresholds for earlier detection
-        rootMargin: "-10px 0px" // Minimal margin to detect sections as early as possible
+        threshold: [0.05, 0.1, 0.15, 0.2, 0.3], // More gradual thresholds for smoother transitions
+        rootMargin: "-5px 0px" // Even smaller margin for earlier detection
       }
     );
     
-    // Observe all sections with a delay to ensure DOM is ready
+    // Observe all sections with shorter delay
     setTimeout(() => {
       const sections = document.querySelectorAll('section[id]');
       sections.forEach((section) => {
         observer.observe(section);
         console.log("Observing section:", section.id);
       });
-    }, 500); // Longer delay to ensure all sections are fully rendered
+    }, 300); // Reduced delay for faster initialization
     
     // Handle manual scrolling
     const handleManualScroll = () => {
@@ -90,7 +90,7 @@ const Index = () => {
             onInteraction={() => {}}
           />
           
-          <div className="space-y-8 md:space-y-16"> {/* Further reduced vertical spacing */}
+          <div className="space-y-6 md:space-y-12"> {/* Further reduced vertical spacing */}
             <HomeSection 
               id="home" 
               isActive={activeSection === 'home'} 

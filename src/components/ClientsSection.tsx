@@ -12,20 +12,20 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Ensure animations are triggered when the section becomes active
+  // Improved animation trigger with faster timing
   useEffect(() => {
     if (isActive && sectionRef.current) {
-      // Animate elements in sequence when section becomes active
+      // Trigger animations immediately with shorter delays
       elementsRef.current.forEach((element, index) => {
         if (element) {
           setTimeout(() => {
             element.style.opacity = '1';
             element.style.transform = 'translateY(0)';
-          }, index * 150);
+          }, index * 100); // Reduced delay between elements
         }
       });
     } else if (!isActive) {
-      // Reset element styles when section is not active
+      // Reset animations when not visible
       elementsRef.current.forEach(element => {
         if (element) {
           element.style.opacity = '0';
@@ -39,27 +39,27 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen flex items-center py-10 md:py-12 px-6 md:px-12 lg:px-24"
+      className="min-h-screen flex items-center justify-center py-6 md:py-8 px-6 md:px-12 lg:px-24"
     >
       <div 
         className={cn(
           "max-w-7xl mx-auto w-full",
-          isActive ? "opacity-100" : "opacity-0"
+          isActive ? "opacity-100 transition-opacity duration-300" : "opacity-0"
         )}
       >
         <div 
           ref={el => elementsRef.current[0] = el}
-          className="mb-16 transition-all duration-500 ease-out opacity-0 transform translate-y-4"
+          className="mb-10 transition-all duration-300 ease-out opacity-0 transform translate-y-4"
         >
-          <div className="flex items-baseline justify-between mb-6">
+          <div className="flex items-baseline justify-between mb-4">
             <h2 className="header-text">Our Clients</h2>
           </div>
-          <div className="w-20 h-1 bg-black mb-12"></div>
+          <div className="w-20 h-1 bg-black mb-8"></div>
         </div>
         
         <div 
           ref={el => elementsRef.current[1] = el}
-          className="transition-all duration-500 ease-out opacity-0 transform translate-y-4"
+          className="transition-all duration-300 ease-out opacity-0 transform translate-y-4"
         >
           <ClientsGrid />
         </div>

@@ -26,9 +26,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pt-24 pb-24" // Reduced padding from pt-48 pb-48 to pt-24 pb-24
+      className="min-h-screen w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pt-20 pb-16" // Further reduced padding
     >
-      <div className="text-center space-y-32 flex-1 flex flex-col justify-center">
+      <div className="text-center space-y-28 flex-1 flex flex-col justify-center"> {/* Reduced spacing from space-y-32 */}
         <Logo showContent={showContent} />
         <FadeInText 
           text="brain in a vat is a boutique music promotions agency that shapes perception and shifts reality."
@@ -40,4 +40,3 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
 };
 
 export default HeroSection;
-
