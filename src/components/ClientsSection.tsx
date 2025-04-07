@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ClientsGrid } from "@/components/ui/clients-grid";
@@ -64,4 +63,3 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
 };
 
 export default ClientsSection;
-
