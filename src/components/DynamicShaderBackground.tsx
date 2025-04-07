@@ -40,8 +40,8 @@ const fragmentShader = `
     // Convert mouse position from screen coordinates to normalized [0,1]
     vec2 mousePos = mouse.xy / resolution.xy;
     
-    // Increase mouse influence for more pronounced effect
-    float mouseInfluence = 0.12; // Increased from 0.03 to 0.12
+    // Updated mouse influence to 0.08 as requested
+    float mouseInfluence = 0.08;
     vec2 adjustedUV = uv + (mousePos - center) * mouseInfluence;
     
     vec2 p = -1.0 + 2.0 * adjustedUV;
@@ -74,6 +74,11 @@ const DynamicShaderBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
   const mousePosition = useRef<[number, number]>([0, 0]);
+  const rendererRef = useRef<any>(null);
+  const sceneRef = useRef<any>(null);
+  const cameraRef = useRef<any>(null);
+  const clockRef = useRef<any>(null);
+  const uniformsRef = useRef<any>(null);
 
   useEffect(() => {
     // Track mouse position
@@ -88,60 +93,81 @@ const DynamicShaderBackground: React.FC = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
-      const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+      // Initialize renderer
+      rendererRef.current = new WebGLRenderer({ canvas, alpha: true, antialias: true });
+      rendererRef.current.setSize(window.innerWidth, window.innerHeight);
+      rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
 
-      const scene = new Scene();
-      const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      // Initialize scene and camera
+      sceneRef.current = new Scene();
+      cameraRef.current = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-      const uniforms = {
+      // Initialize uniforms
+      uniformsRef.current = {
         time: { value: 0 },
         resolution: { value: [window.innerWidth, window.innerHeight] },
         mouse: { value: [0, 0] }
       };
 
+      // Create shader material
       const material = new ShaderMaterial({
         vertexShader,
         fragmentShader,
-        uniforms,
+        uniforms: uniformsRef.current,
         transparent: true,
         depthWrite: false,
         depthTest: false
       });
 
+      // Create mesh
       const geometry = new PlaneGeometry(2, 2);
       const mesh = new Mesh(geometry, material);
-      scene.add(mesh);
+      sceneRef.current.add(mesh);
 
-      const clock = new Clock();
+      // Initialize clock for animation
+      clockRef.current = new Clock();
+      clockRef.current.start();
 
+      // Animation function
       const animate = () => {
-        uniforms.time.value = clock.getElapsedTime();
-        uniforms.mouse.value = mousePosition.current;
-        renderer.render(scene, camera);
+        if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
+        
+        uniformsRef.current.time.value = clockRef.current.getElapsedTime();
+        uniformsRef.current.mouse.value = mousePosition.current;
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
         animationFrameId.current = requestAnimationFrame(animate);
       };
 
+      // Start animation loop
       animate();
 
+      // Handle window resize
       const handleResize = () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        uniforms.resolution.value = [window.innerWidth, window.innerHeight];
+        if (!rendererRef.current) return;
+        rendererRef.current.setSize(window.innerWidth, window.innerHeight);
+        uniformsRef.current.resolution.value = [window.innerWidth, window.innerHeight];
       };
 
       window.addEventListener('resize', handleResize);
 
+      // Cleanup function
       return () => {
         if (animationFrameId.current) {
           cancelAnimationFrame(animationFrameId.current);
         }
+        
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('mousemove', handleMouseMove);
-        scene.remove(mesh);
-        geometry.dispose();
-        material.dispose();
-        renderer.dispose();
+        
+        if (mesh && geometry && material && sceneRef.current) {
+          sceneRef.current.remove(mesh);
+          geometry.dispose();
+          material.dispose();
+        }
+        
+        if (rendererRef.current) {
+          rendererRef.current.dispose();
+        }
       };
     });
 
