@@ -1,7 +1,7 @@
 
 import { Client } from './types';
 
-// These are the first 10 clients that have actual uploaded images
+// These are the clients that have actual uploaded images
 export const featuredClients: Client[] = [
   { 
     name: "Jake Miller", 
@@ -52,5 +52,31 @@ export const featuredClients: Client[] = [
     name: "Pixel Waves", 
     type: "Synth Pop", 
     image: "/lovable-uploads/417eec14-deaa-40cf-8c8d-446df58157d1.png" 
+  },
+  // Adding the new images
+  { 
+    name: "Red Neon", 
+    type: "Electronic Artist", 
+    image: "/lovable-uploads/ac85d8aa-e344-4373-9754-64fa82be6bb1.png" 
+  },
+  { 
+    name: "Summer Vibes", 
+    type: "Indie Pop", 
+    image: "/lovable-uploads/fbda9f76-f304-454b-b601-d190d9c35731.png" 
+  },
+  { 
+    name: "Ocean Wave", 
+    type: "Alternative R&B", 
+    image: "/lovable-uploads/30067150-ac7c-4405-9dec-73cddf74bd55.png" 
+  },
+  { 
+    name: "Neon Dream", 
+    type: "Chill Electronic", 
+    image: "/lovable-uploads/9a1778e7-062d-47c8-97ad-bfbd218c7905.png" 
+  },
+  { 
+    name: "Urban Style", 
+    type: "Hip Hop Producer", 
+    image: "/lovable-uploads/fe81a8cb-5da2-4ed5-92e6-8c1f99da967d.png" 
   }
 ];
