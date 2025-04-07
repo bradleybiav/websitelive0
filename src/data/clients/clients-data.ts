@@ -188,7 +188,7 @@ export const clientsData: Client[] = [
   {
     name: "Higher Ground",
     type: "Label",
-    image: "/HG (1).jpg",
+    image: "/lovable-uploads/97d5a90d-5fd1-40e7-bb2d-a58dddf2453c.png",
     instagramUrl: "https://www.instagram.com/thehigherground/?hl=en",
     beatportUrl: "https://www.beatport.com/label/higher-ground/80998"
   },
@@ -230,7 +230,7 @@ export const clientsData: Client[] = [
   {
     name: "The Orchard",
     type: "Label",
-    image: "/The_Orchard_Logo.svg (1).png",
+    image: "/lovable-uploads/8a75d11c-b5f5-4f56-a927-d49b8d695bfd.png",
     instagramUrl: "https://www.instagram.com/the_orchard_/?hl=en",
     spotifyUrl: null
   },
