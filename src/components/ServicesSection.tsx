@@ -35,7 +35,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h2 className="header-text mb-6">Services</h2>
+          <h2 className="header-text mb-6">Our Services</h2>
           <div className="w-20 h-1 bg-black mb-8"></div>
         </div>
         
