@@ -1,4 +1,3 @@
-
 // Fragment shader with subtle white background effect
 export const fragmentShader = `
   uniform float time;
@@ -41,22 +40,22 @@ export const fragmentShader = `
     // Apply field function
     float t = field(p);
     
-    // We want a very subtle effect - just whitish with a hint of variation
-    vec3 baseColor = vec3(0.99, 0.99, 1.0); // Almost white base
+    // Make the effect more visible
+    vec3 baseColor = vec3(0.98, 0.98, 1.0); // Almost white base
     
-    // Create very subtle color variation
-    float colorIntensity = 0.03; // Very low intensity
+    // Create more visible color variation
+    float colorIntensity = 0.06; // Increase intensity
     vec3 color = baseColor - vec3(t * colorIntensity, t * colorIntensity, t * colorIntensity * 0.8);
     
-    // Increase brightness to ensure it's subtle and close to white
-    color = clamp(color, 0.95, 1.0);
+    // Ensure visible range while keeping white background
+    color = clamp(color, 0.90, 1.0);
     
-    // Add an extremely subtle vignette to hide edges
+    // Add subtle vignette 
     float vignette = 1.0 - length(uv - 0.5) * 0.3;
     color *= vignette;
     
-    // Set a high alpha to ensure the background shows through only subtly
-    float alpha = 0.3 + min(t * 0.15, 0.2); // Low opacity for subtlety
+    // Increase alpha to make the effect more visible
+    float alpha = 0.8; // Higher opacity for visibility
     
     gl_FragColor = vec4(color, alpha);
   }
