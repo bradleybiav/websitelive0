@@ -48,22 +48,18 @@ const fragmentShader = `
     return vec2(fbm6(p + vec2(16.8)), fbm6(p + vec2(11.5)));
   }
 
-  float func(vec2 q, out vec4 ron) {
-    vec2 mousePos = mouse.xy / resolution.xy;
-    mousePos = mousePos * 2.0 - 1.0;
-    mousePos.x *= resolution.x / resolution.y;
-    
-    q += 0.03 * mousePos;
-    
-    q += 0.03 * sin(vec2(0.27, 0.23) * time + length(q) * vec2(4.1, 4.3));
+  float func( vec2 q, out vec4 ron )
+  {
+    q += 0.03*sin( vec2(0.27,0.23)*time + length(q)*vec2(4.1,4.3));
 
-    vec2 o = fbm4_2(0.9 * q);
-    o += 0.04 * sin(vec2(0.12, 0.14) * time + length(o));
-    vec2 n = fbm6_2(3.0 * o);
+    vec2 o = fbm4_2( 0.9*q );
+    o += 0.04*sin( vec2(0.12,0.14)*time + length(o));
 
-    ron = vec4(o, n);
-    float f = 0.5 + 0.5 * fbm4(1.8 * q + 6.0 * n);
-    return mix(f, f * f * f * 3.5, f * abs(n.x));
+    vec2 n = fbm6_2( 3.0*o );
+    ron = vec4( o, n );
+
+    float f = 0.5 + 0.5*fbm4( 1.8*q + 6.0*n );
+    return mix( f, f*f*f*3.5, f*abs(n.x) );
   }
 
   void main() {
@@ -71,15 +67,16 @@ const fragmentShader = `
     vec2 p = (2.0 * uv - 1.0);
     p.x *= resolution.x / resolution.y;
     
-    float e = 2.0 / resolution.y;
+    float e = 2.0/resolution.y;
+
     vec4 on = vec4(0.0);
     float f = func(p, on);
 
-    vec3 col = vec3(0.9, 0.9, 0.95); // Soft white base
-    col = mix(col, vec3(0.8, 0.85, 0.9), f); // Silver-white variation
-    col = mix(col, vec3(0.95, 0.95, 1.0), dot(on.zw, on.zw)); // Bright white highlights
-    col = mix(col, vec3(0.75, 0.8, 0.85), 0.2 + 0.5 * on.y * on.y); // Soft silver tone
-    col = clamp(col * f * 2.0, 0.0, 1.0);
+    vec3 col = vec3(0.99, 0.99, 1.0); // Almost pure white base
+    col = mix(col, vec3(0.95, 0.96, 0.98), f * 0.2); // Extremely subtle silver hint
+    col = mix(col, vec3(0.97, 0.98, 1.0), dot(on.zw, on.zw) * 0.1); // Barely visible highlights
+    col = mix(col, vec3(0.96, 0.97, 0.99), 0.1 + 0.2 * on.y * on.y); // Whisper of silver
+    col = clamp(col * f * 1.5, 0.99, 1.0);
     
     vec4 kk;
     vec3 nor = normalize(vec3(
@@ -90,7 +87,7 @@ const fragmentShader = `
     
     vec3 lig = normalize(vec3(0.9, 0.2, -0.4));
     float dif = clamp(0.3 + 0.7 * dot(nor, lig), 0.0, 1.0);
-    vec3 lin = vec3(0.9) * (nor.y * 0.5 + 0.5) + vec3(0.15) * dif;
+    vec3 lin = vec3(1.0) * (nor.y * 0.5 + 0.5) + vec3(0.15) * dif;
     col *= 1.2 * lin;
     col = 1.0 - col;
     col = 1.1 * col * col;
