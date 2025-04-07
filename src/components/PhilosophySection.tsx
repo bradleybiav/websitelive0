@@ -66,12 +66,6 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
                 <p className="text-lg">{point.description}</p>
               </div>
             ))}
-            
-            {hoveredIndex === null && (
-              <div className="opacity-30 p-6 md:p-8 italic text-lg">
-                Hover over a philosophy point to see details...
-              </div>
-            )}
           </div>
         </div>
         

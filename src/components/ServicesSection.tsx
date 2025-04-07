@@ -73,19 +73,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
                 <p className="text-lg">{service.description}</p>
               </div>
             ))}
-            
-            {hoveredIndex === null && (
-              <div className="opacity-30 p-6 md:p-8 italic text-lg">
-                Hover over a service to see details...
-              </div>
-            )}
           </div>
-        </div>
-        
-        <div className="mt-16 text-center">
-          <button className="px-8 py-3 border-2 border-black font-medium transition-all duration-300 hover:bg-black hover:text-white">
-            Contact Us For Details
-          </button>
         </div>
       </div>
     </section>
