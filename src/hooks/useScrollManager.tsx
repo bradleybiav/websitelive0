@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 interface UseScrollManagerProps {
   sections: string[];
@@ -17,6 +17,8 @@ export function useScrollManager({
   const lastScrollTimeRef = useRef(0);
   const scrollTargetRef = useRef<string | null>(null);
   const scrollTimeoutRef = useRef<number | null>(null);
+  // Track active section in the hook itself
+  const [activeSection, setActiveSection] = useState('');
   
   // Reset scroll state if stuck
   useEffect(() => {
@@ -32,6 +34,43 @@ export function useScrollManager({
     
     return () => clearInterval(interval);
   }, []);
+  
+  // Function to detect visible section
+  const detectVisibleSection = useCallback(() => {
+    if (!containerRef.current) return;
+    
+    const container = containerRef.current;
+    const scrollTop = container.scrollTop;
+    const windowHeight = window.innerHeight;
+    
+    // Determine which section is most visible
+    let maxVisibleSection = '';
+    let maxVisibleRatio = 0;
+    
+    sections.forEach(sectionId => {
+      const sectionElement = document.getElementById(sectionId);
+      if (!sectionElement) return;
+      
+      const sectionRect = sectionElement.getBoundingClientRect();
+      const visibleHeight = Math.min(sectionRect.bottom, windowHeight) - 
+                          Math.max(sectionRect.top, 0);
+      
+      // Calculate what percentage of the viewport this section occupies
+      const visibleRatio = visibleHeight / windowHeight;
+      
+      if (visibleRatio > maxVisibleRatio) {
+        maxVisibleRatio = visibleRatio;
+        maxVisibleSection = sectionId;
+      }
+    });
+    
+    // Only update if we found a section and it's different from current active section
+    if (maxVisibleSection && maxVisibleSection !== activeSection) {
+      console.log(`Detected section: ${maxVisibleSection} (ratio: ${maxVisibleRatio.toFixed(2)})`);
+      setActiveSection(maxVisibleSection);
+      onSectionChange(maxVisibleSection);
+    }
+  }, [sections, activeSection, onSectionChange]);
   
   // Improved scroll handler
   useEffect(() => {
@@ -62,53 +101,6 @@ export function useScrollManager({
       }, 100);
     };
     
-    const detectVisibleSection = () => {
-      if (!containerRef.current) return;
-      
-      const container = containerRef.current;
-      const scrollTop = container.scrollTop;
-      const windowHeight = window.innerHeight;
-      
-      // Determine which section is most visible
-      let maxVisibleSection = '';
-      let maxVisibleRatio = 0;
-      
-      sections.forEach(sectionId => {
-        const sectionElement = document.getElementById(sectionId);
-        if (!sectionElement) return;
-        
-        const sectionRect = sectionElement.getBoundingClientRect();
-        const visibleHeight = Math.min(sectionRect.bottom, windowHeight) - 
-                             Math.max(sectionRect.top, 0);
-        
-        // Calculate what percentage of the viewport this section occupies
-        const visibleRatio = visibleHeight / windowHeight;
-        
-        if (visibleRatio > maxVisibleRatio) {
-          maxVisibleRatio = visibleRatio;
-          maxVisibleSection = sectionId;
-        }
-      });
-      
-      // Only update if we found a section and it's different from current active section
-      if (maxVisibleSection && maxVisibleSection !== activeSection) {
-        console.log(`Detected section: ${maxVisibleSection} (ratio: ${maxVisibleRatio.toFixed(2)})`);
-        onSectionChange(maxVisibleSection);
-      }
-    };
-    
-    // Track the active section locally to fix the comparison bug
-    const [activeSection, setActiveSection] = useState('');
-    
-    // Update local state when onSectionChange is called
-    useEffect(() => {
-      const originalOnSectionChange = onSectionChange;
-      onSectionChange = (section: string) => {
-        setActiveSection(section);
-        originalOnSectionChange(section);
-      };
-    }, [onSectionChange]);
-    
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
@@ -125,9 +117,9 @@ export function useScrollManager({
         window.clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, [sections, heroActive, onSectionChange]);
+  }, [heroActive, detectVisibleSection]);
   
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId: string) => {
     // Prevent multiple scroll attempts
     if (isScrollingRef.current) {
       console.log(`Ignoring scroll request to ${sectionId} - already scrolling`);
@@ -148,6 +140,7 @@ export function useScrollManager({
     }
     
     // Immediately update active section for UI feedback
+    setActiveSection(sectionId);
     onSectionChange(sectionId);
     
     // Set scrolling flag and target
@@ -189,7 +182,7 @@ export function useScrollManager({
       
       scrollTimeoutRef.current = null;
     }, 1000); // Wait for scroll animation to complete
-  };
+  }, [heroActive, onSectionChange]);
 
   return {
     containerRef,
