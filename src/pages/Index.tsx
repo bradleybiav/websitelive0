@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -82,7 +83,7 @@ const Index = () => {
             onInteraction={() => {}} 
           />
           
-          <div className="space-y-2 md:space-y-4"> {/* Significantly reduced spacing between sections */}
+          <div className="space-y-16 md:space-y-20"> {/* Increased spacing between sections */}
             <HomeSection 
               id="home" 
               isActive={true} 
