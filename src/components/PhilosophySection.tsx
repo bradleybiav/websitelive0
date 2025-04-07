@@ -1,11 +1,5 @@
 
 import React, { useState } from 'react';
-import { 
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
 
 interface PhilosophySectionProps {
   id: string;
@@ -13,7 +7,7 @@ interface PhilosophySectionProps {
 }
 
 const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
-  const [openStates, setOpenStates] = useState<boolean[]>([false, false, false, false]);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const philosophyPoints = [
     {
@@ -34,48 +28,51 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
     }
   ];
 
-  const toggleCollapsible = (index: number) => {
-    const newOpenStates = [...openStates];
-    newOpenStates[index] = !newOpenStates[index];
-    setOpenStates(newOpenStates);
-  };
-
   return (
     <section 
       id={id} 
       className="py-20 md:py-28 px-6 md:px-12 lg:px-24"
     >
       <div className="max-w-7xl mx-auto">
-        <div>
+        <div className="mb-16">
           <h2 className="header-text mb-6">Our Philosophy</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
-        <div className="space-y-6">
-          {philosophyPoints.map((point, index) => (
-            <div key={index}>
-              <Collapsible
-                open={openStates[index]}
-                onOpenChange={() => toggleCollapsible(index)}
-                className="border-b border-gray-100 pb-4"
+        <div className="grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-5">
+            {philosophyPoints.map((point, index) => (
+              <div 
+                key={index}
+                className="mb-8 cursor-pointer group"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                <CollapsibleTrigger className="w-full group flex justify-between items-center">
-                  <h3 className="subheader-text font-semibold text-left hover:text-gray-600 transition-colors">
-                    {point.title}
-                  </h3>
-                  <div className={cn(
-                    "h-0.5 w-6 bg-black transition-transform duration-300",
-                    openStates[index] ? "rotate-90" : ""
-                  )}></div>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4 transition-all data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-                  <p className="body-text text-muted-foreground">
-                    {point.description}
-                  </p>
-                </CollapsibleContent>
-              </Collapsible>
-            </div>
-          ))}
+                <h3 className="text-2xl md:text-3xl font-display font-semibold transition-colors duration-300 group-hover:text-gray-600">
+                  {point.title}
+                </h3>
+              </div>
+            ))}
+          </div>
+          
+          <div className="col-span-12 md:col-span-7 relative">
+            {philosophyPoints.map((point, index) => (
+              <div 
+                key={index}
+                className={`absolute top-0 left-0 w-full transition-opacity duration-300 ease-in-out p-6 md:p-8 border-l-2 border-black ${
+                  hoveredIndex === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <p className="text-lg">{point.description}</p>
+              </div>
+            ))}
+            
+            {hoveredIndex === null && (
+              <div className="opacity-30 p-6 md:p-8 italic text-lg">
+                Hover over a philosophy point to see details...
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="mt-16 py-6 border-t border-b border-gray-200">
