@@ -6,4 +6,5 @@ export interface Client {
   instagramUrl?: string;
   beatportUrl?: string;
   spotifyUrl?: string;
+  youtubeUrl?: string;
 }
