@@ -35,21 +35,23 @@ const Index = () => {
         // Only process if we're not in a programmatic scroll
         if (!isScrollingRef.current) {
           entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
               setActiveSection(entry.target.id);
             }
           });
         }
       },
       { 
-        threshold: 0.5, // Higher threshold to avoid too-early triggers
-        rootMargin: "-10% 0px" // Give a small margin to avoid edge cases
+        threshold: [0.2, 0.3, 0.4, 0.5], // Multiple thresholds for better detection
+        rootMargin: "-5% 0px" // Smaller margin to detect sections earlier
       }
     );
     
-    // Observe all sections
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach((section) => observer.observe(section));
+    // Observe all sections with a slight delay to ensure DOM is ready
+    setTimeout(() => {
+      const sections = document.querySelectorAll('section[id]');
+      sections.forEach((section) => observer.observe(section));
+    }, 100);
     
     // Event listener for manual scrolling
     const handleManualScroll = () => {
@@ -62,6 +64,7 @@ const Index = () => {
     window.addEventListener('scroll', handleManualScroll, { passive: true });
     
     return () => {
+      const sections = document.querySelectorAll('section[id]');
       sections.forEach((section) => observer.unobserve(section));
       window.removeEventListener('scroll', handleManualScroll);
     };
@@ -83,7 +86,7 @@ const Index = () => {
             onInteraction={() => {}}
           />
           
-          <div className="space-y-16 md:space-y-24"> {/* Added vertical spacing */}
+          <div className="space-y-12 md:space-y-24"> {/* Slightly reduced vertical spacing */}
             <HomeSection 
               id="home" 
               isActive={activeSection === 'home'} 

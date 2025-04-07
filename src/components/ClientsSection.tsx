@@ -36,7 +36,7 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="py-10 md:py-12 px-6 md:px-12 lg:px-24"
+      className="min-h-screen py-10 md:py-12 px-6 md:px-12 lg:px-24"
     >
       <div 
         className={cn(
