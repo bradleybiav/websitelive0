@@ -28,7 +28,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
       ref={sectionRef}
       className="min-h-screen w-full flex flex-col justify-center items-center px-6 md:px-12 lg:px-24"
     >
-      <div className="text-center space-y-8"> {/* Increased space-y from 4 to 8 */}
+      <div className="text-center space-y-32"> {/* Increased space-y from 8 to 32 */}
         <Logo showContent={showContent} />
         <FadeInText 
           text="brain in a vat is a boutique music promotions agency that shapes perception and shifts reality."
