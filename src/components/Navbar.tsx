@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     onSectionClick('home');
   };
 
