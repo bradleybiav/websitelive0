@@ -1,4 +1,3 @@
-
 export const clients = [
   { 
     name: "Jake Miller", 
@@ -24,6 +23,31 @@ export const clients = [
     name: "Vision Sounds", 
     type: "Production Duo", 
     image: "/lovable-uploads/dfc2416b-091b-4982-8b81-807811e588a3.png" 
+  },
+  { 
+    name: "Ethereal Flame", 
+    type: "Electronic Duo", 
+    image: "/lovable-uploads/89afb052-ee69-45e5-b7b2-8d3a63a4ac0f.png" 
+  },
+  { 
+    name: "Nova Static", 
+    type: "Alternative Rock", 
+    image: "/lovable-uploads/414db8aa-0476-4d92-80c6-fe5bd1adaee9.png" 
+  },
+  { 
+    name: "Daniel Kai", 
+    type: "Indie Producer", 
+    image: "/lovable-uploads/7fa64196-6627-406f-8bb3-cb921e67050d.png" 
+  },
+  { 
+    name: "Lost Frequency", 
+    type: "Electronic Band", 
+    image: "/lovable-uploads/d48549a4-fa5f-4f34-a8a3-26de7888e45f.png" 
+  },
+  { 
+    name: "Pixel Waves", 
+    type: "Synth Pop", 
+    image: "/lovable-uploads/417eec14-deaa-40cf-8c8d-446df58157d1.png" 
   },
   { 
     name: "Ethereal Echo", 
