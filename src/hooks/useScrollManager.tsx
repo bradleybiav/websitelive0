@@ -90,12 +90,24 @@ export function useScrollManager({
         }
       });
       
-      // Only update if we found a section and it's different from current
-      if (maxVisibleSection && maxVisibleSection !== onSectionChange) {
+      // Only update if we found a section and it's different from current active section
+      if (maxVisibleSection && maxVisibleSection !== activeSection) {
         console.log(`Detected section: ${maxVisibleSection} (ratio: ${maxVisibleRatio.toFixed(2)})`);
         onSectionChange(maxVisibleSection);
       }
     };
+    
+    // Track the active section locally to fix the comparison bug
+    const [activeSection, setActiveSection] = useState('');
+    
+    // Update local state when onSectionChange is called
+    useEffect(() => {
+      const originalOnSectionChange = onSectionChange;
+      onSectionChange = (section: string) => {
+        setActiveSection(section);
+        originalOnSectionChange(section);
+      };
+    }, [onSectionChange]);
     
     const container = containerRef.current;
     if (container) {
