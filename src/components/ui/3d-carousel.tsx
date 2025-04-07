@@ -20,7 +20,7 @@ function ThreeDPhotoCarousel() {
     console.log("Clients loaded:", clients)
   }, [])
 
-  const handleClick = (imgUrl: string, clientInfo: {name: string, type: string}) => {
+  const handleClick = (imgUrl: string, clientInfo: {name: string, type: string}, index: number) => {
     setActiveClient({
       image: imgUrl,
       name: clientInfo.name,

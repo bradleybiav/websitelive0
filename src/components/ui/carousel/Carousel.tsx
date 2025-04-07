@@ -1,9 +1,10 @@
 
-import { memo } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import {
   motion,
   useMotionValue,
   useTransform,
+  useAnimation,
 } from "framer-motion"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 
@@ -36,67 +37,114 @@ const Carousel = memo(
       rotation,
       (value) => `rotate3d(0, 1, 0, ${value}deg)`
     )
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [autoRotate, setAutoRotate] = useState(false)
+    const [mousePosition, setMousePosition] = useState(0)
+    
+    // Calculate visibility based on rotation angle
+    const isCardVisible = (index: number) => {
+      const currentRotation = rotation.get() % 360
+      const cardAngle = (index * (360 / faceCount)) % 360
+      const difference = Math.abs(currentRotation - cardAngle)
+      
+      // Cards are visible when they're within 45 degrees of facing forward
+      return difference < 45 || difference > 315
+    }
+
+    // Handle mouse movement within the carousel container
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (!isCarouselActive || !containerRef.current) return
+      
+      const container = containerRef.current
+      const { left, width } = container.getBoundingClientRect()
+      const mouseX = e.clientX - left
+      
+      // Calculate mouse position relative to center (-1 to 1)
+      const relativePosition = (mouseX / width) * 2 - 1
+      setMousePosition(relativePosition)
+      
+      // Enable auto-rotation when mouse is not in the center
+      setAutoRotate(Math.abs(relativePosition) > 0.1)
+    }
+    
+    // Handle mouse leaving the container
+    const handleMouseLeave = () => {
+      setAutoRotate(false)
+    }
+
+    // Auto-rotate based on mouse position
+    useEffect(() => {
+      if (!isCarouselActive) return
+      
+      let animationId: number
+      
+      const updateRotation = () => {
+        if (autoRotate) {
+          // Speed depends on how far from center the mouse is
+          const rotationSpeed = mousePosition * 2
+          rotation.set(rotation.get() + rotationSpeed)
+        }
+        animationId = requestAnimationFrame(updateRotation)
+      }
+      
+      animationId = requestAnimationFrame(updateRotation)
+      
+      return () => {
+        cancelAnimationFrame(animationId)
+      }
+    }, [autoRotate, mousePosition, rotation, isCarouselActive])
 
     return (
       <div
+        ref={containerRef}
         className="flex h-full items-center justify-center"
         style={{
           perspective: "1000px",
           transformStyle: "preserve-3d",
           willChange: "transform",
         }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
         <motion.div
-          drag={isCarouselActive ? "x" : false}
-          className="relative flex h-full origin-center cursor-grab justify-center active:cursor-grabbing"
+          className="relative flex h-full origin-center justify-center"
           style={{
             transform,
             rotateY: rotation,
             width: cylinderWidth,
             transformStyle: "preserve-3d",
           }}
-          onDrag={(_, info) =>
-            isCarouselActive &&
-            rotation.set(rotation.get() + info.offset.x * 0.05)
-          }
-          onDragEnd={(_, info) =>
-            isCarouselActive &&
-            controls.start({
-              rotateY: rotation.get() + info.velocity.x * 0.05,
-              transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 30,
-                mass: 0.1,
-              },
-            })
-          }
           animate={controls}
         >
-          {cards.map((client, i) => (
-            <motion.div
-              key={`key-${client.name}-${i}`}
-              className="absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
-              style={{
-                width: `${faceWidth}px`,
-                transform: `rotateY(${
-                  i * (360 / faceCount)
-                }deg) translateZ(${radius}px)`,
-              }}
-              onClick={() => handleClick(client.image, {name: client.name, type: client.type}, i)}
-            >
-              <motion.img
-                src={client.image}
-                alt={`${client.name} - ${client.type}`}
-                layoutId={`img-${client.image}`}
-                className="pointer-events-none w-full rounded-xl object-cover aspect-square"
-                initial={{ filter: "blur(4px)" }}
-                layout="position"
-                animate={{ filter: "blur(0px)" }}
-                transition={transition}
-              />
-            </motion.div>
-          ))}
+          {cards.map((client, i) => {
+            const cardRotation = i * (360 / faceCount)
+            
+            return (
+              <motion.div
+                key={`key-${client.name}-${i}`}
+                className="absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
+                style={{
+                  width: `${faceWidth}px`,
+                  transform: `rotateY(${cardRotation}deg) translateZ(${radius}px)`,
+                  opacity: isCardVisible(i) ? 1 : 0,
+                  pointerEvents: isCardVisible(i) ? "auto" : "none",
+                  transition: "opacity 0.3s ease",
+                }}
+                onClick={() => isCardVisible(i) && handleClick(client.image, {name: client.name, type: client.type}, i)}
+              >
+                <motion.img
+                  src={client.image}
+                  alt={`${client.name} - ${client.type}`}
+                  layoutId={`img-${client.image}`}
+                  className="pointer-events-none w-full rounded-xl object-cover aspect-square"
+                  initial={{ filter: "blur(4px)" }}
+                  layout="position"
+                  animate={{ filter: "blur(0px)" }}
+                  transition={transition}
+                />
+              </motion.div>
+            )
+          })}
         </motion.div>
       </div>
     )
