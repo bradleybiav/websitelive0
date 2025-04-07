@@ -1,3 +1,4 @@
+
 import { Client } from './types';
 
 // These are the clients that have actual uploaded images
@@ -101,5 +102,30 @@ export const featuredClients: Client[] = [
     name: "Neon Circuit", 
     type: "Experimental Electronic", 
     image: "/lovable-uploads/afb17112-bd85-424f-9df9-ac55ec643d9d.png" 
+  },
+  { 
+    name: "Shadow Collective", 
+    type: "Alternative Electronic", 
+    image: "/lovable-uploads/ed5b4394-4472-4e6f-938b-653aef5ddae0.png" 
+  },
+  { 
+    name: "Urban Rhythm", 
+    type: "Hip Hop Producer", 
+    image: "/lovable-uploads/ce61abec-3e86-47e6-87f6-02dc3297b8af.png" 
+  },
+  { 
+    name: "Synth Waves", 
+    type: "Electronic Duo", 
+    image: "/lovable-uploads/72526771-9781-4510-bebb-65b79cc565cc.png" 
+  },
+  { 
+    name: "Lens Flare", 
+    type: "Indie Electronic", 
+    image: "/lovable-uploads/ec379655-669b-47b9-8f09-16341743c269.png" 
+  },
+  { 
+    name: "Electric Pulse", 
+    type: "Experimental Music", 
+    image: "/lovable-uploads/ac8f5eed-c337-435a-bd28-d22a01701fef.png" 
   }
 ];
