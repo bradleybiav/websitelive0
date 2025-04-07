@@ -102,7 +102,7 @@ const DynamicShaderBackground: React.FC = () => {
       sceneRef.current = new Scene();
       cameraRef.current = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-      // Initialize uniforms
+      // Initialize uniforms with modulo for time to prevent large values
       uniformsRef.current = {
         time: { value: 0 },
         resolution: { value: [window.innerWidth, window.innerHeight] },
@@ -132,7 +132,8 @@ const DynamicShaderBackground: React.FC = () => {
       const animate = () => {
         if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
         
-        uniformsRef.current.time.value = clockRef.current.getElapsedTime();
+        // Use modulo on time to prevent large values that could cause precision issues
+        uniformsRef.current.time.value = clockRef.current.getElapsedTime() % 1000;
         uniformsRef.current.mouse.value = mousePosition.current;
         rendererRef.current.render(sceneRef.current, cameraRef.current);
         animationFrameId.current = requestAnimationFrame(animate);
