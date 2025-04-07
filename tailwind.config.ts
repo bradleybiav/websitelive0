@@ -20,8 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				display: ['Inter', 'sans-serif'], // Will be replaced with Neue Haas Display 65
+				sans: ['"Neue Haas Display"', 'Inter', 'sans-serif'],
+				'neue-haas': ['"Neue Haas Display"', 'sans-serif'],
+				display: ['"Neue Haas Display"', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
