@@ -35,7 +35,7 @@ const fragmentShader = `
   
   // Cellular automaton-inspired function
   float cellular(vec2 uv, float time) {
-    float resolution = 15.0;
+    float resolution = 10.0;
     vec2 grid = fract(uv * resolution) - 0.5;
     vec2 id = floor(uv * resolution);
     
@@ -45,13 +45,13 @@ const fragmentShader = `
     for(float y = -1.0; y <= 1.0; y++) {
       for(float x = -1.0; x <= 1.0; x++) {
         vec2 offset = vec2(x, y);
-        vec2 r = offset + sin(time * 0.2 + random(id + offset) * 6.28) * 0.3;
+        vec2 r = offset + sin(time * 0.3 + random(id + offset) * 6.28) * 0.4;
         float d = length(grid - r);
         minDist = min(minDist, d);
       }
     }
     
-    return smoothstep(0.2, 0.3, minDist);
+    return smoothstep(0.15, 0.25, minDist);
   }
   
   void main() {
@@ -59,13 +59,13 @@ const fragmentShader = `
     
     // Subtle time-based cellular pattern
     float cell = cellular(uv, time);
-    float ring = smoothstep(0.0, 0.05, abs(cell - 0.5)) * 0.8;
-    float disk = (1.0 - cell) * 0.2;
+    float ring = smoothstep(0.0, 0.07, abs(cell - 0.5)) * 0.9;
+    float disk = (1.0 - cell) * 0.3;
     
     // Apply cell colors
-    vec3 cellColor = vec3(0.1, 0.1, 0.15);
-    vec3 ringColor = vec3(0.0, 0.15, 0.2);
-    vec3 diskColor = vec3(0.0, 0.0, 0.05);
+    vec3 cellColor = vec3(0.15, 0.15, 0.25);
+    vec3 ringColor = vec3(0.05, 0.2, 0.25);
+    vec3 diskColor = vec3(0.02, 0.03, 0.1);
     
     // Combine the patterns
     vec3 color = cell * cellColor + ring * ringColor + disk * diskColor;
@@ -75,20 +75,17 @@ const fragmentShader = `
     float c2 = cellular(uv + 0.5/resolution.xy, time);
     c2 = 1.0 - c2 * 0.5;
     
-    // Add subtle blue highlights
-    color += vec3(0.3, 0.4, 0.5) * max(c2*c2 - c*c, 0.0) * 1.5;
-    
-    // Ensure the background is subtle - limit brightness and increase transparency
-    color = min(color, vec3(0.2, 0.2, 0.25));
+    // Add blue highlights
+    color += vec3(0.4, 0.5, 0.7) * max(c2*c2 - c*c, 0.0) * 2.5;
     
     // Create a gradient vignette to fade the effect toward edges
-    float vignette = smoothstep(0.8, 0.2, length(uv - 0.5) * 1.5);
+    float vignette = smoothstep(0.9, 0.2, length(uv - 0.5) * 1.5);
     color *= vignette;
     
-    // Set alpha to be more transparent
-    float alpha = 0.5 * vignette;
+    // Set alpha to be more visible but still subtle
+    float alpha = 0.8 * vignette;
     
-    fragColor = vec4(color, alpha);
+    gl_FragColor = vec4(color, alpha);
   }
 `;
 
