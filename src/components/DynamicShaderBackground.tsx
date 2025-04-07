@@ -15,58 +15,97 @@ const fragmentShader = `
   uniform vec2 mouse;
   varying vec2 vUv;
 
-  float field(in vec3 p) {
-    float strength = 7.0 + 0.03 * log(1.e-6 + fract(sin(time) * 4373.11));
-    float accum = 0.0;
-    float prev = 0.0;
-    float tw = 0.0;
+  const mat2 m = mat2(0.80, 0.60, -0.60, 0.80);
 
-    for(int i = 0; i < 4; ++i) {
-      float mag = dot(p, p);
-      p = abs(p) / mag + vec3(-0.5, -0.4, -1.5);
-      float w = exp(-float(i) / 7.0);
-      accum += w * exp(-strength * pow(abs(mag - prev), 2.3));
-      tw += w;
-      prev = mag;
-    }
+  float noise(in vec2 p) {
+    return sin(p.x) * sin(p.y);
+  }
+
+  float fbm4(vec2 p) {
+    float f = 0.0;
+    f += 0.5000 * noise(p); p = m * p * 2.02;
+    f += 0.2500 * noise(p); p = m * p * 2.03;
+    f += 0.1250 * noise(p); p = m * p * 2.01;
+    f += 0.0625 * noise(p);
+    return f / 0.9375;
+  }
+
+  float fbm6(vec2 p) {
+    float f = 0.0;
+    f += 0.500000 * (0.5 + 0.5 * noise(p)); p = m * p * 2.02;
+    f += 0.250000 * (0.5 + 0.5 * noise(p)); p = m * p * 2.03;
+    f += 0.125000 * (0.5 + 0.5 * noise(p)); p = m * p * 2.01;
+    f += 0.062500 * (0.5 + 0.5 * noise(p)); p = m * p * 2.04;
+    f += 0.031250 * (0.5 + 0.5 * noise(p)); p = m * p * 2.01;
+    f += 0.015625 * (0.5 + 0.5 * noise(p));
+    return f / 0.96875;
+  }
+
+  vec2 fbm4_2(vec2 p) {
+    return vec2(fbm4(p), fbm4(p + vec2(7.8)));
+  }
+
+  vec2 fbm6_2(vec2 p) {
+    return vec2(fbm6(p + vec2(16.8)), fbm6(p + vec2(11.5)));
+  }
+
+  float func(vec2 q, out vec4 ron) {
+    // Add mouse influence here
+    vec2 mousePos = mouse.xy / resolution.xy;
+    mousePos = mousePos * 2.0 - 1.0;
+    mousePos.x *= resolution.x / resolution.y;
     
-    return max(0.0, 5.0 * accum / tw - 0.7);
+    // Apply mouse influence with increased sensitivity (0.08)
+    q += 0.08 * mousePos;
+    
+    // Time-based animation
+    q += 0.03 * sin(vec2(0.27, 0.23) * time + length(q) * vec2(4.1, 4.3));
+
+    vec2 o = fbm4_2(0.9 * q);
+    o += 0.04 * sin(vec2(0.12, 0.14) * time + length(o));
+    vec2 n = fbm6_2(3.0 * o);
+
+    ron = vec4(o, n);
+    float f = 0.5 + 0.5 * fbm4(1.8 * q + 6.0 * n);
+    return mix(f, f * f * f * 3.5, f * abs(n.x));
   }
 
   void main() {
     vec2 uv = vUv;
-    vec2 center = vec2(0.5, 0.5);
-    
-    // Convert mouse position from screen coordinates to normalized [0,1]
-    vec2 mousePos = mouse.xy / resolution.xy;
-    
-    // Updated mouse influence to 0.08 as requested
-    float mouseInfluence = 0.08;
-    vec2 adjustedUV = uv + (mousePos - center) * mouseInfluence;
-    
-    vec2 p = -1.0 + 2.0 * adjustedUV;
+    vec2 p = (2.0 * uv - 1.0);
     p.x *= resolution.x / resolution.y;
     
-    float t = field(vec3(p.x * 1.2, p.y, time * 0.1));
+    float e = 2.0 / resolution.y;
+    vec4 on = vec4(0.0);
+    float f = func(p, on);
+
+    // Lightened color palette for better visibility with transparency
+    vec3 col = vec3(0.0);
+    col = mix(vec3(0.2, 0.1, 0.4), vec3(0.3, 0.05, 0.05), f);
+    col = mix(col, vec3(0.9, 0.9, 0.9), dot(on.zw, on.zw));
+    col = mix(col, vec3(0.4, 0.3, 0.3), 0.2 + 0.5 * on.y * on.y);
+    col = mix(col, vec3(0.0, 0.2, 0.4), 0.5 * smoothstep(1.2, 1.3, abs(on.z) + abs(on.w)));
+    col = clamp(col * f * 2.0, 0.0, 1.0);
     
-    // Slightly less white base with more color variation
-    vec3 baseColor = vec3(0.95, 0.95, 0.97); // Slightly off-white base
-    float colorIntensity = 0.1; // Increased from 0.04 to 0.1
+    // Manual derivatives for normal calculation
+    vec4 kk;
+    vec3 nor = normalize(vec3(
+      func(p + vec2(e, 0.0), kk) - f,
+      2.0 * e,
+      func(p + vec2(0.0, e), kk) - f
+    ));
     
-    vec3 color = mix(
-      baseColor,
-      baseColor - vec3(t * colorIntensity, t * colorIntensity * 0.9, t * colorIntensity * 0.7),
-      t * 0.35 // Increased from 0.2 to 0.35
-    );
+    vec3 lig = normalize(vec3(0.9, 0.2, -0.4));
+    float dif = clamp(0.3 + 0.7 * dot(nor, lig), 0.0, 1.0);
+    vec3 lin = vec3(0.70, 0.90, 0.95) * (nor.y * 0.5 + 0.5) + vec3(0.15, 0.10, 0.05) * dif;
+    col *= 1.2 * lin;
+    col = 1.0 - col;
+    col = 1.1 * col * col;
     
-    // Add a slightly stronger vignette
-    float vignette = 1.0 - length(uv - 0.5) * 0.35;
-    color *= vignette;
+    // Set alpha to make it more visible but still show content behind it
+    float alpha = 0.65; 
     
-    // Increase opacity for more visibility
-    float alpha = 0.25 + min(t * 0.2, 0.25); // Increased from 0.2 + min(t * 0.1, 0.15)
-    
-    gl_FragColor = vec4(color, alpha);
+    gl_FragColor = vec4(col, alpha);
   }
 `;
 
