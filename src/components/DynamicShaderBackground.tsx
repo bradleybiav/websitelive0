@@ -13,11 +13,11 @@ const fragmentShader = `
   uniform vec2 resolution;
   uniform vec2 mouse;
   varying vec2 vUv;
-
-  const mat2 m = mat2(0.80, 0.60, -0.60, 0.80);
+  
+  const mat2 m = mat2( 0.80,  0.60, -0.60,  0.80 );
 
   float noise(in vec2 p) {
-    return sin(p.x) * sin(p.y);
+    return sin(p.x)*sin(p.y);
   }
 
   float fbm4(vec2 p) {
@@ -75,10 +75,10 @@ const fragmentShader = `
     vec4 on = vec4(0.0);
     float f = func(p, on);
 
-    vec3 col = vec3(0.2);
-    col = mix(col, vec3(0.5), f);
-    col = mix(col, vec3(0.8), dot(on.zw, on.zw));
-    col = mix(col, vec3(0.3), 0.2 + 0.5 * on.y * on.y);
+    vec3 col = vec3(0.9, 0.9, 0.95); // Soft white base
+    col = mix(col, vec3(0.8, 0.85, 0.9), f); // Silver-white variation
+    col = mix(col, vec3(0.95, 0.95, 1.0), dot(on.zw, on.zw)); // Bright white highlights
+    col = mix(col, vec3(0.75, 0.8, 0.85), 0.2 + 0.5 * on.y * on.y); // Soft silver tone
     col = clamp(col * f * 2.0, 0.0, 1.0);
     
     vec4 kk;
@@ -90,7 +90,7 @@ const fragmentShader = `
     
     vec3 lig = normalize(vec3(0.9, 0.2, -0.4));
     float dif = clamp(0.3 + 0.7 * dot(nor, lig), 0.0, 1.0);
-    vec3 lin = vec3(0.7) * (nor.y * 0.5 + 0.5) + vec3(0.15) * dif;
+    vec3 lin = vec3(0.9) * (nor.y * 0.5 + 0.5) + vec3(0.15) * dif;
     col *= 1.2 * lin;
     col = 1.0 - col;
     col = 1.1 * col * col;
