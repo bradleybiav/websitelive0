@@ -83,7 +83,7 @@ const Index = () => {
             onInteraction={() => {}} 
           />
           
-          <div className="space-y-16 md:space-y-20"> {/* Increased spacing between sections */}
+          <div className="space-y-8 md:space-y-12"> {/* Reduced vertical spacing */}
             <HomeSection 
               id="home" 
               isActive={true} 
