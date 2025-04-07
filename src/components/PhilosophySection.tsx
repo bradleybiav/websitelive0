@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -22,7 +21,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
     },
     {
       title: "Context creates impact",
-      description: "Discovery is never accidental. Music isn't just heard, it's shaped by the environment in which it's found: who's talking about it, where it appears, and the signals of credibility that surround it. We navigate cultural currents to position music where it will be championed, ensuring it resonates in the right spaces at the right time."
+      description: "Discovery is never accidental, it's shaped by the environment in which it's found. We navigate cultural currents to position music where it will be championed."
     },
     {
       title: "Influence isn't accidental",
@@ -50,7 +49,6 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
         </div>
         
         {isMobile ? (
-          // Mobile layout - vertical accordion style
           <div className="space-y-8">
             {philosophyPoints.map((point, index) => (
               <div 
@@ -72,7 +70,6 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
             ))}
           </div>
         ) : (
-          // Desktop layout - hover effect with column layout
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-12 md:col-span-5">
               {philosophyPoints.map((point, index) => (
