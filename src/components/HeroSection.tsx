@@ -26,7 +26,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-[60vh] w-full flex flex-col justify-center items-center"
+      className="min-h-[50vh] w-full flex flex-col justify-center items-center"
     >
       <div className="text-center">
         <div 
@@ -39,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
           <img 
             src="/lovable-uploads/c1499d03-d412-485f-b24e-3b96975d1fdd.png" 
             alt="Brain in a Vat" 
-            className="w-48 md:w-64 lg:w-80 animate-pulse"
+            className="w-96 md:w-[30rem] lg:w-[36rem] animate-pulse"
           />
         </div>
       </div>
