@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 const vertexShader = `
@@ -14,70 +15,40 @@ const fragmentShader = `
   uniform vec2 mouse;
   varying vec2 vUv;
   
-  float hash(float n) {
-    return fract(sin(n) * 43758.5453);
-  }
-  
-  float noise(vec3 x) {
-    vec3 p = floor(x);
-    vec3 f = fract(x);
-    f = f * f * (3.0 - 2.0 * f);
-    
-    float n = p.x + p.y * 57.0 + p.z * 113.0;
-    float res = mix(mix(mix(hash(n), hash(n + 1.0), f.x),
-                        mix(hash(n + 57.0), hash(n + 58.0), f.x), f.y),
-                    mix(mix(hash(n + 113.0), hash(n + 114.0), f.x),
-                        mix(hash(n + 170.0), hash(n + 171.0), f.x), f.y), f.z);
-    return res;
-  }
-  
-  float fbm(vec3 p) {
-    float f = 0.0;
-    float amp = 0.5;
-    for(int i = 0; i < 5; i++) {
-      f += amp * noise(p);
-      p *= 2.03;
-      amp *= 0.5;
-    }
-    return f;
-  }
-  
   void main() {
     vec2 uv = vUv;
+    vec2 uvs = uv * 2.0 - 1.0;
+    uvs.x *= resolution.x / resolution.y;
     
     vec2 mousePos = mouse.xy / resolution.xy;
     mousePos = mousePos * 2.0 - 1.0;
+    mousePos.x *= resolution.x / resolution.y;
     
-    float mouseInfluence = 0.02;
-    vec2 uvDistorted = uv + vec2(
-      sin(uv.y * 10.0 + time * 0.3 + mousePos.x) * 0.01,
-      cos(uv.x * 10.0 + time * 0.3 + mousePos.y) * 0.01
-    ) * mouseInfluence;
+    // Calculate distance from current pixel to mouse position
+    float dist = distance(uvs, mousePos);
     
-    float t = time * 0.1;
-    vec3 p = vec3(uvDistorted * 2.0, t * 0.05);
-    float stars = pow(fbm(p * 5.0), 5.0) * 0.5;
+    // Create a wave effect that follows the mouse
+    // Make the effect more concentrated around the mouse (less zoomed out)
+    float strength = 0.02 / (0.01 + dist * 2.5); // Increased influence by lowering the denominator
     
-    float nebula = fbm(p * 3.0 + fbm(p * 7.0) * 0.5) * 0.5;
+    // Create displacement effect
+    vec2 displacement = normalize(uvs - mousePos) * strength;
     
-    vec3 baseColor = vec3(0.99, 0.99, 1.0);
+    // Base color (almost white for subtlety)
+    vec3 color = vec3(0.98, 0.98, 0.98);
     
-    vec3 nebulaColor = vec3(0.9, 0.95, 1.0);
-    vec3 starsColor = vec3(1.0);
+    // Add very subtle color variation based on displacement
+    color += vec3(displacement.y * 0.04, displacement.x * 0.02, displacement.x * displacement.y * 0.01);
     
-    float nebulaIntensity = 0.04;
-    float starsIntensity = 0.05;
-    
-    vec3 color = baseColor;
-    color = mix(color, nebulaColor, nebula * nebulaIntensity);
-    color = mix(color, starsColor, stars * starsIntensity);
-    
+    // Ensure the color doesn't get too dark or bright
     color = clamp(color, 0.95, 1.0);
     
-    float vignette = 1.0 - length(uv - 0.5) * 0.3;
+    // Subtle vignette effect to hide edges
+    float vignette = 1.0 - length(uv - 0.5) * 0.2;
     color *= vignette;
     
-    float alpha = 0.3 + min(nebula * 0.1, 0.1);
+    // Set a subtle alpha to ensure the effect is visible but not overwhelming
+    float alpha = smoothstep(0.0, 0.5, strength) * 0.3;
     
     gl_FragColor = vec4(color, alpha);
   }
@@ -89,19 +60,21 @@ const ShaderBackground: React.FC = () => {
   const mousePosition = useRef<[number, number]>([0, 0]);
 
   useEffect(() => {
+    // Track mouse position
     const handleMouseMove = (event: MouseEvent) => {
       mousePosition.current = [event.clientX, event.clientY];
     };
     
     window.addEventListener('mousemove', handleMouseMove);
     
+    // Import Three.js dynamically to avoid SSR issues
     import('three').then(({ WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Clock }) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
       const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
 
       const scene = new Scene();
       const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -109,7 +82,7 @@ const ShaderBackground: React.FC = () => {
       const uniforms = {
         time: { value: 0 },
         resolution: { value: [window.innerWidth, window.innerHeight] },
-        mouse: { value: mousePosition.current }
+        mouse: { value: [0, 0] }
       };
 
       const material = new ShaderMaterial({
