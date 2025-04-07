@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 interface PhilosophySectionProps {
@@ -31,7 +30,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
   return (
     <section 
       id={id} 
-      className="py-20 md:py-28 px-6 md:px-12 lg:px-24"
+      className="py-10 md:py-12 px-6 md:px-12 lg:px-24"
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-16">
@@ -69,7 +68,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
           </div>
         </div>
         
-        <div className="mt-16 py-6 border-t border-b border-gray-200">
+        <div className="mt-8 py-4 border-t border-b border-gray-200">
           <blockquote className="italic text-xl md:text-2xl text-center max-w-3xl mx-auto">
             "We don't just promote music; we create experiences that challenge perception and expand consciousness."
           </blockquote>

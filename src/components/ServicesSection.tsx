@@ -35,12 +35,12 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
   return (
     <section 
       id={id} 
-      className="py-20 md:py-28 px-6 md:px-12 lg:px-24"
+      className="py-10 md:py-12 px-6 md:px-12 lg:px-24"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16">
+        <div className="mb-8">
           <h2 className="header-text mb-6">Our Services</h2>
-          <div className="w-20 h-1 bg-black mb-12"></div>
+          <div className="w-20 h-1 bg-black mb-8"></div>
         </div>
         
         <div className="grid grid-cols-12 gap-8">
