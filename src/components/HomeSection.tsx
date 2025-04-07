@@ -14,7 +14,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({ id }) => {
     >
       <div className="max-w-[700px] text-center mx-auto">
         <p className="text-xl md:text-2xl font-normal leading-relaxed">
-          Brain in a Vat is a boutique music promotion agency that challenges perception and crafts immersive narratives for artists who defy conventional boundaries in sound and expression.
+          brain in a vat is a boutique music promotions agency that shapes perception and shifts reality.
         </p>
       </div>
     </section>

@@ -12,19 +12,19 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
   const services = [
     {
       title: "Press",
-      description: "Strategic placement in key publications and digital platforms that align with your artistic vision. We craft compelling narratives and visual assets that capture the essence of your music, securing meaningful coverage that resonates with both established fans and new audiences."
+      description: "We craft tailored press campaigns that elevate the visibility of artists and labels within electronic music media and beyond. Our approach builds compelling narratives through strategic placements across a variety of mediums. With a deep understanding of the electronic music landscape, we connect you with the tastemakers and platforms that ensure your story resonates authentically."
     },
     {
-      title: "DSP",
-      description: "Expert navigation of the digital streaming landscape to maximize your presence on platforms like Spotify, Apple Music, and beyond. We develop tailored strategies for playlist placement, algorithmic optimization, and feature opportunities that exponentially expand your digital footprint."
+      title: "DSP Promo",
+      description: "We pitch your release directly to editorial contacts across major platforms like Spotify, Apple Music, Amazon Music, Deezer, and SoundCloud. Beyond standard pitching, our DSP service includes a bespoke third-party playlist placement and algorithmic optimization campaign. We target curators who have featured tracks in your micro niche— driving high-quality listens and refining your release's algorithmic associations."
     },
     {
-      title: "Radio",
-      description: "Targeted campaigns for both traditional and digital radio channels, leveraging our extensive network of relationships with programmers and tastemakers. We position your music strategically to reach the right listeners at the right moment across the airwaves."
+      title: "Radio Promo",
+      description: "We pitch your track for airplay across an international network of radio DJs and music programmers, spanning terrestrial, internet, and satellite stations. In addition, we offer guest mix seeding, pitching stations on exclusive mixes (recorded upon confirmation of interest) or syndicating non-exclusive mixes to shows with recurring guest mix slots."
     },
     {
-      title: "Tastemaker",
-      description: "Curated outreach to influential voices in music culture who can amplify your artistic message. We identify and engage with the perfect constellation of bloggers, podcasters, and cultural commentators whose audiences align with your creative universe."
+      title: "Club/Tastemaker DJ Promo",
+      description: "Our DJ promo service ensures your release reaches key global tastemaker DJs. Leveraging strong relationships across the electronic music spectrum, we place your track in the hands (or onto the USBs) of influential DJs. Our targeted approach amplifies your music's impact at festivals, clubs, and beyond, generating organic buzz on dance floors worldwide."
     }
   ];
 
@@ -35,7 +35,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h2 className="header-text mb-6">Our Services</h2>
+          <h2 className="header-text mb-6">Services</h2>
           <div className="w-20 h-1 bg-black mb-8"></div>
         </div>
         

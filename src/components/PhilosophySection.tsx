@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 interface PhilosophySectionProps {
@@ -10,20 +11,20 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
 
   const philosophyPoints = [
     {
-      title: "Perception Shapes Reality",
-      description: "We believe that music is not just heard but experienced. Our approach to promotion creates immersive narratives that shape how audiences perceive and connect with music. Through strategic storytelling and sensory engagement, we transform passive listening into active experiences."
+      title: "Your favorite tastemaker's favorite tastemaker",
+      description: "brain in a vat is the unseen force behind some of the most resonant electronic music of today, orchestrating how sound moves through culture."
     },
     {
-      title: "Beyond Conventional Boundaries",
-      description: "Like the philosophical brain in a vat, we challenge the notion of what's possible in music promotion, pushing beyond conventional limitations to create memorable experiences. We dismantle traditional frameworks to create campaigns that traverse the boundaries between digital and physical, conscious and subconscious."
+      title: "Movements — not just campaigns",
+      description: "Every strategy is bespoke, every pitch deliberate, every placement meaningful. We don't just amplify music — we shape how it's experienced."
     },
     {
-      title: "Mindful Integration",
-      description: "We carefully integrate artist vision, audience psychology, and market dynamics to craft promotion strategies that resonate on multiple levels of consciousness. This thoughtful approach ensures that each campaign exists in harmony with the artist's creative universe while strategically positioning them within the broader cultural landscape."
+      title: "Context creates impact",
+      description: "Discovery is never accidental. Music isn't just heard, it's shaped by the environment in which it's found: who's talking about it, where it appears, and the signals of credibility that surround it. We navigate cultural currents to position music where it will be championed, ensuring it resonates in the right spaces at the right time."
     },
     {
-      title: "Conscious Evolution",
-      description: "Our methodology embraces constant evolution and adaptation. We believe that effective promotion must respond to the fluid nature of consciousness and culture. By continuously questioning assumptions and refining our approach, we ensure that our strategies remain relevant and impactful in an ever-changing landscape."
+      title: "Influence isn't accidental",
+      description: "brain in a vat connects its clients with the right cultural gatekeepers, ensuring their work is recognized, remembered, and revered."
     }
   ];
 
@@ -34,7 +35,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-16">
-          <h2 className="header-text mb-6">Our Philosophy</h2>
+          <h2 className="header-text mb-6">Philosophy</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
