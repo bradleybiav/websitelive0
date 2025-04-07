@@ -41,8 +41,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
     setMenuOpen(false);
   };
 
-  // Determine if the logo should be shown (only when not on the home section)
-  const shouldShowLogo = activeSection !== 'home';
+  // Determine if the logo should be shown (only when not on the home or hero section)
+  const shouldShowLogo = activeSection !== 'home' && activeSection !== 'hero';
 
   return (
     <nav

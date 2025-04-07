@@ -9,7 +9,7 @@ import ClientsSection from '@/components/ClientsSection';
 import ContactSection from '@/components/ContactSection';
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('hero');
   const isScrollingRef = useRef(false);
   
   const handleSectionClick = (section: string) => {
@@ -79,34 +79,34 @@ const Index = () => {
         <main>
           <HeroSection 
             id="hero" 
-            isActive={true} 
-            onInteraction={() => {}} 
+            isActive={activeSection === 'hero'} 
+            onInteraction={() => {}}
           />
           
           <div className="space-y-16 md:space-y-24"> {/* Added vertical spacing */}
             <HomeSection 
               id="home" 
-              isActive={true} 
+              isActive={activeSection === 'home'} 
             />
             
             <PhilosophySection 
               id="philosophy" 
-              isActive={true} 
+              isActive={activeSection === 'philosophy'} 
             />
             
             <ServicesSection 
               id="services" 
-              isActive={true} 
+              isActive={activeSection === 'services'} 
             />
             
             <ClientsSection 
               id="clients" 
-              isActive={true} 
+              isActive={activeSection === 'clients'} 
             />
             
             <ContactSection 
               id="contact" 
-              isActive={true} 
+              isActive={activeSection === 'contact'} 
             />
           </div>
         </main>
