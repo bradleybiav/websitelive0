@@ -22,7 +22,7 @@ export const featuredArtists: Client[] = [
   // Current photo 5: Chloé Caillet
   { 
     name: "Chloé Caillet", 
-    type: "DJ/Producer", 
+    type: "Artist", 
     image: "/lovable-uploads/2e201a6c-ab7e-4b4f-b623-f7094f40eac0.png", 
     instagramUrl: "https://www.instagram.com/chloecaillet/",
     spotifyUrl: "https://open.spotify.com/artist/68ywCN6ZpInbcilOfLBa3a"
@@ -103,7 +103,7 @@ export const featuredArtists: Client[] = [
   { 
     name: "Orsay", 
     type: "Electronic Producer", 
-    image: "/lovable-uploads/be5a2ed1-81b5-4cbb-b6cb-a9b602759d57.png", 
+    image: "/lovable-uploads/535715ac-e038-492e-b45d-84e6ef2e6104.png", 
     instagramUrl: "https://www.instagram.com/orsaymusic/",
     spotifyUrl: "https://open.spotify.com/artist/0jbyfa9yocQWIf7nXO8LH4"
   },
