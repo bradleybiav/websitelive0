@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -33,7 +32,6 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
               className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
               loading="eager" 
               decoding="async"
-              fetchPriority="high"
               onError={handleImageError}
             />
           ) : (
