@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -14,7 +13,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ id }) => {
   const services = [
     {
       title: "DSP Promo",
-      description: "We pitch directly to editorial teams at platforms like Spotify, Apple Music, Amazon Music, Deezer, and SoundCloud. Our approach includes targeted third-party playlisting and algorithmic positioning to drive fan discovery and engagement."
+      description: "We pitch your release directly to the editorial playlist curation teams at every major streaming platform. Our approach also includes targeted third-party playlisting and algorithmic positioning to drive fan discovery and engagement."
     },
     {
       title: "Radio Promo",
