@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -8,10 +9,18 @@ import ClientsSection from '@/components/ClientsSection';
 import ContactSection from '@/components/ContactSection';
 
 const Index = () => {
+  const [introMode, setIntroMode] = useState(true);
   const [activeSection, setActiveSection] = useState('home');
   const isScrollingRef = useRef(false);
   
+  const handleEnterSite = () => {
+    setIntroMode(false);
+    setActiveSection('home');
+  };
+  
   const handleSectionClick = (section: string) => {
+    if (introMode) return;
+    
     isScrollingRef.current = true;
     setActiveSection(section);
     
@@ -28,6 +37,8 @@ const Index = () => {
   };
   
   useEffect(() => {
+    if (introMode) return;
+    
     // Set up intersection observer to update active section on scroll
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,51 +75,61 @@ const Index = () => {
       sections.forEach((section) => observer.unobserve(section));
       window.removeEventListener('scroll', handleManualScroll);
     };
-  }, []);
+  }, [introMode]);
   
   return (
     <>
       <div className="relative min-h-screen">
-        <Navbar 
-          activeSection={activeSection} 
-          onSectionClick={handleSectionClick} 
-          visible={true}
-        />
-        
-        <main className="pt-16">
+        {introMode ? (
           <HeroSection 
-            id="hero" 
-            isActive={true} 
-            onInteraction={() => {}} 
+            id="intro" 
+            isActive={introMode} 
+            onInteraction={handleEnterSite} 
           />
-          
-          <div className="space-y-2 md:space-y-4"> {/* Significantly reduced spacing between sections */}
-            <HomeSection 
-              id="home" 
-              isActive={true} 
+        ) : (
+          <>
+            <Navbar 
+              activeSection={activeSection} 
+              onSectionClick={handleSectionClick} 
+              visible={true}
             />
             
-            <PhilosophySection 
-              id="philosophy" 
-              isActive={true} 
-            />
-            
-            <ServicesSection 
-              id="services" 
-              isActive={true} 
-            />
-            
-            <ClientsSection 
-              id="clients" 
-              isActive={true} 
-            />
-            
-            <ContactSection 
-              id="contact" 
-              isActive={true} 
-            />
-          </div>
-        </main>
+            <main className="pt-16">
+              <HeroSection 
+                id="hero" 
+                isActive={!introMode} 
+                onInteraction={() => {}} 
+              />
+              
+              <div className="space-y-2 md:space-y-4"> {/* Significantly reduced spacing between sections */}
+                <HomeSection 
+                  id="home" 
+                  isActive={true} 
+                />
+                
+                <PhilosophySection 
+                  id="philosophy" 
+                  isActive={true} 
+                />
+                
+                <ServicesSection 
+                  id="services" 
+                  isActive={true} 
+                />
+                
+                <ClientsSection 
+                  id="clients" 
+                  isActive={true} 
+                />
+                
+                <ContactSection 
+                  id="contact" 
+                  isActive={true} 
+                />
+              </div>
+            </main>
+          </>
+        )}
       </div>
     </>
   );

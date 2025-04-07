@@ -35,7 +35,7 @@ const PhilosophySection: React.FC<PhilosophySectionProps> = ({ id }) => {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-16">
-          <h2 className="header-text mb-6">Philosophy</h2>
+          <h2 className="header-text mb-6">Our Philosophy</h2>
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
