@@ -7,6 +7,7 @@ import PhilosophySection from '@/components/PhilosophySection';
 import ServicesSection from '@/components/ServicesSection';
 import ClientsSection from '@/components/ClientsSection';
 import ContactSection from '@/components/ContactSection';
+import ScrollIndicator from '@/components/ScrollIndicator';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -75,6 +76,8 @@ const Index = () => {
           onSectionClick={handleSectionClick} 
           visible={true}
         />
+        
+        <ScrollIndicator />
         
         <main className="pt-16"> {/* Add padding-top to accommodate fixed navbar */}
           <HeroSection 
