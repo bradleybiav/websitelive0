@@ -26,9 +26,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
     <section 
       id={id} 
       ref={sectionRef}
-      className="min-h-screen w-full flex flex-col justify-center items-center"
+      className="min-h-screen w-full flex flex-col justify-center items-center pt-16" // Added pt-16 to account for navbar height
     >
-      <div className="text-center">
+      <div className="text-center space-y-6"> {/* Added space-y-6 for consistent spacing */}
         <div 
           ref={logoRef} 
           className={cn(
@@ -42,9 +42,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id, isActive }) => {
             className="w-[249.6px] md:w-[78.0rem] lg:w-[93.6rem]"
           />
         </div>
+        <p className="text-xl md:text-2xl font-normal leading-relaxed px-6">
+          brain in a vat is a boutique music promotions agency that shapes perception and shifts reality.
+        </p>
       </div>
     </section>
   );
 };
 
 export default HeroSection;
+
