@@ -23,7 +23,8 @@ export const featuredClients: Client[] = [
   { 
     name: "Bounce House", 
     type: "Electronic Collective", 
-    image: "/lovable-uploads/73a0adeb-3a64-4da8-a2a0-fbb68a8f91bc.png"
+    image: "/lovable-uploads/73a0adeb-3a64-4da8-a2a0-fbb68a8f91bc.png", 
+    instagramUrl: "https://www.instagram.com/bouncehousecollective/"
   },
   // Current photo 4: Arodes
   { 
@@ -201,7 +202,7 @@ export const featuredClients: Client[] = [
     instagramUrl: "https://www.instagram.com/hurryupslowly/",
     beatportUrl: "https://www.beatport.com/label/hurry-up-slowly/95786"
   },
-  // Current photo 26: 20/20 Vision again (This is Yet More according to your list)
+  // Current photo 26: Yet More (previously identified as "20/20 Vision again")
   { 
     name: "Yet More", 
     type: "Electronic Producer", 
@@ -217,7 +218,7 @@ export const featuredClients: Client[] = [
     instagramUrl: "https://www.instagram.com/braslive/",
     beatportUrl: "https://www.beatport.com/label/braslive-records/18996"
   },
-  // Current photo 28: Higher Ground again (This is Adriatique according to your list)
+  // Current photo 28: Adriatique (previously identified as "Higher Ground again")
   { 
     name: "Adriatique", 
     type: "Electronic Duo", 
@@ -225,7 +226,7 @@ export const featuredClients: Client[] = [
     instagramUrl: "https://www.instagram.com/adriatique/",
     spotifyUrl: "https://open.spotify.com/artist/02DWGcShQivFepRvGJ7xhB"
   },
-  // Current photo 29: Hurry Up Slowly again (This is YUMA according to your list)
+  // Current photo 29: YUMA (previously identified as "Hurry Up Slowly again")
   { 
     name: "YUMA", 
     type: "Electronic Producer", 
