@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import Logo from '@/components/ui/Logo';
+import FadeInText from '@/components/ui/FadeInText';
 
 interface HeroSectionProps {
   id: string;
@@ -10,7 +11,6 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
   const [showContent, setShowContent] = useState(false);
 
   // Fade in content on initial load
@@ -29,27 +29,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
       className="min-h-screen w-full flex flex-col justify-center items-center px-6 md:px-12 lg:px-24"
     >
       <div className="text-center space-y-4">
-        <div 
-          ref={logoRef} 
-          className={cn(
-            "flex justify-center transition-all duration-400 ease-in-out transform opacity-0",
-            showContent && "opacity-100"
-          )}
-        >
-          <img 
-            src="/lovable-uploads/ae35b706-929b-4ead-b6f1-1ef0e3dbd7c5.png" 
-            alt="Brain in a Vat" 
-            className="w-[249.6px] md:w-[78.0rem] lg:w-[93.6rem]"
-          />
-        </div>
-        <p 
-          className={cn(
-            "text-2xl md:text-3xl lg:text-4xl font-normal leading-relaxed px-6 md:px-12 lg:px-24 transition-opacity duration-400 opacity-0",
-            showContent && "opacity-100"
-          )}
-        >
-          brain in a vat is a boutique music promotions agency that shapes perception and shifts reality.
-        </p>
+        <Logo showContent={showContent} />
+        <FadeInText 
+          text="brain in a vat is a boutique music promotions agency that shapes perception and shifts reality."
+          showContent={showContent}
+        />
       </div>
     </section>
   );
