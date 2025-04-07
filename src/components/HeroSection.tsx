@@ -37,7 +37,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
           )}
         >
           <img 
-            src="/lovable-uploads/30b17da8-3da2-4d25-a663-2d2a56f8f892.png" 
+            src="/lovable-uploads/BIAV_Final Logo_Black.eps" 
             alt="Brain in a Vat" 
             className="w-[249.6px] md:w-[78.0rem] lg:w-[93.6rem]"
           />

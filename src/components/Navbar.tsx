@@ -52,7 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center">
           <img 
-            src="/lovable-uploads/30b17da8-3da2-4d25-a663-2d2a56f8f892.png" 
+            src="/lovable-uploads/BIAV_Final Logo_Black.eps" 
             alt="Brain in a Vat" 
             className="h-10 md:h-12 cursor-pointer"
             onClick={handleLogoClick}
