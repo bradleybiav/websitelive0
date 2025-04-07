@@ -72,7 +72,15 @@ const Carousel = memo(
       setAutoRotate(false)
     }
 
-    // Auto-rotate based on mouse position
+    // Normalize rotation to prevent large values
+    const normalizeRotation = () => {
+      const currentRotation = rotation.get()
+      if (Math.abs(currentRotation) > 3600) { // Reset after 10 full rotations
+        rotation.set(currentRotation % 360)
+      }
+    }
+
+    // Auto-rotate based on mouse position with infinite looping
     useEffect(() => {
       if (!isCarouselActive) return
       
@@ -83,6 +91,7 @@ const Carousel = memo(
           // Speed depends on how far from center the mouse is
           const rotationSpeed = mousePosition * 2
           rotation.set(rotation.get() + rotationSpeed)
+          normalizeRotation()
         }
         animationId = requestAnimationFrame(updateRotation)
       }
@@ -128,6 +137,7 @@ const Carousel = memo(
                   transform: `rotateY(${cardRotation}deg) translateZ(${radius}px)`,
                   opacity: isCardVisible(i) ? 1 : 0,
                   pointerEvents: isCardVisible(i) ? "auto" : "none",
+                  backfaceVisibility: "hidden", // Hide backfaces
                   transition: "opacity 0.3s ease",
                 }}
                 onClick={() => isCardVisible(i) && handleClick(client.image, {name: client.name, type: client.type}, i)}
