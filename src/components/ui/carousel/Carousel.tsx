@@ -1,15 +1,7 @@
 
-import { memo, useEffect, useRef, useState } from "react"
-import {
-  motion,
-  useMotionValue,
-  useTransform,
-  useAnimation,
-} from "framer-motion"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { memo } from "react"
 
-const transition = { duration: 0.15, ease: [0.32, 0.72, 0, 1], filter: "blur(4px)" }
-
+// Placeholder component - no longer used, but kept to prevent import errors
 const Carousel = memo(
   ({
     handleClick,
@@ -26,167 +18,12 @@ const Carousel = memo(
     }[]
     isCarouselActive: boolean
   }) => {
-    const isScreenSizeSm = useMediaQuery("(max-width: 640px)")
-    // Cylinder width configurations
-    const cylinderWidth = isScreenSizeSm ? 2000 : 3200
-    const faceCount = cards.length
-    const faceWidth = cylinderWidth / faceCount
-    const radius = cylinderWidth / (2 * Math.PI)
-    const rotation = useMotionValue(0)
-    const transform = useTransform(
-      rotation,
-      (value) => `rotate3d(0, 1, 0, ${value}deg)`
-    )
-    const containerRef = useRef<HTMLDivElement>(null)
-    const [autoRotate, setAutoRotate] = useState(false)
-    const [mousePosition, setMousePosition] = useState(0)
-    const [isMouseOver, setIsMouseOver] = useState(false)
-    
-    // Calculate visibility based on rotation angle
-    const isCardVisible = (index: number) => {
-      const currentRotation = rotation.get() % 360
-      const cardAngle = (index * (360 / faceCount)) % 360
-      
-      // Calculate angle difference, considering the circular nature
-      let angleDiff = Math.abs(currentRotation - cardAngle)
-      if (angleDiff > 180) angleDiff = 360 - angleDiff
-      
-      // Cards are visible when they're within 90 degrees of facing forward
-      return angleDiff < 90
-    }
-
-    // Get opacity based on visibility
-    const getCardOpacity = (index: number) => {
-      const currentRotation = rotation.get() % 360
-      const cardAngle = (index * (360 / faceCount)) % 360
-      
-      let angleDiff = Math.abs(currentRotation - cardAngle)
-      if (angleDiff > 180) angleDiff = 360 - angleDiff
-      
-      // Smoothly transition opacity based on angle
-      // Fully visible when directly in front, fading out as angle increases
-      if (angleDiff < 45) {
-        return 1; // Fully visible for cards directly in front
-      } else if (angleDiff < 90) {
-        // Linear fade from 1 to 0.2 between 45 and 90 degrees
-        return 1 - (angleDiff - 45) / 45 * 0.8;
-      } else {
-        return 0.2; // Minimum opacity for cards on the back
-      }
-    }
-
-    // Handle mouse movement within the carousel container
-    const handleMouseMove = (e: React.MouseEvent) => {
-      if (!isCarouselActive || !containerRef.current || !isMouseOver) return
-      
-      const container = containerRef.current
-      const { left, width } = container.getBoundingClientRect()
-      const mouseX = e.clientX - left
-      
-      // Calculate mouse position relative to center (-1 to 1)
-      const relativePosition = (mouseX / width) * 2 - 1
-      
-      // Reduce sensitivity by multiplying by a factor less than 1
-      setMousePosition(relativePosition * 0.5)
-      
-      // Enable auto-rotation when mouse is not in the center
-      setAutoRotate(true)
-    }
-    
-    // Handle mouse entering the container
-    const handleMouseEnter = () => {
-      setIsMouseOver(true)
-      setAutoRotate(true)
-    }
-    
-    // Handle mouse leaving the container
-    const handleMouseLeave = () => {
-      setIsMouseOver(false)
-      setAutoRotate(false)
-    }
-
-    // Auto-rotate based on mouse position
-    useEffect(() => {
-      if (!isCarouselActive) return
-      
-      let animationId: number
-      
-      const updateRotation = () => {
-        if (autoRotate && isMouseOver) {
-          // Reduced speed for smoother rotation
-          const rotationSpeed = mousePosition * 1
-          
-          // Simple continuous rotation
-          rotation.set(rotation.get() + rotationSpeed)
-        }
-        animationId = requestAnimationFrame(updateRotation)
-      }
-      
-      animationId = requestAnimationFrame(updateRotation)
-      
-      return () => {
-        cancelAnimationFrame(animationId)
-      }
-    }, [autoRotate, mousePosition, rotation, isCarouselActive, isMouseOver])
-
     return (
-      <div
-        ref={containerRef}
-        className="flex h-full items-center justify-center"
-        style={{
-          perspective: "1000px",
-          transformStyle: "preserve-3d",
-          willChange: "transform",
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <motion.div
-          className="relative flex h-full origin-center justify-center"
-          style={{
-            transform,
-            rotateY: rotation,
-            width: cylinderWidth,
-            transformStyle: "preserve-3d",
-          }}
-          animate={controls}
-        >
-          {cards.map((client, i) => {
-            const cardRotation = i * (360 / faceCount)
-            
-            return (
-              <motion.div
-                key={`key-${client.name}-${i}`}
-                className="absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
-                style={{
-                  width: `${faceWidth}px`,
-                  transform: `rotateY(${cardRotation}deg) translateZ(${radius}px)`,
-                  opacity: getCardOpacity(i),
-                  pointerEvents: isCardVisible(i) ? "auto" : "none",
-                  backfaceVisibility: "hidden",
-                  transition: "opacity 0.2s ease-out",
-                }}
-                onClick={() => isCardVisible(i) && handleClick(client.image, {name: client.name, type: client.type}, i)}
-              >
-                <motion.img
-                  src={client.image}
-                  alt={`${client.name} - ${client.type}`}
-                  layoutId={`img-${client.image}`}
-                  className="pointer-events-none w-full rounded-xl object-cover aspect-square"
-                  initial={{ filter: "blur(4px)" }}
-                  layout="position"
-                  animate={{ filter: "blur(0px)" }}
-                  transition={transition}
-                />
-              </motion.div>
-            )
-          })}
-        </motion.div>
+      <div className="flex h-full items-center justify-center">
+        <p>Carousel component replaced with grid layout</p>
       </div>
     )
   }
 )
 
 export default Carousel
-

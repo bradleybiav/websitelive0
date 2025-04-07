@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { ThreeDPhotoCarousel } from "@/components/ui/3d-carousel";
+import { ClientsGrid } from "@/components/ui/clients-grid";
 
 interface ClientsSectionProps {
   id: string;
@@ -59,7 +59,7 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           ref={el => elementsRef.current[1] = el}
           className="transition-all duration-500 ease-out opacity-0 transform translate-y-4"
         >
-          <ThreeDPhotoCarousel />
+          <ClientsGrid />
         </div>
         
         <div 
