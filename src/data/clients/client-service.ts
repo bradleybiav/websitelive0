@@ -1,6 +1,9 @@
 
 import { Client } from './types';
 import { featuredClients } from './featured-clients';
+import { featuredArtists } from './featured-artists';
+import { featuredGroups } from './featured-groups';
+import { featuredLabels } from './featured-labels';
 import { electronicClients } from './electronic-clients';
 import { experimentalClients } from './experimental-clients';
 import { ensembleClients } from './ensemble-clients';
@@ -19,9 +22,22 @@ export const getAllClients = (): Client[] => {
   ];
 };
 
-// Gets featured clients only
+// Gets featured clients only (maintaining backward compatibility)
 export const getFeaturedClients = (): Client[] => {
   return featuredClients;
+};
+
+// Gets featured clients by category
+export const getFeaturedArtists = (): Client[] => {
+  return featuredArtists;
+};
+
+export const getFeaturedGroups = (): Client[] => {
+  return featuredGroups;
+};
+
+export const getFeaturedLabels = (): Client[] => {
+  return featuredLabels;
 };
 
 // Gets clients by type

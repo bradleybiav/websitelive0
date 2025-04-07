@@ -7,6 +7,9 @@ export const clients = getAllClients();
 // Re-export the client service functions for more specific queries
 export { 
   getFeaturedClients,
+  getFeaturedArtists,
+  getFeaturedGroups,
+  getFeaturedLabels,
   getClientsByType,
   searchClientsByName
 } from './clients/client-service';
