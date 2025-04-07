@@ -53,32 +53,37 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, onSectionClick, visible 
       )}
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center space-x-10">
-          {shouldShowLogo && (
+        {shouldShowLogo ? (
+          <div className="flex items-center">
             <img 
               src="/lovable-uploads/ae35b706-929b-4ead-b6f1-1ef0e3dbd7c5.png" 
               alt="Brain in a Vat" 
               className="h-10 md:h-12 cursor-pointer"
               onClick={handleLogoClick}
             />
-          )}
-
-          <div className="hidden md:flex space-x-10">
-            {navItems.map(item => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={cn(
-                  'nav-link relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-black after:transition-all after:duration-300 after:ease-in-out',
-                  activeSection === item.id 
-                    ? 'after:w-full' 
-                    : 'after:w-0 hover:after:w-full'
-                )}
-              >
-                {item.name}
-              </button>
-            ))}
           </div>
+        ) : (
+          <div className="flex-1 md:hidden"></div> // Empty div for mobile spacing when logo is hidden
+        )}
+
+        <div className={cn(
+          "hidden md:flex",
+          shouldShowLogo ? "space-x-10" : "flex-1 justify-center space-x-16" // Center the nav items when no logo
+        )}>
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={cn(
+                'nav-link relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-black after:transition-all after:duration-300 after:ease-in-out',
+                activeSection === item.id 
+                  ? 'after:w-full' 
+                  : 'after:w-0 hover:after:w-full'
+              )}
+            >
+              {item.name}
+            </button>
+          ))}
         </div>
 
         <button 
