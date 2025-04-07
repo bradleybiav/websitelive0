@@ -11,6 +11,7 @@ import ContactSection from '@/components/ContactSection';
 const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const isScrollingRef = useRef(false);
+  const lastScrollTime = useRef(Date.now());
   
   const handleSectionClick = (section: string) => {
     isScrollingRef.current = true;
@@ -24,19 +25,22 @@ const Index = () => {
       // Reset the scroll lock after animation completes
       setTimeout(() => {
         isScrollingRef.current = false;
-      }, 800); // Slightly reduced from 1000ms
+      }, 600); // Shorter duration for more responsive controls
     }
   };
   
   useEffect(() => {
-    // Set up intersection observer with more sensitive thresholds
+    // Improve scroll detection with more granular thresholds
     const observer = new IntersectionObserver(
       (entries) => {
-        // Only process if we're not in a programmatic scroll
-        if (!isScrollingRef.current) {
+        // Only process if not in programmatic scroll or if enough time has passed
+        const now = Date.now();
+        if (!isScrollingRef.current || (now - lastScrollTime.current > 100)) {
+          lastScrollTime.current = now;
+          
           entries.forEach((entry) => {
-            // Even lower threshold for earlier detection, especially for clients section
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
+            // Even lower threshold (10%) for earlier and smoother detection
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.1) {
               setActiveSection(entry.target.id);
               console.log("Section visible:", entry.target.id, "with ratio:", entry.intersectionRatio);
             }
@@ -44,10 +48,24 @@ const Index = () => {
         }
       },
       { 
-        threshold: [0.05, 0.1, 0.15, 0.2, 0.3], // More gradual thresholds for smoother transitions
-        rootMargin: "-5px 0px" // Even smaller margin for earlier detection
+        // More granular thresholds for smoother transitions
+        threshold: [0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.3], 
+        rootMargin: "-2px 0px" // Minimal margin for more precise detection
       }
     );
+    
+    // Set up scroll event to track scroll status
+    const handleScroll = () => {
+      lastScrollTime.current = Date.now();
+      
+      // Only handle scroll logic if not during programmatic scrolling
+      if (!isScrollingRef.current) {
+        // We're manually scrolling now
+        // (Intersection observer will handle section detection)
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     // Observe all sections with shorter delay
     setTimeout(() => {
@@ -56,21 +74,12 @@ const Index = () => {
         observer.observe(section);
         console.log("Observing section:", section.id);
       });
-    }, 300); // Reduced delay for faster initialization
-    
-    // Handle manual scrolling
-    const handleManualScroll = () => {
-      if (!isScrollingRef.current) {
-        // We're in a manual scroll, the observer will handle section detection
-      }
-    };
-    
-    window.addEventListener('scroll', handleManualScroll, { passive: true });
+    }, 200); // Slightly reduced delay for faster initialization
     
     return () => {
       const sections = document.querySelectorAll('section[id]');
       sections.forEach((section) => observer.unobserve(section));
-      window.removeEventListener('scroll', handleManualScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
@@ -90,7 +99,7 @@ const Index = () => {
             onInteraction={() => {}}
           />
           
-          <div className="space-y-6 md:space-y-12"> {/* Further reduced vertical spacing */}
+          <div className="space-y-0 md:space-y-6"> {/* Removed vertical spacing completely */}
             <HomeSection 
               id="home" 
               isActive={activeSection === 'home'} 
