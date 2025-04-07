@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ClientsGrid } from "@/components/ui/clients-grid";
@@ -47,7 +48,9 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           ref={el => elementsRef.current[0] = el}
           className="mb-16 transition-all duration-500 ease-out opacity-0 transform translate-y-4"
         >
-          <h2 className="header-text mb-6">Our Clients</h2>
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="header-text">Our Clients</h2>
+          </div>
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         

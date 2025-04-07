@@ -4,10 +4,11 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ZoomIn, ZoomOut } from "lucide-react"
+import { ZoomIn, ZoomOut, Instagram, ExternalLink } from "lucide-react"
 import { featuredClients } from "@/data/clients/featured-clients"
 import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 interface ClientCardProps {
   client: Client;
@@ -28,7 +29,35 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
             <div className="text-white text-center p-4 font-sans">
               <h3 className="font-bold text-lg mb-1">{client.name}</h3>
-              <p className="text-sm text-gray-300">{client.type}</p>
+              <p className="text-sm text-gray-300 mb-3">{client.type}</p>
+              
+              {(client.instagramUrl || client.beatportUrl) && (
+                <div className="flex justify-center space-x-3 mt-2">
+                  {client.instagramUrl && (
+                    <a 
+                      href={client.instagramUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-gray-300 transition-colors"
+                      aria-label={`Visit ${client.name}'s Instagram`}
+                    >
+                      <Instagram size={18} />
+                    </a>
+                  )}
+                  
+                  {client.beatportUrl && (
+                    <a 
+                      href={client.beatportUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-gray-300 transition-colors"
+                      aria-label={`Visit ${client.name}'s Beatport`}
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -61,25 +90,45 @@ const ClientsGrid = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-end mb-4 space-x-2">
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={handleZoomOut}
-          disabled={size === "small"}
-          className="bg-white hover:bg-gray-100"
-        >
-          <ZoomOut className="h-4 w-4" />
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={handleZoomIn}
-          disabled={size === "xl"}
-          className="bg-white hover:bg-gray-100"
-        >
-          <ZoomIn className="h-4 w-4" />
-        </Button>
+      <div className="flex justify-between mb-4">
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="link" className="text-black hover:text-gray-700 p-0">
+              How to import client data
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-80">
+            <div className="text-sm">
+              <p className="font-semibold mb-2">Import options:</p>
+              <ol className="list-decimal pl-4 space-y-1">
+                <li>Export from Airtable as CSV</li>
+                <li>Upload the data as JSON format</li>
+                <li>Connect directly via Airtable API</li>
+              </ol>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+        
+        <div className="flex space-x-2">
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleZoomOut}
+            disabled={size === "small"}
+            className="bg-white hover:bg-gray-100"
+          >
+            <ZoomOut className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleZoomIn}
+            disabled={size === "xl"}
+            className="bg-white hover:bg-gray-100"
+          >
+            <ZoomIn className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       
       <div className={cn("grid gap-4", gridSizeClasses[size])}>
