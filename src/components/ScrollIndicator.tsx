@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import brainIcon from '/lovable-uploads/55ba2a74-4fc3-45c5-aa66-9fb7986e555d.png';
+
+// Use a relative path to the public directory for the image
+const brainIcon = '/lovable-uploads/55ba2a74-4fc3-45c5-aa66-9fb7986e555d.png';
 
 const ScrollIndicator = () => {
   const [scrollY, setScrollY] = useState(0);
