@@ -40,6 +40,7 @@ const Carousel = memo(
     const containerRef = useRef<HTMLDivElement>(null)
     const [autoRotate, setAutoRotate] = useState(false)
     const [mousePosition, setMousePosition] = useState(0)
+    const [isMouseOver, setIsMouseOver] = useState(false)
     
     // Calculate visibility based on rotation angle
     const isCardVisible = (index: number) => {
@@ -51,13 +52,32 @@ const Carousel = memo(
       if (angleDiff > 180) angleDiff = 360 - angleDiff
       
       // Cards are visible when they're within 90 degrees of facing forward
-      // This creates a wider visible range than before
       return angleDiff < 90
+    }
+
+    // Get opacity based on visibility
+    const getCardOpacity = (index: number) => {
+      const currentRotation = rotation.get() % 360
+      const cardAngle = (index * (360 / faceCount)) % 360
+      
+      let angleDiff = Math.abs(currentRotation - cardAngle)
+      if (angleDiff > 180) angleDiff = 360 - angleDiff
+      
+      // Smoothly transition opacity based on angle
+      // Fully visible when directly in front, fading out as angle increases
+      if (angleDiff < 45) {
+        return 1; // Fully visible for cards directly in front
+      } else if (angleDiff < 90) {
+        // Linear fade from 1 to 0.2 between 45 and 90 degrees
+        return 1 - (angleDiff - 45) / 45 * 0.8;
+      } else {
+        return 0.2; // Minimum opacity for cards on the back
+      }
     }
 
     // Handle mouse movement within the carousel container
     const handleMouseMove = (e: React.MouseEvent) => {
-      if (!isCarouselActive || !containerRef.current) return
+      if (!isCarouselActive || !containerRef.current || !isMouseOver) return
       
       const container = containerRef.current
       const { left, width } = container.getBoundingClientRect()
@@ -65,14 +85,23 @@ const Carousel = memo(
       
       // Calculate mouse position relative to center (-1 to 1)
       const relativePosition = (mouseX / width) * 2 - 1
-      setMousePosition(relativePosition)
+      
+      // Reduce sensitivity by multiplying by a factor less than 1
+      setMousePosition(relativePosition * 0.5)
       
       // Enable auto-rotation when mouse is not in the center
       setAutoRotate(true)
     }
     
+    // Handle mouse entering the container
+    const handleMouseEnter = () => {
+      setIsMouseOver(true)
+      setAutoRotate(true)
+    }
+    
     // Handle mouse leaving the container
     const handleMouseLeave = () => {
+      setIsMouseOver(false)
       setAutoRotate(false)
     }
 
@@ -83,11 +112,11 @@ const Carousel = memo(
       let animationId: number
       
       const updateRotation = () => {
-        if (autoRotate) {
-          // Speed depends on how far from center the mouse is
-          const rotationSpeed = mousePosition * 2
+        if (autoRotate && isMouseOver) {
+          // Reduced speed for smoother rotation
+          const rotationSpeed = mousePosition * 1
           
-          // Simple continuous rotation - no normalization needed
+          // Simple continuous rotation
           rotation.set(rotation.get() + rotationSpeed)
         }
         animationId = requestAnimationFrame(updateRotation)
@@ -98,7 +127,7 @@ const Carousel = memo(
       return () => {
         cancelAnimationFrame(animationId)
       }
-    }, [autoRotate, mousePosition, rotation, isCarouselActive])
+    }, [autoRotate, mousePosition, rotation, isCarouselActive, isMouseOver])
 
     return (
       <div
@@ -110,6 +139,7 @@ const Carousel = memo(
           willChange: "transform",
         }}
         onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <motion.div
@@ -132,9 +162,10 @@ const Carousel = memo(
                 style={{
                   width: `${faceWidth}px`,
                   transform: `rotateY(${cardRotation}deg) translateZ(${radius}px)`,
-                  opacity: isCardVisible(i) ? 1 : 0.2,
+                  opacity: getCardOpacity(i),
                   pointerEvents: isCardVisible(i) ? "auto" : "none",
                   backfaceVisibility: "hidden",
+                  transition: "opacity 0.2s ease-out",
                 }}
                 onClick={() => isCardVisible(i) && handleClick(client.image, {name: client.name, type: client.type}, i)}
               >
@@ -158,3 +189,4 @@ const Carousel = memo(
 )
 
 export default Carousel
+
