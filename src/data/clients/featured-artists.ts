@@ -1,7 +1,5 @@
-
 import { Client } from './types';
 
-// Electronic Artists & Producers
 export const featuredArtists: Client[] = [
   // Calussa
   { 
