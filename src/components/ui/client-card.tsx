@@ -19,8 +19,12 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   // Get optimized image size based on device
   const imageSize = isMobile ? 400 : 800;
   
-  // Check if the image path is valid
+  // Enhanced image path validation with more logging
   const validImagePath = isValidImagePath(client.image);
+  
+  if (!validImagePath) {
+    console.warn(`Invalid image path for client: ${client.name}, using fallback`, client.image);
+  }
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">

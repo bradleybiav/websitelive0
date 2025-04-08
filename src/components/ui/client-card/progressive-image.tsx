@@ -37,16 +37,35 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     };
   }, []);
 
-  // Progressive loading approach for images
+  // Image loading strategy
   useEffect(() => {
     if (!validImagePath || progressiveLoadingRef.current) return;
     
     progressiveLoadingRef.current = true;
     
-    // Start with low quality placeholder for immediate visual
+    // Mobile-specific image loading strategy
     if (isMobile) {
-      // For mobile, load directly to avoid extra network requests
-      preloadImage(processedImageSrc);
+      // For mobile, eagerly load with high priority
+      const img = new Image();
+      img.src = processedImageSrc;
+      img.crossOrigin = "anonymous";
+      img.fetchPriority = "high";
+      img.decoding = "async";
+      
+      img.onload = () => {
+        if (mountedRef.current) {
+          console.log(`Successfully loaded image for client: ${clientName}`);
+          setImageLoaded(true);
+          setImageError(false);
+        }
+      };
+      
+      img.onerror = () => {
+        if (mountedRef.current) {
+          console.error(`Failed to load image for client: ${clientName} (path: ${processedImageSrc})`);
+          setImageError(true);
+        }
+      };
     } else {
       // For desktop, use IntersectionObserver for lazy loading
       if (!imageRef.current || typeof IntersectionObserver === 'undefined') {
@@ -112,8 +131,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   };
 
   const handleImageError = () => {
-    if (!validImagePath) return;
-    console.error(`Failed to load image on render for client: ${clientName} (path: ${src})`);
+    console.error(`Failed to load image on render for client: ${clientName} (path: ${processedImageSrc})`);
     setImageError(true);
   };
 
