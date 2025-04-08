@@ -18,6 +18,13 @@ export const moreArtists: Client[] = [
     spotifyUrl: "https://open.spotify.com/artist/6Q1Ps2F5LkdxLAM6S7KPpt"
   },
   {
+    name: "Orsay",
+    type: "Artist",
+    image: "/lovable-uploads/535715ac-e038-492e-b45d-84e6ef2e6104.png",
+    instagramUrl: "https://www.instagram.com/orsaymusic/?hl=en",
+    spotifyUrl: "https://open.spotify.com/artist/0jbyfa9yocQWIf7nXO8LH4"
+  },
+  {
     name: "Port London",
     type: "Artist",
     image: "/Port London_artist_cover (1) (1).jpg",

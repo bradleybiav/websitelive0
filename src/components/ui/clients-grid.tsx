@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -16,8 +17,15 @@ interface ClientCardProps {
 const ClientCard = ({ client, size }: ClientCardProps) => {
   const [imageError, setImageError] = useState(false);
 
+  // Create a fallback image URL with client name for consistent placeholder generation
+  const getFallbackImage = () => {
+    // Use an Unsplash random image as placeholder with client name embedded for consistency
+    const clientNameEncoded = encodeURIComponent(client.name);
+    return `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=800&h=800&q=80&txt=${clientNameEncoded}`;
+  };
+
   const handleImageError = () => {
-    console.error(`Failed to load image for client: ${client.name}`);
+    console.error(`Failed to load image for client: ${client.name} (path: ${client.image})`);
     setImageError(true);
   };
 
@@ -35,8 +43,16 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
               onError={handleImageError}
             />
           ) : (
-            <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500">
-              {client.name}
+            <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
+              <img
+                src={getFallbackImage()}
+                alt={client.name}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <span className="text-white text-sm font-semibold px-2 py-1">{client.name}</span>
+              </div>
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -94,7 +110,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 const ClientsGrid = () => {
   const [size, setSize] = useState<"small" | "medium" | "large" | "xl">("medium");
 
-  console.log(`Total clients in grid: ${clientsData.length}`);
+  console.info(`Total clients in grid: ${clientsData.length}`);
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
