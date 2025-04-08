@@ -1,14 +1,26 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clients } from '@/data/clients';
 import { Badge } from "@/components/ui/badge";
-import { Instagram, Music, Link } from "lucide-react";
+import { Instagram, Music, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 
 const MobileClients = () => {
   const navigate = useNavigate();
   const [expandedClient, setExpandedClient] = useState<string | null>(null);
+  
+  useEffect(() => {
+    // Let the user know they're on the mobile clients page
+    toast({
+      title: "Mobile Clients View",
+      description: "Tap on a client to see their social media links",
+      duration: 3000,
+    });
+    
+    console.log("Mobile clients page loaded");
+  }, []);
   
   // Separate clients by type
   const artistClients = clients.filter(client => client.type === 'Artist');
@@ -83,7 +95,7 @@ const MobileClients = () => {
                       rel="noopener noreferrer"
                       className="flex items-center text-blue-600 hover:text-blue-800"
                     >
-                      <Link className="mr-1" size={18} />
+                      <LinkIcon className="mr-1" size={18} />
                       <span>Beatport</span>
                     </a>
                   )}
@@ -130,7 +142,7 @@ const MobileClients = () => {
                       rel="noopener noreferrer"
                       className="flex items-center text-blue-600 hover:text-blue-800"
                     >
-                      <Link className="mr-1" size={18} />
+                      <LinkIcon className="mr-1" size={18} />
                       <span>Beatport</span>
                     </a>
                   )}

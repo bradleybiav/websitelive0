@@ -33,6 +33,7 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
   }, [initialized, isMobile]);
 
   const handleViewMobileList = () => {
+    console.log("Navigating to mobile clients page");
     navigate('/mobile-clients');
   };
 
@@ -72,7 +73,12 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           <div className="flex items-baseline justify-between mb-2 md:mb-4">
             <h2 className="header-text">Our Clients</h2>
             {isMobile && (
-              <Button onClick={handleViewMobileList} variant="outline" size="sm" className="text-xs">
+              <Button 
+                onClick={handleViewMobileList} 
+                variant="outline" 
+                size="sm" 
+                className="text-xs font-medium bg-white hover:bg-gray-100"
+              >
                 View as List
               </Button>
             )}
@@ -90,6 +96,18 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           </div>
         ) : (
           <div>
+            {isMobile ? (
+              <div className="mb-4 flex justify-center">
+                <Button 
+                  onClick={handleViewMobileList}
+                  variant="default"
+                  size="lg"
+                  className="w-full max-w-xs font-semibold"
+                >
+                  View Clients as List
+                </Button>
+              </div>
+            ) : null}
             <ClientsGrid />
           </div>
         )}
