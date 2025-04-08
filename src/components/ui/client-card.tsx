@@ -19,10 +19,11 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   const mountedRef = useRef(true);
+  const attemptedLoadingRef = useRef(false);
 
-  // Process the image URL just once at component initialization
+  // Process the image URL with optimizations for mobile
   const processedImageSrc = (() => {
-    // Ensure full URL is used (especially important for mobile)
+    // Ensure full URL is used
     let imageSrc = client.image;
     
     // Convert relative paths to absolute URLs
@@ -30,84 +31,98 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
       imageSrc = window.location.origin + imageSrc;
     }
     
-    // For mobile devices, append a cache-busting parameter
+    // For mobile devices, use specific techniques to avoid caching issues
     if (isMobile) {
-      const cacheBuster = `?mobile=true&t=${new Date().getTime().toString().slice(0, 8)}`;
-      imageSrc = imageSrc.includes('?') ? `${imageSrc}&${cacheBuster.slice(1)}` : imageSrc + cacheBuster;
+      // Add timestamp as cache buster
+      const timestamp = new Date().getTime();
+      const cacheBuster = `mobile=true&t=${timestamp}`;
+      imageSrc = imageSrc.includes('?') 
+        ? `${imageSrc}&${cacheBuster}` 
+        : `${imageSrc}?${cacheBuster}`;
     }
     
     return imageSrc;
   })();
 
-  // Use intersection observer for lazy loading
+  // Init at component mount
   useEffect(() => {
-    if (!imageRef.current || typeof IntersectionObserver === 'undefined') return;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!mountedRef.current) return;
-        
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Preload the image
-            preloadImage(processedImageSrc);
-            // Unobserve once detected
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+  // Load image when visible or component mounts
+  useEffect(() => {
+    if (!imageRef.current || typeof IntersectionObserver === 'undefined') {
+      // Fallback if IntersectionObserver not available
+      if (!attemptedLoadingRef.current) {
+        attemptedLoadingRef.current = true;
+        preloadImage(processedImageSrc);
+      }
+      return;
+    }
+
+    const options = { 
+      threshold: 0.1, 
+      rootMargin: isMobile ? "100px" : "50px" // More aggressive preloading on mobile
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (!mountedRef.current) return;
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !attemptedLoadingRef.current) {
+          attemptedLoadingRef.current = true;
+          preloadImage(processedImageSrc);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
 
     observer.observe(imageRef.current);
 
     return () => {
-      mountedRef.current = false;
       observer.disconnect();
     };
-  }, [processedImageSrc]);
+  }, [processedImageSrc, isMobile]);
 
-  // Improved preloading strategy
   const preloadImage = (src: string) => {
     setImageLoaded(false);
     setImageError(false);
     
-    const preloadImage = new Image();
+    const img = new Image();
+    img.crossOrigin = "anonymous";
     
-    // Set crossOrigin attribute
-    preloadImage.crossOrigin = "anonymous";
-    
-    preloadImage.onload = () => {
+    img.onload = () => {
       if (mountedRef.current) {
+        console.log(`Successfully loaded image for client: ${client.name}`);
         setImageLoaded(true);
       }
     };
     
-    preloadImage.onerror = () => {
+    img.onerror = () => {
       if (mountedRef.current) {
-        console.error(`Failed to preload image for client: ${client.name} (path: ${client.image})`);
+        console.error(`Failed to load image for client: ${client.name} (path: ${src})`);
         setImageError(true);
       }
     };
     
-    // Apply srcset for responsive images
+    // Prioritize loading on mobile
     if (isMobile) {
-      // Smaller image for mobile
-      preloadImage.src = src;
-    } else {
-      preloadImage.src = src;
+      img.setAttribute('importance', 'high');
     }
+    
+    img.src = src;
   };
 
-  // Create a fallback image URL with client name for consistent placeholder generation
+  // Get a consistent fallback image based on client name
   const getFallbackImage = () => {
-    // Use an Unsplash random image as placeholder with client name embedded for consistency
     const clientNameEncoded = encodeURIComponent(client.name);
     return `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=800&h=800&q=80&txt=${clientNameEncoded}`;
   };
 
   const handleImageError = () => {
-    console.error(`Failed to load image for client: ${client.name} (path: ${client.image})`);
+    console.error(`Failed to load image on render for client: ${client.name} (path: ${client.image})`);
     setImageError(true);
   };
 

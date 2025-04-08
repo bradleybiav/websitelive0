@@ -5,15 +5,19 @@ const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean>(false)
+  const [initialized, setInitialized] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     // More reliable check using matchMedia
     const checkMobile = () => {
       const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
       setIsMobile(mql.matches)
+      if (!initialized) {
+        setInitialized(true)
+      }
     }
     
-    // Initialize on mount
+    // Initialize immediately on mount
     checkMobile()
     
     // Add event listener for resize
@@ -23,14 +27,15 @@ export function useIsMobile() {
     window.addEventListener('orientationchange', checkMobile)
     
     // Force a second check after a short delay to catch any edge cases
-    const timeout = setTimeout(checkMobile, 200)
+    const timeout = setTimeout(checkMobile, 100)
     
     return () => {
       window.removeEventListener('resize', checkMobile)
       window.removeEventListener('orientationchange', checkMobile)
       clearTimeout(timeout)
     }
-  }, [])
+  }, [initialized])
 
-  return isMobile
+  // Return both the mobile status and whether initialization is complete
+  return { isMobile, initialized }
 }

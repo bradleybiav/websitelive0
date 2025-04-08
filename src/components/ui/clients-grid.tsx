@@ -12,9 +12,9 @@ import { ClientGridSize, getGridSizeClasses } from "@/components/ui/clients-grid
 
 const ClientsGrid = () => {
   const [size, setSize] = useState<ClientGridSize>("medium");
-  const isMobile = useIsMobile();
+  const { isMobile, initialized } = useIsMobile();
 
-  console.info(`Total clients in grid: ${clients.length}, Device is mobile: ${isMobile}`);
+  console.info(`Total clients in grid: ${clients.length}, Device is mobile: ${isMobile}, Initialized: ${initialized}`);
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
