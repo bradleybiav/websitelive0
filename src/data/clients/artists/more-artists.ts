@@ -3,6 +3,14 @@ import { Client } from '../types';
 
 export const moreArtists: Client[] = [
   {
+    name: "Bounce House",
+    type: "Artist",
+    image: "/Bounce House.jpeg",
+    instagramUrl: "https://www.instagram.com/bouncehouseforever/",
+    beatportUrl: null,
+    spotifyUrl: null
+  },
+  {
     name: "Notre Dame",
     type: "Artist",
     image: "/Notre Dame_artist_cover (3).jpg",
@@ -71,13 +79,5 @@ export const moreArtists: Client[] = [
     image: "/YUMA_artist_cover (1).jpg",
     instagramUrl: "https://www.instagram.com/yuma.inbox/",
     spotifyUrl: "https://open.spotify.com/artist/5ynMbTlnZvBUxrxUrd6gs0"
-  },
-  {
-    name: "Bounce House",
-    type: "Artist",
-    image: "/Bounce House.jpeg",
-    instagramUrl: "https://www.instagram.com/bouncehouseforever/",
-    beatportUrl: null,
-    spotifyUrl: null
   }
 ];
