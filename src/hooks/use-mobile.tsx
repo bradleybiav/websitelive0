@@ -37,5 +37,20 @@ export function useIsMobile() {
   }, [initialized])
 
   // Return both the mobile status and whether initialization is complete
-  return { isMobile, initialized }
+  // For backward compatibility, also make the function itself cast to boolean
+  const result = { isMobile, initialized } as const
+  
+  // Add toString method for backward compatibility with code that expects boolean
+  Object.defineProperty(result, 'toString', {
+    value: function() { return isMobile.toString(); },
+    enumerable: false,
+  });
+  
+  // Add valueOf method to coerce to boolean in expressions
+  Object.defineProperty(result, 'valueOf', {
+    value: function() { return isMobile; },
+    enumerable: false,
+  });
+  
+  return result;
 }
