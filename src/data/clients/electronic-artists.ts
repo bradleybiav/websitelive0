@@ -1,4 +1,5 @@
-import { Client } from '../types';
+
+import { Client } from './types';
 
 export const electronicArtists: Client[] = [
   {
