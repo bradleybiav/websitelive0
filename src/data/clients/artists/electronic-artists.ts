@@ -47,7 +47,7 @@ export const electronicArtists: Client[] = [
   {
     name: "Chloé Caillet",
     type: "Artist",
-    image: "/lovable-uploads/b94a5ee9-877f-4e78-926e-f7b0480a6a15.png",
+    image: "/Chloé Caillet_artist_cover.jpg",
     instagramUrl: "https://www.instagram.com/chloecaillet/",
     spotifyUrl: "https://open.spotify.com/artist/68ywCN6ZpInbcilOfLBa3a"
   },
@@ -75,7 +75,7 @@ export const electronicArtists: Client[] = [
   {
     name: "Malóne",
     type: "Artist", 
-    image: "/lovable-uploads/c40a2cd9-810e-4f69-8a17-e15a8f8a379c.png",
+    image: "/Malóne_artist_cover (1).jpg",
     instagramUrl: "https://www.instagram.com/malonemusicofc/",
     spotifyUrl: "https://open.spotify.com/artist/7fQMET8UaHL3gpH9LhqINM"
   },
