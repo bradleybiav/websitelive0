@@ -23,27 +23,22 @@ export const processImageSrc = (imagePath: string | undefined, clientName: strin
     imageSrc = origin + imageSrc;
   }
   
-  // Add cache-busting parameter for mobile devices to prevent caching issues
-  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-    const separator = imageSrc.includes('?') ? '&' : '?';
-    imageSrc = `${imageSrc}${separator}t=${Date.now()}`;
-  }
-  
+  // Skip cache-busting parameters - they can cause reloads and prevent caching 
+  // which is especially important on mobile
   return imageSrc;
 };
 
 /**
- * Check if image path is valid - Less strict validation
+ * Check if image path is valid
  */
 export const isValidImagePath = (imagePath: string | undefined): boolean => {
   if (!imagePath) return false;
   
-  // More permissive check for valid image paths
+  // More comprehensive check for valid image paths
   return (
-    typeof imagePath === 'string' && 
-    imagePath.length > 0 &&
-    !imagePath.includes('undefined') &&
-    !imagePath.includes('null')
+    imagePath.startsWith("/") || 
+    imagePath.startsWith("http") || 
+    imagePath.startsWith("data:image")
   );
 };
 
@@ -73,6 +68,7 @@ export const getFallbackImage = (clientName: string, imageSize: number = 800): s
   // Use smaller images on mobile for better performance
   const optimizedSize = imageSize <= 400 ? 400 : 800;
   
-  // Return a simple unsplash image without text overlay for better performance
-  return `https://images.unsplash.com/${placeholderId}?fit=crop&w=${optimizedSize}&h=${optimizedSize}&q=80`;
+  // Encode the client name for the text overlay
+  const clientNameEncoded = encodeURIComponent(clientName);
+  return `https://images.unsplash.com/${placeholderId}?fit=crop&w=${optimizedSize}&h=${optimizedSize}&q=80&txt=${clientNameEncoded}`;
 };
