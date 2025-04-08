@@ -1,7 +1,5 @@
-
 import { Client } from './types';
 
-// Define artist clients in the exact order specified by the user
 export const artistClients: Client[] = [
   {
     name: "Adriatique",
