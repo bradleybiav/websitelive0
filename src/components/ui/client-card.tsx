@@ -20,9 +20,19 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const mountedRef = useRef(true);
   const attemptedLoadingRef = useRef(false);
+  const progressiveLoadingRef = useRef(false);
 
-  // Process the image URL with optimizations for mobile
+  // Get optimized image size based on device
+  const imageSize = isMobile ? 400 : 800;
+  
+  // Process the image URL with optimizations
   const processedImageSrc = (() => {
+    // Handle potential undefined image
+    if (!client.image) {
+      console.error(`Missing image for client: ${client.name}`);
+      return getFallbackImage();
+    }
+    
     // Ensure full URL is used
     let imageSrc = client.image;
     
@@ -31,64 +41,74 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
       imageSrc = window.location.origin + imageSrc;
     }
     
-    // For mobile devices, use specific techniques to avoid caching issues
-    if (isMobile) {
-      // Add timestamp as cache buster
-      const timestamp = new Date().getTime();
-      const cacheBuster = `mobile=true&t=${timestamp}`;
-      imageSrc = imageSrc.includes('?') 
-        ? `${imageSrc}&${cacheBuster}` 
-        : `${imageSrc}?${cacheBuster}`;
-    }
+    // Add cache-busting parameters
+    const timestamp = new Date().getTime();
+    const cacheBuster = `t=${timestamp}`;
+    imageSrc = imageSrc.includes('?') 
+      ? `${imageSrc}&${cacheBuster}` 
+      : `${imageSrc}?${cacheBuster}`;
     
     return imageSrc;
   })();
 
-  // Init at component mount
+  // Early fallback if image path is invalid
+  const isValidImagePath = !!client.image && 
+    (client.image.startsWith("/") || client.image.startsWith("http"));
+
+  // Setup component lifecycle
   useEffect(() => {
     return () => {
       mountedRef.current = false;
     };
   }, []);
 
-  // Load image when visible or component mounts
+  // Progressive loading approach for images
   useEffect(() => {
-    if (!imageRef.current || typeof IntersectionObserver === 'undefined') {
-      // Fallback if IntersectionObserver not available
-      if (!attemptedLoadingRef.current) {
-        attemptedLoadingRef.current = true;
+    if (!isValidImagePath || progressiveLoadingRef.current) return;
+    
+    progressiveLoadingRef.current = true;
+    
+    // Start with low quality placeholder for immediate visual
+    if (isMobile) {
+      // For mobile, load directly to avoid extra network requests
+      preloadImage(processedImageSrc);
+    } else {
+      // For desktop, use IntersectionObserver for lazy loading
+      if (!imageRef.current || typeof IntersectionObserver === 'undefined') {
+        // Fallback if IntersectionObserver not available
         preloadImage(processedImageSrc);
+        return;
       }
-      return;
-    }
 
-    const options = { 
-      threshold: 0.1, 
-      rootMargin: isMobile ? "100px" : "50px" // More aggressive preloading on mobile
-    };
+      const options = { 
+        threshold: 0.1, 
+        rootMargin: "50px"
+      };
 
-    const observer = new IntersectionObserver((entries) => {
-      if (!mountedRef.current) return;
+      const observer = new IntersectionObserver((entries) => {
+        if (!mountedRef.current) return;
+        
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !attemptedLoadingRef.current) {
+            attemptedLoadingRef.current = true;
+            preloadImage(processedImageSrc);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, options);
+
+      observer.observe(imageRef.current);
       
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !attemptedLoadingRef.current) {
-          attemptedLoadingRef.current = true;
-          preloadImage(processedImageSrc);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, options);
-
-    observer.observe(imageRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [processedImageSrc, isMobile]);
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [processedImageSrc, isMobile, isValidImagePath]);
 
   const preloadImage = (src: string) => {
+    if (!mountedRef.current || !isValidImagePath) return;
+    
     setImageLoaded(false);
-    setImageError(false);
     
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -97,6 +117,7 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
       if (mountedRef.current) {
         console.log(`Successfully loaded image for client: ${client.name}`);
         setImageLoaded(true);
+        setImageError(false);
       }
     };
     
@@ -107,21 +128,22 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
       }
     };
     
-    // Prioritize loading on mobile
-    if (isMobile) {
-      img.setAttribute('importance', 'high');
-    }
+    // Set priority loading hints
+    img.fetchPriority = isMobile ? "high" : "auto";
+    img.decoding = "async";
     
+    // Start loading
     img.src = src;
   };
 
   // Get a consistent fallback image based on client name
   const getFallbackImage = () => {
     const clientNameEncoded = encodeURIComponent(client.name);
-    return `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=800&h=800&q=80&txt=${clientNameEncoded}`;
+    return `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=${imageSize}&h=${imageSize}&q=80&txt=${clientNameEncoded}`;
   };
 
   const handleImageError = () => {
+    if (!isValidImagePath) return;
     console.error(`Failed to load image on render for client: ${client.name} (path: ${client.image})`);
     setImageError(true);
   };
@@ -130,7 +152,7 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
       <CardContent className="p-0">
         <div className="relative overflow-hidden" ref={imageRef}>
-          {!imageError ? (
+          {isValidImagePath && !imageError ? (
             <img 
               src={processedImageSrc}
               alt={`${client.name} - ${client.type}`}
@@ -144,8 +166,8 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
               onError={handleImageError}
               onLoad={() => setImageLoaded(true)}
               crossOrigin="anonymous"
-              width={isMobile ? 400 : 800}
-              height={isMobile ? 400 : 800}
+              width={imageSize}
+              height={imageSize}
             />
           ) : (
             <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
@@ -154,20 +176,22 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
                 alt={client.name}
                 className="w-full h-full object-cover"
                 loading="eager"
-                width={400}
-                height={400}
+                width={imageSize}
+                height={imageSize}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <span className="text-white text-sm font-semibold px-2 py-1">{client.name}</span>
               </div>
             </div>
           )}
+          
           {/* Loading indicator */}
-          {!imageLoaded && !imageError && (
+          {!imageLoaded && !imageError && isValidImagePath && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
               <Skeleton className="w-full h-full" />
             </div>
           )}
+          
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
             <div className="text-white text-center p-4 font-sans">
               <h3 className="font-bold text-lg mb-1">{client.name}</h3>
