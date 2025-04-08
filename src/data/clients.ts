@@ -1,18 +1,8 @@
 
-import { getAllClients } from './clients/client-service';
+import { clientsData } from './clients/clients-data';
 
 // Export all clients as the default export to maintain backward compatibility
-export const clients = getAllClients();
-
-// Re-export the client service functions for more specific queries
-export { 
-  getFeaturedClients,
-  getFeaturedArtists,
-  getFeaturedGroups,
-  getFeaturedLabels,
-  getClientsByType,
-  searchClientsByName
-} from './clients/client-service';
+export const clients = clientsData;
 
 // Re-export the Client type
 export type { Client } from './clients/types';
