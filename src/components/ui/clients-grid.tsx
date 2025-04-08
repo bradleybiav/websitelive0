@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ZoomIn, ZoomOut, Instagram, ExternalLink } from "lucide-react"
@@ -16,6 +16,28 @@ interface ClientCardProps {
 
 const ClientCard = ({ client, size }: ClientCardProps) => {
   const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Preload the image to ensure it's cached
+  useEffect(() => {
+    const preloadImage = new Image();
+    preloadImage.src = client.image;
+    
+    preloadImage.onload = () => {
+      setImageLoaded(true);
+    };
+    
+    preloadImage.onerror = () => {
+      console.error(`Failed to preload image for client: ${client.name} (path: ${client.image})`);
+      setImageError(true);
+    };
+    
+    return () => {
+      // Clean up by removing event listeners
+      preloadImage.onload = null;
+      preloadImage.onerror = null;
+    };
+  }, [client.image, client.name]);
 
   // Create a fallback image URL with client name for consistent placeholder generation
   const getFallbackImage = () => {
@@ -29,18 +51,28 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
     setImageError(true);
   };
 
+  const imageSrc = client.image.startsWith("/") && !client.image.startsWith("//") 
+    ? window.location.origin + client.image 
+    : client.image;
+
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
       <CardContent className="p-0">
         <div className="relative overflow-hidden">
           {!imageError ? (
             <img 
-              src={client.image}
+              src={imageSrc}
               alt={`${client.name} - ${client.type}`}
-              className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+              className={cn(
+                "w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0",
+                !imageLoaded && "opacity-0",
+                imageLoaded && "opacity-100"
+              )}
               loading="eager" 
               decoding="async"
               onError={handleImageError}
+              onLoad={() => setImageLoaded(true)}
+              crossOrigin="anonymous"
             />
           ) : (
             <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
@@ -53,6 +85,12 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <span className="text-white text-sm font-semibold px-2 py-1">{client.name}</span>
               </div>
+            </div>
+          )}
+          {/* Loading indicator */}
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+              <div className="w-8 h-8 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
