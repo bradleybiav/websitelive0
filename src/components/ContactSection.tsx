@@ -18,50 +18,22 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 md:col-span-5">
-            <div className="mb-8">
-              <h3 className="text-2xl md:text-3xl font-display font-semibold mb-4">Email</h3>
-              <a 
-                href="mailto:bradley@braininavat.dance" 
-                className="text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
-              >
-                bradley@braininavat.dance
-              </a>
-            </div>
-            
-            <div className="mb-8">
-              <h3 className="text-2xl md:text-3xl font-display font-semibold mb-4">Social</h3>
-              <a 
-                href="https://www.instagram.com/braininavat.dance/" 
-                className="text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                @braininavat.dance
-              </a>
-            </div>
-            
-            <div className="mb-8">
-              <h3 className="text-2xl md:text-3xl font-display font-semibold mb-4">LinkedIn</h3>
-              <a 
-                href="https://www.linkedin.com/company/braininavat/" 
-                className="text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                brain in a vat
-              </a>
-            </div>
-          </div>
+        <div className="space-y-6 md:space-y-8">
+          <a 
+            href="mailto:bradley@braininavat.dance" 
+            className="block text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
+          >
+            bradley@braininavat.dance
+          </a>
           
-          <div className="col-span-12 md:col-span-7">
-            <div className="border-l-2 border-black pl-6 md:pl-8">
-              <p className="text-xl md:text-2xl font-sans">
-                We'd love to hear about your project. Get in touch and let's create something extraordinary together.
-              </p>
-            </div>
-          </div>
+          <a 
+            href="https://www.instagram.com/braininavat.dance/" 
+            className="block text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @braininavat.dance
+          </a>
         </div>
       </div>
     </section>
