@@ -7,6 +7,19 @@ interface ContactSectionProps {
 }
 
 const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
+  const contactPoints = [
+    {
+      title: "Email",
+      link: "mailto:bradley@braininavat.dance",
+      text: "bradley@braininavat.dance"
+    },
+    {
+      title: "Social",
+      link: "https://www.instagram.com/braininavat.dance/",
+      text: "@braininavat.dance"
+    }
+  ];
+
   return (
     <section 
       id={id} 
@@ -18,22 +31,19 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
           <div className="w-20 h-1 bg-black mb-12"></div>
         </div>
         
-        <div className="space-y-6 md:space-y-8">
-          <a 
-            href="mailto:bradley@braininavat.dance" 
-            className="block text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
-          >
-            bradley@braininavat.dance
-          </a>
-          
-          <a 
-            href="https://www.instagram.com/braininavat.dance/" 
-            className="block text-xl md:text-2xl font-sans hover:text-gray-600 transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @braininavat.dance
-          </a>
+        <div className="space-y-8">
+          {contactPoints.map((point, index) => (
+            <div key={index}>
+              <a 
+                href={point.link}
+                className="text-2xl md:text-3xl font-display font-semibold transition-colors duration-300 hover:text-gray-600"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {point.text}
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -41,3 +51,4 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
 };
 
 export default ContactSection;
+
