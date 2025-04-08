@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Instagram, ExternalLink } from "lucide-react"
 import { Client } from "@/data/clients/types"
@@ -17,45 +17,87 @@ interface ClientCardProps {
 const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const mountedRef = useRef(true);
 
-  // Preload the image to ensure it's cached
-  useEffect(() => {
-    setImageLoaded(false);
-    setImageError(false);
-    
-    const preloadImage = new Image();
-    
+  // Process the image URL just once at component initialization
+  const processedImageSrc = (() => {
     // Ensure full URL is used (especially important for mobile)
-    let imagePath = client.image;
+    let imageSrc = client.image;
     
     // Convert relative paths to absolute URLs
-    if (imagePath.startsWith("/") && !imagePath.startsWith("//")) {
-      imagePath = window.location.origin + imagePath;
+    if (imageSrc.startsWith("/") && !imageSrc.startsWith("//")) {
+      imageSrc = window.location.origin + imageSrc;
     }
     
     // For mobile devices, append a cache-busting parameter
     if (isMobile) {
       const cacheBuster = `?mobile=true&t=${new Date().getTime().toString().slice(0, 8)}`;
-      imagePath = imagePath.includes('?') ? `${imagePath}&${cacheBuster.slice(1)}` : imagePath + cacheBuster;
+      imageSrc = imageSrc.includes('?') ? `${imageSrc}&${cacheBuster.slice(1)}` : imageSrc + cacheBuster;
     }
     
-    preloadImage.src = imagePath;
+    return imageSrc;
+  })();
+
+  // Use intersection observer for lazy loading
+  useEffect(() => {
+    if (!imageRef.current || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!mountedRef.current) return;
+        
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Preload the image
+            preloadImage(processedImageSrc);
+            // Unobserve once detected
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "50px" }
+    );
+
+    observer.observe(imageRef.current);
+
+    return () => {
+      mountedRef.current = false;
+      observer.disconnect();
+    };
+  }, [processedImageSrc]);
+
+  // Improved preloading strategy
+  const preloadImage = (src: string) => {
+    setImageLoaded(false);
+    setImageError(false);
+    
+    const preloadImage = new Image();
+    
+    // Set crossOrigin attribute
+    preloadImage.crossOrigin = "anonymous";
     
     preloadImage.onload = () => {
-      setImageLoaded(true);
+      if (mountedRef.current) {
+        setImageLoaded(true);
+      }
     };
     
     preloadImage.onerror = () => {
-      console.error(`Failed to preload image for client: ${client.name} (path: ${client.image})`);
-      setImageError(true);
+      if (mountedRef.current) {
+        console.error(`Failed to preload image for client: ${client.name} (path: ${client.image})`);
+        setImageError(true);
+      }
     };
     
-    return () => {
-      // Clean up by removing event listeners
-      preloadImage.onload = null;
-      preloadImage.onerror = null;
-    };
-  }, [client.image, client.name, isMobile]);
+    // Apply srcset for responsive images
+    if (isMobile) {
+      // Smaller image for mobile
+      preloadImage.src = src;
+    } else {
+      preloadImage.src = src;
+    }
+  };
 
   // Create a fallback image URL with client name for consistent placeholder generation
   const getFallbackImage = () => {
@@ -69,27 +111,13 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
     setImageError(true);
   };
 
-  // Ensure full URL is used (especially important for mobile)
-  let imageSrc = client.image;
-  
-  // Convert relative paths to absolute URLs
-  if (imageSrc.startsWith("/") && !imageSrc.startsWith("//")) {
-    imageSrc = window.location.origin + imageSrc;
-  }
-  
-  // For mobile devices, append a cache-busting parameter
-  if (isMobile) {
-    const cacheBuster = `?mobile=true&t=${new Date().getTime().toString().slice(0, 8)}`;
-    imageSrc = imageSrc.includes('?') ? `${imageSrc}&${cacheBuster.slice(1)}` : imageSrc + cacheBuster;
-  }
-
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
       <CardContent className="p-0">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden" ref={imageRef}>
           {!imageError ? (
             <img 
-              src={imageSrc}
+              src={processedImageSrc}
               alt={`${client.name} - ${client.type}`}
               className={cn(
                 "w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0",
@@ -101,6 +129,8 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
               onError={handleImageError}
               onLoad={() => setImageLoaded(true)}
               crossOrigin="anonymous"
+              width={isMobile ? 400 : 800}
+              height={isMobile ? 400 : 800}
             />
           ) : (
             <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden">
@@ -109,6 +139,8 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
                 alt={client.name}
                 className="w-full h-full object-cover"
                 loading="eager"
+                width={400}
+                height={400}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <span className="text-white text-sm font-semibold px-2 py-1">{client.name}</span>
