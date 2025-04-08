@@ -37,75 +37,25 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     };
   }, []);
 
+  // Reset error state when src changes
+  useEffect(() => {
+    setImageError(false);
+    attemptedLoadingRef.current = false;
+    progressiveLoadingRef.current = false;
+  }, [src]);
+
   // Image loading strategy
   useEffect(() => {
     if (!validImagePath || progressiveLoadingRef.current) return;
     
     progressiveLoadingRef.current = true;
     
-    // Mobile-specific image loading strategy
-    if (isMobile) {
-      // For mobile, eagerly load with high priority
-      const img = new Image();
-      img.src = processedImageSrc;
-      img.crossOrigin = "anonymous";
-      img.fetchPriority = "high";
-      img.decoding = "async";
-      
-      img.onload = () => {
-        if (mountedRef.current) {
-          console.log(`Successfully loaded image for client: ${clientName}`);
-          setImageLoaded(true);
-          setImageError(false);
-        }
-      };
-      
-      img.onerror = () => {
-        if (mountedRef.current) {
-          console.error(`Failed to load image for client: ${clientName} (path: ${processedImageSrc})`);
-          setImageError(true);
-        }
-      };
-    } else {
-      // For desktop, use IntersectionObserver for lazy loading
-      if (!imageRef.current || typeof IntersectionObserver === 'undefined') {
-        // Fallback if IntersectionObserver not available
-        preloadImage(processedImageSrc);
-        return;
-      }
-
-      const options = { 
-        threshold: 0.1, 
-        rootMargin: "50px"
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        if (!mountedRef.current) return;
-        
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !attemptedLoadingRef.current) {
-            attemptedLoadingRef.current = true;
-            preloadImage(processedImageSrc);
-            observer.unobserve(entry.target);
-          }
-        });
-      }, options);
-
-      observer.observe(imageRef.current);
-      
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [processedImageSrc, isMobile, validImagePath]);
-
-  const preloadImage = (src: string) => {
-    if (!mountedRef.current || !validImagePath) return;
-    
-    setImageLoaded(false);
-    
+    // Always use eager loading strategy regardless of device
     const img = new Image();
+    img.src = processedImageSrc;
     img.crossOrigin = "anonymous";
+    img.fetchPriority = "high";
+    img.decoding = "async";
     
     img.onload = () => {
       if (mountedRef.current) {
@@ -117,18 +67,11 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     
     img.onerror = () => {
       if (mountedRef.current) {
-        console.error(`Failed to load image for client: ${clientName} (path: ${src})`);
+        console.error(`Failed to load image for client: ${clientName} (path: ${processedImageSrc})`);
         setImageError(true);
       }
     };
-    
-    // Set priority loading hints
-    img.fetchPriority = isMobile ? "high" : "auto";
-    img.decoding = "async";
-    
-    // Start loading
-    img.src = src;
-  };
+  }, [processedImageSrc, validImagePath, clientName]);
 
   const handleImageError = () => {
     console.error(`Failed to load image on render for client: ${clientName} (path: ${processedImageSrc})`);
@@ -146,11 +89,11 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         src={processedImageSrc}
         alt={alt}
         className={cn(
-          "w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105 filter grayscale group-hover:grayscale-0",
+          "w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-105",
           !imageLoaded && "opacity-0",
           imageLoaded && "opacity-100"
         )}
-        loading={isMobile ? "eager" : "lazy"}
+        loading="eager" // Always eager load to prioritize images
         decoding="async"
         onError={handleImageError}
         onLoad={() => setImageLoaded(true)}

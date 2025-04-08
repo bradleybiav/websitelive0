@@ -18,8 +18,8 @@ export const FallbackImage: React.FC<FallbackImageProps> = ({ clientName, imageS
         width={imageSize}
         height={imageSize}
       />
-      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60">
-        <span className="text-white text-sm font-semibold px-2 py-1">{clientName}</span>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+        <span className="text-white text-lg font-semibold px-3 py-2 text-center">{clientName}</span>
       </div>
     </div>
   );

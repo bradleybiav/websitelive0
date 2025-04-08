@@ -1,7 +1,7 @@
 
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Client } from "@/data/clients/types"
 import { FallbackImage } from "./client-card/fallback-image"
@@ -19,12 +19,19 @@ const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   // Get optimized image size based on device
   const imageSize = isMobile ? 400 : 800;
   
-  // Enhanced image path validation with more logging
-  const validImagePath = isValidImagePath(client.image);
+  // Image validation state
+  const [validImagePath, setValidImagePath] = useState(false);
   
-  if (!validImagePath) {
-    console.warn(`Invalid image path for client: ${client.name}, using fallback`, client.image);
-  }
+  // Check image validity on component mount and when client changes
+  useEffect(() => {
+    // Simple check first
+    const isValid = isValidImagePath(client.image);
+    setValidImagePath(isValid);
+    
+    if (!isValid) {
+      console.warn(`Invalid image path for client: ${client.name}, using fallback`, client.image);
+    }
+  }, [client]);
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
