@@ -1,13 +1,13 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ZoomIn, ZoomOut, Instagram, ExternalLink } from "lucide-react"
-import { clientsData } from "@/data/clients/clients-data"
+import { clients } from "@/data/clients"
 import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface ClientCardProps {
   client: Client;
@@ -20,8 +20,16 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 
   // Preload the image to ensure it's cached
   useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+    
     const preloadImage = new Image();
-    preloadImage.src = client.image;
+    // Ensure full URL is used (especially important for mobile)
+    const fullImagePath = client.image.startsWith("/") && !client.image.startsWith("//") 
+      ? window.location.origin + client.image 
+      : client.image;
+      
+    preloadImage.src = fullImagePath;
     
     preloadImage.onload = () => {
       setImageLoaded(true);
@@ -51,6 +59,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
     setImageError(true);
   };
 
+  // Ensure full URL is used (especially important for mobile)
   const imageSrc = client.image.startsWith("/") && !client.image.startsWith("//") 
     ? window.location.origin + client.image 
     : client.image;
@@ -90,7 +99,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
           {/* Loading indicator */}
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-              <div className="w-8 h-8 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+              <Skeleton className="w-full h-full" />
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -148,7 +157,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 const ClientsGrid = () => {
   const [size, setSize] = useState<"small" | "medium" | "large" | "xl">("medium");
 
-  console.info(`Total clients in grid: ${clientsData.length}`);
+  console.info(`Total clients in grid: ${clients.length}`);
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
@@ -195,7 +204,7 @@ const ClientsGrid = () => {
       </div>
       
       <div className={cn("grid gap-4", gridSizeClasses[size])}>
-        {clientsData.map((client, index) => (
+        {clients.map((client, index) => (
           <ClientCard key={`${client.name}-${index}`} client={client} size={size} />
         ))}
       </div>
