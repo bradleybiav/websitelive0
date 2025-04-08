@@ -1,3 +1,4 @@
+
 import { Client } from './types';
 
 export const featuredArtists: Client[] = [
@@ -21,7 +22,7 @@ export const featuredArtists: Client[] = [
   { 
     name: "Chloé Caillet", 
     type: "Artist", 
-    image: "/Chloé Caillet_artist_cover.jpg", 
+    image: "/Chloé Caillet_artist_cover.png", 
     instagramUrl: "https://www.instagram.com/chloecaillet/",
     spotifyUrl: "https://open.spotify.com/artist/68ywCN6ZpInbcilOfLBa3a"
   },
