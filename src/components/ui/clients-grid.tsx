@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -8,13 +9,15 @@ import { clients } from "@/data/clients"
 import { Client } from "@/data/clients/types"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface ClientCardProps {
   client: Client;
-  size: "small" | "medium" | "large" | "xl"
+  size: "small" | "medium" | "large" | "xl";
+  isMobile: boolean;
 }
 
-const ClientCard = ({ client, size }: ClientCardProps) => {
+const ClientCard = ({ client, size, isMobile }: ClientCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -24,12 +27,22 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
     setImageError(false);
     
     const preloadImage = new Image();
+    
     // Ensure full URL is used (especially important for mobile)
-    const fullImagePath = client.image.startsWith("/") && !client.image.startsWith("//") 
-      ? window.location.origin + client.image 
-      : client.image;
-      
-    preloadImage.src = fullImagePath;
+    let imagePath = client.image;
+    
+    // Convert relative paths to absolute URLs
+    if (imagePath.startsWith("/") && !imagePath.startsWith("//")) {
+      imagePath = window.location.origin + imagePath;
+    }
+    
+    // For mobile devices, append a cache-busting parameter
+    if (isMobile) {
+      const cacheBuster = `?mobile=true&t=${new Date().getTime().toString().slice(0, 8)}`;
+      imagePath = imagePath.includes('?') ? `${imagePath}&${cacheBuster.slice(1)}` : imagePath + cacheBuster;
+    }
+    
+    preloadImage.src = imagePath;
     
     preloadImage.onload = () => {
       setImageLoaded(true);
@@ -45,7 +58,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
       preloadImage.onload = null;
       preloadImage.onerror = null;
     };
-  }, [client.image, client.name]);
+  }, [client.image, client.name, isMobile]);
 
   // Create a fallback image URL with client name for consistent placeholder generation
   const getFallbackImage = () => {
@@ -60,9 +73,18 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
   };
 
   // Ensure full URL is used (especially important for mobile)
-  const imageSrc = client.image.startsWith("/") && !client.image.startsWith("//") 
-    ? window.location.origin + client.image 
-    : client.image;
+  let imageSrc = client.image;
+  
+  // Convert relative paths to absolute URLs
+  if (imageSrc.startsWith("/") && !imageSrc.startsWith("//")) {
+    imageSrc = window.location.origin + imageSrc;
+  }
+  
+  // For mobile devices, append a cache-busting parameter
+  if (isMobile) {
+    const cacheBuster = `?mobile=true&t=${new Date().getTime().toString().slice(0, 8)}`;
+    imageSrc = imageSrc.includes('?') ? `${imageSrc}&${cacheBuster.slice(1)}` : imageSrc + cacheBuster;
+  }
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-md">
@@ -77,7 +99,7 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
                 !imageLoaded && "opacity-0",
                 imageLoaded && "opacity-100"
               )}
-              loading="eager" 
+              loading={isMobile ? "eager" : "lazy"}
               decoding="async"
               onError={handleImageError}
               onLoad={() => setImageLoaded(true)}
@@ -156,8 +178,9 @@ const ClientCard = ({ client, size }: ClientCardProps) => {
 
 const ClientsGrid = () => {
   const [size, setSize] = useState<"small" | "medium" | "large" | "xl">("medium");
+  const isMobile = useIsMobile();
 
-  console.info(`Total clients in grid: ${clients.length}`);
+  console.info(`Total clients in grid: ${clients.length}, Device is mobile: ${isMobile}`);
 
   const handleZoomIn = () => {
     if (size === "small") setSize("medium");
@@ -205,7 +228,12 @@ const ClientsGrid = () => {
       
       <div className={cn("grid gap-4", gridSizeClasses[size])}>
         {clients.map((client, index) => (
-          <ClientCard key={`${client.name}-${index}`} client={client} size={size} />
+          <ClientCard 
+            key={`${client.name}-${index}`} 
+            client={client} 
+            size={size} 
+            isMobile={isMobile} 
+          />
         ))}
       </div>
     </div>

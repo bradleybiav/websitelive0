@@ -40,10 +40,19 @@ export function useMediaQuery(
     const matchMedia = window.matchMedia(query)
     handleChange()
 
-    matchMedia.addEventListener("change", handleChange)
-
-    return () => {
-      matchMedia.removeEventListener("change", handleChange)
+    // Use modern event listener API
+    try {
+      // Modern browsers
+      matchMedia.addEventListener("change", handleChange)
+      return () => {
+        matchMedia.removeEventListener("change", handleChange)
+      }
+    } catch (e) {
+      // Fallback for older browsers
+      matchMedia.addListener(handleChange)
+      return () => {
+        matchMedia.removeListener(handleChange)
+      }
     }
   }, [query])
 
