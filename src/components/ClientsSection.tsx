@@ -3,8 +3,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ClientsGrid } from "@/components/ui/clients-grid";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from 'react-router-dom';
 
 interface ClientsSectionProps {
   id: string;
@@ -15,7 +13,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { isMobile, initialized } = useIsMobile();
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   
   // Manage loading state with a longer delay on mobile to ensure images have time to load
   useEffect(() => {
@@ -31,11 +28,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
       return () => clearTimeout(timer);
     }
   }, [initialized, isMobile]);
-
-  const handleViewMobileList = () => {
-    console.log("Navigating to mobile clients page");
-    navigate('/mobile-clients');
-  };
 
   // Prevent section from being rendered until device detection is complete
   if (!initialized) {
@@ -72,16 +64,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
         <div className="mb-4 md:mb-6">
           <div className="flex items-baseline justify-between mb-2 md:mb-4">
             <h2 className="header-text">Our Clients</h2>
-            {isMobile && (
-              <Button 
-                onClick={handleViewMobileList} 
-                variant="outline" 
-                size="sm" 
-                className="text-xs font-medium bg-white hover:bg-gray-100"
-              >
-                View as List
-              </Button>
-            )}
           </div>
           <div className="w-20 h-1 bg-black mb-4 md:mb-6"></div>
         </div>
@@ -96,18 +78,6 @@ const ClientsSection: React.FC<ClientsSectionProps> = ({ id, isActive }) => {
           </div>
         ) : (
           <div>
-            {isMobile ? (
-              <div className="mb-4 flex justify-center">
-                <Button 
-                  onClick={handleViewMobileList}
-                  variant="default"
-                  size="lg"
-                  className="w-full max-w-xs font-semibold"
-                >
-                  View Clients as List
-                </Button>
-              </div>
-            ) : null}
             <ClientsGrid />
           </div>
         )}
