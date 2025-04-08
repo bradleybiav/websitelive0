@@ -47,7 +47,7 @@ export const electronicArtists: Client[] = [
   {
     name: "Chloé Caillet",
     type: "Artist",
-    image: "/Chloé Caillet_artist_cover.jpg",
+    image: "/Chloé_Caillet_artist_cover.png",
     instagramUrl: "https://www.instagram.com/chloecaillet/",
     spotifyUrl: "https://open.spotify.com/artist/68ywCN6ZpInbcilOfLBa3a"
   },
@@ -75,7 +75,7 @@ export const electronicArtists: Client[] = [
   {
     name: "Malóne",
     type: "Artist", 
-    image: "/Malóne_artist_cover (1).jpg",
+    image: "/Malone_artist_cover.png",
     instagramUrl: "https://www.instagram.com/malonemusicofc/",
     spotifyUrl: "https://open.spotify.com/artist/7fQMET8UaHL3gpH9LhqINM"
   },
@@ -92,6 +92,12 @@ export const electronicArtists: Client[] = [
     image: "/NOCUI_artist_cover (1).jpg",
     instagramUrl: "https://www.instagram.com/nocui_/",
     spotifyUrl: "https://open.spotify.com/artist/5WAAffTsqPSeJqB4zb1SlV"
+  },
+  {
+    name: "Orsay",
+    type: "Artist",
+    image: "/lovable-uploads/535715ac-e038-492e-b45d-84e6ef2e6104.png",
+    instagramUrl: "https://www.instagram.com/orsaymusic/?hl=en",
+    spotifyUrl: "https://open.spotify.com/artist/0jbyfa9yocQWIf7nXO8LH4"
   }
 ];
-
