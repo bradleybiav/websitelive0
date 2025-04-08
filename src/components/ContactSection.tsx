@@ -14,7 +14,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
       className="py-10 md:py-12 px-6 md:px-12 lg:px-24"
     >
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-5xl font-bold mb-8">Get In Touch</h1>
+        <h1 className="text-5xl font-bold mb-8">Our Clients</h1>
         
         <div className="flex justify-center space-x-8 mt-8">
           <a 
