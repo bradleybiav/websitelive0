@@ -10,8 +10,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
   const contactPoints = [
     {
       title: "Email",
-      link: "mailto:bradley@braininavat.dance",
-      text: "bradley@braininavat.dance"
+      link: "mailto:hello@braininavat.dance",
+      text: "hello@braininavat.dance"
     },
     {
       title: "Social",
@@ -51,4 +51,3 @@ const ContactSection: React.FC<ContactSectionProps> = ({ id }) => {
 };
 
 export default ContactSection;
-
