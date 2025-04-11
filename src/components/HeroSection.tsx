@@ -1,7 +1,6 @@
-
-import React, { useEffect, useRef, useState } from 'react';
-import Logo from '@/components/ui/Logo';
-import FadeInText from '@/components/ui/FadeInText';
+import FadeInText from "@/components/ui/FadeInText";
+import Logo from "@/components/ui/Logo";
+import React, { useEffect, useRef, useState } from "react";
 
 interface HeroSectionProps {
   id: string;
@@ -23,14 +22,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ id }) => {
   }, []);
 
   return (
-    <section 
-      id={id} 
+    <section
+      id={id}
       ref={sectionRef}
       className="min-h-screen w-full flex flex-col items-center px-6 md:px-12 lg:px-24 pt-16 pb-12" // Further reduced padding
     >
-      <div className="text-center space-y-24 flex-1 flex flex-col justify-center"> {/* Reduced spacing from space-y-28 */}
+      <div className="text-center space-y-24 flex-1 flex flex-col justify-center">
+        {" "}
+        {/* Reduced spacing from space-y-28 */}
         <Logo showContent={showContent} />
-        <FadeInText 
+        <FadeInText
+          id="hero-title"
           text="brain in a vat is a boutique music promotions agency that shapes perception and shifts reality."
           showContent={showContent}
         />
