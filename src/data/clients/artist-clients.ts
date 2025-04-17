@@ -18,28 +18,28 @@ export const artistClients: Client[] = [
   {
     name: "Ampersounds",
     type: "Artist",
-    image: "/Ampersounds_artist_cover (1).jpg",
+    image: "/Ampersounds_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/ampersounds/?hl=en",
     spotifyUrl: "https://open.spotify.com/artist/37kgO7O0OonRq0zQ7WcWWl"
   },
   {
     name: "Arodes",
     type: "Artist",
-    image: "/Arodes_artist_cover (1).jpg",
+    image: "/Arodes_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/arodes_ofc/",
     spotifyUrl: "https://open.spotify.com/artist/4p2f8wUtltMAFuIJB4NR47"
   },
   {
     name: "Augusto Yepes",
     type: "Artist",
-    image: "/Augusto Yepes_artist_cover (1).jpg",
+    image: "/AugustoYepes_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/augustoyepes1/",
     spotifyUrl: "https://open.spotify.com/artist/4Fii6zdHW1hbQw0LS4qeTs"
   },
   {
     name: "Bounce House",
     type: "Artist",
-    image: "/Bounce House.jpeg",
+    image: "/BounceHouse.jpeg",
     instagramUrl: "https://www.instagram.com/bouncehouseforever/",
     beatportUrl: null,
     spotifyUrl: null
@@ -68,14 +68,14 @@ export const artistClients: Client[] = [
   {
     name: "KinAhau",
     type: "Artist",
-    image: "/KinAhau_artist_cover (1).jpg",
+    image: "/KinAhau_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/kinahau_/",
     spotifyUrl: "https://open.spotify.com/artist/3C7Tv0IqIGLjA9rpVaeHRB"
   },
   {
     name: "Kino Todo",
     type: "Artist",
-    image: "/Kino Todo_artist_cover (1).jpg",
+    image: "/KinoTodo_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/kino_todo/",
     spotifyUrl: "https://open.spotify.com/artist/2kzHzn9DTankt1OfK1U8ol"
   },
@@ -89,21 +89,21 @@ export const artistClients: Client[] = [
   {
     name: "Mia Moretti",
     type: "Artist",
-    image: "/Mia Moretti_artist_cover (1).jpg",
+    image: "/MiaMoretti_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/miamoretti/",
     spotifyUrl: "https://open.spotify.com/artist/508HEnl2cDRksyq8hyQtRh?si=423b55337cc14f08"
   },
   {
     name: "NOCUI",
     type: "Artist",
-    image: "/NOCUI_artist_cover (1).jpg",
+    image: "/NOCUI_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/nocui_/",
     spotifyUrl: "https://open.spotify.com/artist/5WAAffTsqPSeJqB4zb1SlV"
   },
   {
     name: "Notre Dame",
     type: "Artist",
-    image: "/Notre Dame_artist_cover (3).jpg",
+    image: "/NotreDame_artist_cover(3).jpg",
     instagramUrl: "https://www.instagram.com/notredame.music/",
     spotifyUrl: "https://open.spotify.com/artist/6Q1Ps2F5LkdxLAM6S7KPpt"
   },
@@ -117,7 +117,7 @@ export const artistClients: Client[] = [
   {
     name: "Port London",
     type: "Artist",
-    image: "/Port London_artist_cover (1) (1).jpg",
+    image: "/PortLondon_artist_cover(1)(1).jpg",
     instagramUrl: "https://www.instagram.com/portlondon.xyz/",
     spotifyUrl: "https://open.spotify.com/artist/4hvH07yUsAeYBO5KeyAefq?si=S775EuoMRD2nqYYpcbi57Q"
   },
