@@ -11,7 +11,7 @@ export const artistClients: Client[] = [
   {
     name: "Amal Nemer",
     type: "Artist",
-    image: "/Amal Nemer_artist_cover (1).jpg",
+    image: "/Amal_Nemer_artist_cover_(1).jpg",
     instagramUrl: "https://www.instagram.com/amal.nemer/",
     spotifyUrl: "https://open.spotify.com/artist/4dJbkK58s6mj9RGElqCNhm"
   },
