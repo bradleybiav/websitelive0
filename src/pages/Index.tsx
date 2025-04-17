@@ -26,7 +26,7 @@ const Index = () => {
       // Get the element's position relative to the viewport
       const rect = element.getBoundingClientRect();
 
-      // Calculate the scroll target position
+      // Calculate the scroll target positions
       // We subtract the navbar height to ensure the section appears below the navbar
       const scrollTarget = window.pageYOffset + rect.top - navbarHeight;
 
