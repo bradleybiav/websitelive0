@@ -124,7 +124,7 @@ export const artistClients: Client[] = [
   {
     name: "Saraga",
     type: "Artist",
-    image: "/Saraga.jpg",
+    image: "Saraga.jpg",
     instagramUrl: "https://www.instagram.com/saragamusic/",
     spotifyUrl: "https://open.spotify.com/artist/68iQrOCMSJ2ThzXU1ELap6"
   },
