@@ -124,28 +124,28 @@ export const artistClients: Client[] = [
   {
     name: "Saraga",
     type: "Artist",
-    image: "Saraga.jpg",
+    image: "/Saraga.jpg",
     instagramUrl: "https://www.instagram.com/saragamusic/",
     spotifyUrl: "https://open.spotify.com/artist/68iQrOCMSJ2ThzXU1ELap6"
   },
   {
     name: "SIDEPIECE",
     type: "Artist",
-    image: "SIDEPIECE_artist_cover(1).jpg",
+    image: "/SIDEPIECE_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/youasidepiece/",
     spotifyUrl: "https://open.spotify.com/artist/5czbzNZZfWpyFgZyfT3Mkk"
   },
   {
     name: "SOMMA",
     type: "Artist",
-    image: "SOMMA.jpg",
+    image: "/SOMMA.jpg",
     instagramUrl: "https://www.instagram.com/somma_dj/",
     spotifyUrl: "https://open.spotify.com/artist/656ibQgcoUQrUPdhQWRcI3"
   },
   {
     name: "Sosh & Mosh",
     type: "Artist",
-    image: "SoshMosh.jpg",
+    image: "/SoshMosh.jpg",
     instagramUrl: "https://www.instagram.com/soshmosh/",
     spotifyUrl: "https://open.spotify.com/artist/5eyJw0SeeTMFQKy9huXIHc"
   },
@@ -159,21 +159,21 @@ export const artistClients: Client[] = [
   {
     name: "WhoMadeWho",
     type: "Artist",
-    image: "WhoMadeWho_artist_cover(1).jpg",
+    image: "/WhoMadeWho_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/whomadewhoofficial/",
     spotifyUrl: "https://open.spotify.com/artist/50Lr1puweM1hFsF1LpIZLM"
   },
   {
     name: "Yet More",
     type: "Artist",
-    image: "YetMore_artist_cover(1).jpg",
+    image: "/YetMore_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/yetmoremusic/",
     spotifyUrl: "https://open.spotify.com/artist/56brJyNkgCiv9ncSNkV99C"
   },
   {
     name: "YUMA",
     type: "Artist",
-    image: "YUMA_artist_cover(1).jpg",
+    image: "/YUMA_artist_cover(1).jpg",
     instagramUrl: "https://www.instagram.com/yuma.inbox/",
     spotifyUrl: "https://open.spotify.com/artist/5ynMbTlnZvBUxrxUrd6gs0"
   }
